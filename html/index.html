@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoL Codex | Plataforma de Estudo League of Legends</title>
+    
+    <!-- Google Fonts Hextech & Gamer -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS Externo na pasta ../css/ -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo" onclick="switchTab('home')">
+                <div class="logo-icon"><i class="fa-solid fa-gem"></i></div>
+                <div>LoL <span>Codex</span></div>
+            </a>
+
+            <button class="mobile-toggle" id="mobileToggleBtn" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active" onclick="switchTab('home')"><i class="fa-solid fa-house"></i> Início</a></li>
+                <li><a href="#champions" class="nav-link" onclick="switchTab('champions')"><i class="fa-solid fa-shield-halved"></i> Campeões</a></li>
+                <li><a href="#items" class="nav-link" onclick="switchTab('items')"><i class="fa-solid fa-ring"></i> Itens</a></li>
+                <li><a href="#runes" class="nav-link" onclick="switchTab('runes')"><i class="fa-solid fa-wand-magic-sparkles"></i> Runas</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Content Sections -->
+    <main>
+        <!-- HOME SECTION -->
+        <section id="home" class="page-section active">
+            <div class="hero">
+                <div class="container">
+                    <h1 class="hero-title">Biblioteca Hextech de Conhecimento</h1>
+                    <p class="hero-subtitle">Consulte campeões, habilidades, itens, runas e estatísticas de League of Legends sincronizados nativamente com o Data Dragon da Riot Games.</p>
+
+                    <!-- Search Bar -->
+                    <div class="search-wrap-hero">
+                        <div class="search-input-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="globalSearch" placeholder="Busque por um Campeão ou Item (ex: Ahri, Jax, Força da Trindade)..." onkeyup="handleGlobalSearch(event)">
+                        </div>
+                    </div>
+
+                    <!-- Category Quick Cards -->
+                    <div class="categories-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                        <div class="category-card" onclick="switchTab('champions')">
+                            <div class="icon"><i class="fa-solid fa-user-ninja"></i></div>
+                            <h3>Campeões <span class="badge-count" id="countChamps">Carregando...</span></h3>
+                            <p>Combos, habilidades Q/W/E/R, rotas, atributos e modo resumido.</p>
+                        </div>
+                        <div class="category-card" onclick="switchTab('items')">
+                            <div class="icon"><i class="fa-solid fa-gem"></i></div>
+                            <h3>Itens <span class="badge-count" id="countItems">Carregando...</span></h3>
+                            <p>Passivas, atributos de jogo, custos e árvores completas de receita.</p>
+                        </div>
+                        <div class="category-card" onclick="switchTab('runes')">
+                            <div class="icon"><i class="fa-solid fa-dharmachakra"></i></div>
+                            <h3>Runas <span class="badge-count">5 Árvores + Shards</span></h3>
+                            <p>Keystones, sub-runas completas e fragmentos terciários de atributos.</p>
+                        </div>
+                    </div>
+
+                    <!-- Featured Champions Section -->
+                    <div class="section-header" style="margin-top: 2rem;">
+                        <div class="section-title"><i class="fa-solid fa-fire"></i> Campeões em Destaque</div>
+                        <button class="filter-btn" onclick="switchTab('champions')">Ver Todos <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+
+                    <div class="champ-grid" id="featuredChampGrid">
+                        <div class="loading-box">
+                            <div class="loading-spinner"></div>
+                            <span>Carregando campeões do Data Dragon...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAMPIONS SECTION -->
+        <section id="champions" class="page-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-title"><i class="fa-solid fa-shield-halved"></i> Campeões de Summoner's Rift</div>
+                </div>
+
+                <div class="filter-bar">
+                    <div class="filter-group" id="roleFilterGroup">
+                        <button class="filter-btn active" data-role="all"><i class="fa-solid fa-globe"></i> Todos</button>
+                        <button class="filter-btn" data-role="Top"><img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-top.png" style="width:16px; height:16px;" alt="Top"> Top</button>
+                        <button class="filter-btn" data-role="Jungle"><img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-jungle.png" style="width:16px; height:16px;" alt="Jungle"> Jungle</button>
+                        <button class="filter-btn" data-role="Mid"><img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-middle.png" style="width:16px; height:16px;" alt="Mid"> Mid</button>
+                        <button class="filter-btn" data-role="ADC"><img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-bottom.png" style="width:16px; height:16px;" alt="ADC"> ADC</button>
+                        <button class="filter-btn" data-role="Suporte"><img src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png" style="width:16px; height:16px;" alt="Suporte"> Suporte</button>
+                    </div>
+                    <div class="search-input-box" style="min-width: 250px;">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="champSearch" placeholder="Filtrar campeão..." oninput="filtrarCampeoes()">
+                    </div>
+                </div>
+
+                <!-- Grid principal de Campeões -->
+                <div class="champ-grid" id="champions-grid">
+                    <div class="loading-box">
+                        <div class="loading-spinner"></div>
+                        <span>Buscando campeões do Data Dragon...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ITEMS SECTION -->
+        <section id="items" class="page-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-title"><i class="fa-solid fa-ring"></i> Compêndio de Itens (Summoner's Rift)</div>
+                    <div class="switch-wrapper">
+                        <span>Detalhes</span>
+                        <label class="hextech-toggle">
+                            <input type="checkbox" id="itemSummaryToggle" onchange="alternarResumoItens(this.checked)">
+                            <span class="hextech-slider"></span>
+                        </label>
+                        <span id="itemSummaryLabel">Resumo</span>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <div class="filter-group" id="itemCatFilterGroup">
+                        <button class="filter-btn active" data-cat="all"><i class="fa-solid fa-border-all"></i> Todos</button>
+                        <button class="filter-btn" data-cat="Ataque"><i class="fa-solid fa-hand-fist" style="color:#f97316;"></i> Dano Físico (AD)</button>
+                        <button class="filter-btn" data-cat="AP"><i class="fa-solid fa-wand-magic-sparkles" style="color:#00A3FF;"></i> Poder de Habilidade (AP)</button>
+                        <button class="filter-btn" data-cat="Defesa"><i class="fa-solid fa-shield-halved" style="color:#22c55e;"></i> Armadura / Tanque</button>
+                        <button class="filter-btn" data-cat="Velocidade"><i class="fa-solid fa-bolt" style="color:#fbbf24;"></i> Vel. de Ataque</button>
+                        <button class="filter-btn" data-cat="Critico"><i class="fa-solid fa-crosshairs" style="color:#ef4444;"></i> Crítico</button>
+                        <button class="filter-btn" data-cat="Botas"><i class="fa-solid fa-shoe-prints" style="color:#a855f7;"></i> Botas</button>
+                    </div>
+                    <div class="search-input-box" style="min-width: 250px;">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="itemSearch" placeholder="Buscar item..." oninput="filtrarItens()">
+                    </div>
+                </div>
+
+                <!-- Grid principal de Itens de Summoner's Rift -->
+                <div class="item-grid" id="items-grid">
+                    <div class="loading-box">
+                        <div class="loading-spinner"></div>
+                        <span>Carregando itens de Summoner's Rift via Data Dragon...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RUNES SECTION -->
+        <section id="runes" class="page-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Runas Reforjadas & Fragmentos de Atributos</div>
+                    <div class="switch-wrapper">
+                        <span>Detalhes</span>
+                        <label class="hextech-toggle">
+                            <input type="checkbox" id="runeSummaryToggle" onchange="alternarResumoRunas(this.checked)">
+                            <span class="hextech-slider"></span>
+                        </label>
+                        <span id="runeSummaryLabel">Resumo</span>
+                    </div>
+                </div>
+
+                <!-- Container dinâmico das 5 árvores com sub-runas e stat shards -->
+                <div id="runes-container">
+                    <div class="loading-box">
+                        <div class="loading-spinner"></div>
+                        <span>Carregando árvores de runas e sub-runas do Data Dragon...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Detalhado de Campeões (#champion-modal) -->
+    <div class="modal-overlay" id="champion-modal">
+        <div class="modal-container">
+            <button class="modal-close" onclick="fecharModalCampeao()" aria-label="Fechar modal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-body" id="champion-modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Modal Detalhado de Itens (#item-modal) -->
+    <div class="modal-overlay" id="item-modal">
+        <div class="modal-container">
+            <button class="modal-close" onclick="fecharModalItem()" aria-label="Fechar modal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-body" id="item-modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Modal Genérico de Fallback (detailModal) -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeModal()" aria-label="Fechar modal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-body" id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>LoL Codex © 2026 | Plataforma de Estudo e Consulta Hextech.</p>
+            <p style="font-size: 0.75rem; margin-top: 0.3rem;">Não afiliado à Riot Games. League of Legends é marca registrada da Riot Games, Inc.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Externo na pasta ../js/ -->
+    <script src="../js/script.js"></script>
+</body>
+</html>
