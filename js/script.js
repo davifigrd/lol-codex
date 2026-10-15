@@ -24,6 +24,10 @@ let detalhesCampeoesCache = {};
 let filtroRotaAtiva = 'all';
 let filtroCategoriaItemAtiva = 'all';
 
+// Novo sistema de filtros de atributos (multi-seleção via janelinha)
+let filtrosAtributosAtivos = new Set();
+let mostrarDescricaoCardsItens = false;
+
 // Estados das chaves switches de resumo
 let modoResumoHabilidades = false;
 let modoResumoItens = false;
@@ -70,16 +74,16 @@ const ICONES_ROTAS = {
 // Todos usando FontAwesome 6 Free (sem ícones Pro)
 // =========================================================================
 const ICONES_ATRIBUTO = {
-    AD: { icon: 'fa-solid fa-hand-fist', color: '#f97316', label: 'Dano Físico (AD)' },
-    AP: { icon: 'fa-solid fa-wand-magic-sparkles', color: '#a78bfa', label: 'Poder de Habilidade (AP)' },
-    Heal: { icon: 'fa-solid fa-heart', color: '#34d399', label: 'Cura' },
-    Shield: { icon: 'fa-solid fa-shield-halved', color: '#818cf8', label: 'Escudo' },
-    Tank: { icon: 'fa-solid fa-shield', color: '#22c55e', label: 'Tanque/Defesa' },
-    CC: { icon: 'fa-solid fa-snowflake', color: '#60a5fa', label: 'Controle de Grupo' },
-    Dash: { icon: 'fa-solid fa-person-running', color: '#fbbf24', label: 'Mobilidade/Dash' },
+    AD: { class: 'stat-img-ad', color: '#ff7700', label: 'Dano Físico (AD)' },
+    AP: { class: 'stat-img-ap', color: '#b84af5', label: 'Poder de Habilidade (AP)' },
+    Heal: { class: 'stat-img-health', color: '#22c55e', label: 'Cura / Vida' },
+    Shield: { class: 'stat-img-mr', color: '#06b6d4', label: 'Escudo / Resistência Mágica' },
+    Tank: { class: 'stat-img-armor', color: '#f59e0b', label: 'Armadura (ARMOR)' },
+    CC: { class: 'stat-img-tenacity', color: '#60a5fa', label: 'Controle de Grupo' },
+    Dash: { class: 'stat-img-mov', color: '#60a5fa', label: 'Mobilidade / Dash' },
     Stealth: { icon: 'fa-solid fa-eye-slash', color: '#94a3b8', label: 'Furtividade' },
     Summon: { icon: 'fa-solid fa-dragon', color: '#f59e0b', label: 'Invocações' },
-    True: { icon: 'fa-solid fa-circle-half-stroke', color: '#f0e6d2', label: 'Dano Verdadeiro' },
+    True: { class: 'stat-img-pen', color: '#e2e8f0', label: 'Dano Verdadeiro / Penetração' },
     Global: { icon: 'fa-solid fa-earth-americas', color: '#06b6d4', label: 'Habilidade Global' },
     Execute: { icon: 'fa-solid fa-skull', color: '#ef4444', label: 'Execução' },
     Zone: { icon: 'fa-solid fa-circle-radiation', color: '#fb923c', label: 'Controle de Zona' }
@@ -267,7 +271,10 @@ function gerarBadgesDanoCampeao(champId) {
     return perfil.slice(0, 3).map(key => {
         const attr = ICONES_ATRIBUTO[key];
         if (!attr) return '';
-        return `<span class="champ-damage-badge" title="${attr.label}"><i class="${attr.icon}" style="color:${attr.color}; font-size:11px;"></i> ${key}</span>`;
+        const iconeHtml = attr.class
+            ? `<span class="stat-img-icon ${attr.class}" aria-hidden="true"></span>`
+            : `<i class="${attr.icon}" style="color:${attr.color}; font-size:11px;"></i>`;
+        return `<span class="champ-damage-badge" title="${attr.label}">${iconeHtml} ${key}</span>`;
     }).join('');
 }
 
@@ -278,7 +285,11 @@ function gerarBadgesDanoModalCampeao(champId) {
     return perfil.map(key => {
         const attr = ICONES_ATRIBUTO[key];
         if (!attr) return '';
-        return `<span class="stat-icon-badge" title="${attr.label}" style="border-color:${attr.color}44;"><i class="${attr.icon}" style="color:${attr.color};"></i> ${attr.label}</span>`;
+        const badgeClass = key === 'AD' ? 'stat-badge-ad' : key === 'AP' ? 'stat-badge-ap' : key === 'Tank' ? 'stat-badge-armor' : key === 'Heal' ? 'stat-badge-health' : key === 'Shield' ? 'stat-badge-mr' : '';
+        const iconeHtml = attr.class
+            ? `<span class="stat-img-icon ${attr.class}" style="width:16px; height:16px;" aria-hidden="true"></span>`
+            : `<i class="${attr.icon}" style="color:${attr.color}; font-size:12px;"></i>`;
+        return `<span class="stat-icon-badge ${badgeClass}" title="${attr.label}">${iconeHtml} ${attr.label}</span>`;
     }).join('');
 }
 
@@ -419,7 +430,8 @@ function renderizarCampeoes(lista) {
 }
 
 function criarCardCampeaoHTML(champ) {
-    const splashUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champ.id}_0.jpg`;
+    const splashId = champ.id === 'Fiddlesticks' ? 'FiddleSticks' : champ.id;
+    const splashUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${splashId}_0.jpg`;
     const rotaPrincipal = identificarRotaPrincipalCampeao(champ);
     const iconeRotaUrl = ICONES_ROTAS[rotaPrincipal] || ICONES_ROTAS.Mid;
     const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${versaoAtual}/img/champion/${champ.id}.png`;
@@ -498,9 +510,52 @@ let itemModalAbertoAtual = null;
 
 function alternarResumoItens(ativado) {
     modoResumoItens = ativado;
-    filtrarItens(); // Atualiza os cards
+
+    // Sincroniza toggles e labels da página principal e do modal
+    const mainToggle = document.getElementById('itemSummaryToggle');
+    if (mainToggle && mainToggle.checked !== ativado) mainToggle.checked = ativado;
+
+    const mainDetLabel = document.getElementById('itemDetailsLabel');
+    const mainResLabel = document.getElementById('itemSummaryLabel');
+    if (mainDetLabel) mainDetLabel.classList.toggle('switch-label-active', !ativado);
+    if (mainResLabel) mainResLabel.classList.toggle('switch-label-active', ativado);
+
+    // Fade out suave na grid de itens
+    const grid = document.getElementById('items-grid');
+    if (grid) {
+        grid.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        grid.style.opacity = '0';
+        grid.style.transform = 'translateY(4px)';
+        setTimeout(() => {
+            filtrarItens();
+            grid.style.opacity = '1';
+            grid.style.transform = 'translateY(0)';
+        }, 200);
+    } else {
+        filtrarItens();
+    }
+
+    // Transição suave no modal de item se estiver aberto
     if (itemModalAbertoAtual && todosItens[itemModalAbertoAtual]) {
-        abrirModalItem(itemModalAbertoAtual); // Re-renderiza o modal aberto
+        const modalDetLabel = document.getElementById('itemModalSwitchLabelDet');
+        const modalResLabel = document.getElementById('itemModalSwitchLabelRes');
+        if (modalDetLabel) modalDetLabel.classList.toggle('switch-label-active', !ativado);
+        if (modalResLabel) modalResLabel.classList.toggle('switch-label-active', ativado);
+
+        const modalToggle = document.querySelector('#item-modal-content .hextech-toggle input');
+        if (modalToggle && modalToggle.checked !== ativado) modalToggle.checked = ativado;
+
+        const modalDesc = document.querySelector('#item-modal-content .item-ddragon-desc');
+        if (modalDesc) {
+            modalDesc.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            modalDesc.style.opacity = '0';
+            modalDesc.style.transform = 'translateY(4px)';
+            setTimeout(() => {
+                abrirModalItem(itemModalAbertoAtual);
+            }, 200);
+        } else {
+            abrirModalItem(itemModalAbertoAtual);
+        }
     }
 }
 
@@ -525,8 +580,8 @@ function criarCardItemHTML(item) {
     const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${versaoAtual}/img/item/${item.id}.png`;
     const preco = item.gold && item.gold.total ? item.gold.total : 0;
 
-    // Ícones visuais de atributos em vez de texto escrito
-    const iconesAtributos = gerarIconesAtributosItem(item.tags || []);
+    // Ícones visuais de atributos em vez de texto escrito (passando o item completo para analisar tags e stats)
+    const iconesAtributos = gerarIconesAtributosItem(item);
 
     // Modo resumo vs detalhado: Resumo = texto autoral do JSON; Detalhado = plaintext limpo do DDragon
     const resumoItem = resumoItens[item.id];
@@ -542,46 +597,93 @@ function criarCardItemHTML(item) {
             <div class="item-header">
                 <img src="${iconUrl}" class="item-icon" alt="${item.name}" loading="lazy">
                 <div class="item-title-wrap">
-                    <h4>${item.name}</h4>
-                    <!-- Apenas a moeda e o valor, sem a palavra gold -->
-                    <span class="item-cost"><i class="fa-solid fa-coins" style="color:var(--gold-bright);"></i> ${preco}</span>
+                    <div class="item-name-row" style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem;">
+                        <h4>${item.name}</h4>
+                        <!-- Apenas a moeda e o valor, sem a palavra gold -->
+                        <span class="item-cost"><i class="fa-solid fa-coins" style="color:var(--gold-bright);"></i> ${preco}</span>
+                    </div>
+                    <!-- Badges de atributos abaixo do nome do item (ex: Força da Trindade > AD LP AS) -->
+                    <div class="item-badges" style="display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.35rem;">
+                        ${iconesAtributos}
+                    </div>
                 </div>
             </div>
-            <!-- Ícones visuais dos atributos (AD, AP, Armadura, etc.) -->
-            <div style="display:flex; flex-wrap:wrap; gap:0.35rem; margin-bottom:0.6rem;">
-                ${iconesAtributos}
-            </div>
             <p class="item-stats" style="font-size:0.8rem; color:var(--text-body); line-height:1.4;">${textoExibicao}</p>
-            <div class="item-passive" style="margin-top:auto; font-size:0.75rem;">
-                <i class="fa-solid fa-circle-info" style="color:var(--gold-primary); margin-right:4px;"></i> Detalhes & Receitas
-            </div>
         </div>
     `;
 }
 
-function gerarIconesAtributosItem(tags) {
+function gerarIconesAtributosItem(itemOuTags) {
+    const item = (typeof itemOuTags === 'object' && !Array.isArray(itemOuTags)) ? itemOuTags : null;
+    const tags = Array.isArray(itemOuTags) ? itemOuTags : (item?.tags || []);
+    const stats = item?.stats || {};
+
     let badges = [];
-    if (tags.some(t => ['Damage', 'AttackSpeed', 'CriticalStrike', 'LifeSteal', 'ArmorPenetration', 'OnHit'].includes(t))) {
-        badges.push(`<span class="stat-icon-badge" title="Dano Físico / Ataque (AD)" style="border-color:#f9731633;"><i class="fa-solid fa-hand-fist" style="color:#f97316;"></i> AD</span>`);
+
+    // Dano Físico (AD)
+    if (tags.includes('Damage') || Boolean(stats.FlatPhysicalDamageMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-ad" title="Dano Físico (AD)"><span class="stat-img-icon stat-img-ad" aria-hidden="true"></span> AD</span>`);
     }
-    if (tags.some(t => ['SpellDamage', 'Mana', 'ManaRegen', 'MagicPenetration', 'AbilityHaste', 'SpellVamp'].includes(t))) {
-        badges.push(`<span class="stat-icon-badge" title="Poder de Habilidade / Magia (AP)" style="border-color:#a78bfa33;"><i class="fa-solid fa-wand-magic-sparkles" style="color:#a78bfa;"></i> AP</span>`);
+
+    // Poder de Habilidade (AP)
+    if (tags.includes('SpellDamage') || Boolean(stats.FlatMagicDamageMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-ap" title="Poder de Habilidade (AP)"><span class="stat-img-icon stat-img-ap" aria-hidden="true"></span> AP</span>`);
     }
-    if (tags.some(t => ['Armor', 'SpellBlock', 'Health', 'HealthRegen', 'Tenacity'].includes(t))) {
-        badges.push(`<span class="stat-icon-badge" title="Armadura / Defesa / Tanque" style="border-color:#22c55e33;"><i class="fa-solid fa-shield" style="color:#22c55e;"></i> DEF</span>`);
+
+    // Armadura (ARMOR) - Estritamente itens que concedem armadura, NUNCA apenas vida!
+    if (tags.includes('Armor') || Boolean(stats.FlatArmorMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-armor" title="Armadura (ARMOR)"><span class="stat-img-icon stat-img-armor" aria-hidden="true"></span> ARMOR</span>`);
     }
-    if (tags.includes('Boots')) {
-        badges.push(`<span class="stat-icon-badge" title="Velocidade de Movimento" style="border-color:#a855f733;"><i class="fa-solid fa-shoe-prints" style="color:#a855f7;"></i> MOV</span>`);
+
+    // Vida (LP) - Itens que concedem vida
+    if (tags.includes('Health') || Boolean(stats.FlatHPPoolMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-health" title="Vida (LP)"><span class="stat-img-icon stat-img-health" aria-hidden="true"></span> LP</span>`);
     }
-    if (tags.includes('CriticalStrike')) {
-        badges.push(`<span class="stat-icon-badge" title="Acerto Crítico" style="border-color:#ef444433;"><i class="fa-solid fa-crosshairs" style="color:#ef4444;"></i> CRIT</span>`);
+
+    // Velocidade de Ataque (AS)
+    if (tags.includes('AttackSpeed') || Boolean(stats.PercentAttackSpeedMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-as" title="Velocidade de Ataque (AS)"><span class="stat-img-icon stat-img-as" aria-hidden="true"></span> AS</span>`);
     }
-    if (tags.includes('LifeSteal') || tags.includes('SpellVamp')) {
-        badges.push(`<span class="stat-icon-badge" title="Roubo de Vida" style="border-color:#34d39933;"><i class="fa-solid fa-heart" style="color:#34d399;"></i> Roubo</span>`);
+
+    // Aceleração de Habilidade (CDR)
+    if (tags.includes('CooldownReduction') || tags.includes('AbilityHaste')) {
+        badges.push(`<span class="stat-icon-badge stat-badge-cdr" title="Aceleração de Habilidade (CDR)"><span class="stat-img-icon stat-img-cdr" aria-hidden="true"></span> CDR</span>`);
     }
+
+    // Crítico (CRIT)
+    if (tags.includes('CriticalStrike') || Boolean(stats.FlatCritChanceMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-crit" title="Acerto Crítico (CRIT)"><span class="stat-img-icon stat-img-crit" aria-hidden="true"></span> CRIT</span>`);
+    }
+
+    // Roubo de Vida (LS)
+    if (tags.includes('LifeSteal') || tags.includes('SpellVamp') || tags.includes('Omnivamp') || Boolean(stats.PercentLifeStealMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-ls" title="Roubo de Vida (LS)"><span class="stat-img-icon stat-img-ls" aria-hidden="true"></span> LS</span>`);
+    }
+
+    // Resistência Mágica (MR)
+    if (tags.includes('SpellBlock') || tags.includes('MagicResist') || Boolean(stats.FlatSpellBlockMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-mr" title="Resistência Mágica (MR)"><span class="stat-img-icon stat-img-mr" aria-hidden="true"></span> MR</span>`);
+    }
+
+    // Penetração (PEN)
+    if (tags.includes('ArmorPenetration') || tags.includes('MagicPenetration')) {
+        badges.push(`<span class="stat-icon-badge stat-badge-pen" title="Penetração (PEN)"><span class="stat-img-icon stat-img-pen" aria-hidden="true"></span> PEN</span>`);
+    }
+
+    // Mana (MANA)
+    if (tags.includes('Mana') || tags.includes('ManaRegen') || Boolean(stats.FlatMPPoolMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-mana" title="Mana (MANA)"><span class="stat-img-icon stat-img-mana" aria-hidden="true"></span> MANA</span>`);
+    }
+
+    // Botas / Velocidade de Movimento (MOV)
+    if (tags.includes('Boots') || tags.includes('NonbootsMovement') || Boolean(stats.FlatMovementSpeedMod) || Boolean(stats.PercentMovementSpeedMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-mov" title="Botas / Movimento (MOV)"><span class="stat-img-icon stat-img-mov" aria-hidden="true"></span> MOV</span>`);
+    }
+
     if (badges.length === 0) {
-        badges.push(`<span class="stat-icon-badge" title="Utilidade / Loja"><i class="fa-solid fa-gem" style="color:var(--gold-primary);"></i> Util</span>`);
+        badges.push(`<span class="stat-icon-badge" title="Item de Suporte / Utilidade" style="border-color:var(--border-color); color:var(--gold-light);"><i class="fa-solid fa-sparkles" style="color:var(--gold-bright);"></i> UTIL</span>`);
     }
+
     return badges.join('');
 }
 
@@ -875,7 +977,8 @@ function renderizarConteudoModalCampeao(champData) {
     const modalContent = document.getElementById('champion-modal-content');
     if (!modalContent) return;
 
-    const splashUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champData.id}_0.jpg`;
+    const splashId = champData.id === 'Fiddlesticks' ? 'FiddleSticks' : champData.id;
+    const splashUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${splashId}_0.jpg`;
     const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${versaoAtual}/img/champion/${champData.id}.png`;
     const champKeyPad = String(champData.key || '').padStart(4, '0');
     const safeChampName = escaparParaAtributo(champData.name);
@@ -996,7 +1099,7 @@ function renderizarConteudoModalCampeao(champData) {
                     <input type="checkbox" ${modoResumoHabilidades ? 'checked' : ''} onchange="alternarResumoHabilidadesCampeao(this.checked)">
                     <span class="hextech-slider"></span>
                 </label>
-                <span class="${modoResumoHabilidades ? 'switch-label-active' : ''}">Resumo</span>
+                <span class="${modoResumoHabilidades ? 'switch-label-active' : ''}">Resumido</span>
             </div>
         </div>
         
@@ -1176,10 +1279,11 @@ function abrirModalItem(itemId) {
         <div style="display:flex; gap:1.25rem; align-items:center; margin-bottom:1.5rem; border-bottom:1px solid var(--border-color); padding-bottom:1.25rem;">
             <img id="item-modal-avatar" src="${iconUrl}" style="width:75px; height:75px; border-radius:var(--radius-md); border:2px solid var(--gold-bright); box-shadow:0 0 15px var(--gold-glow); object-fit:cover; background:#000; transition:border-color 0.3s ease, box-shadow 0.3s ease;">
             <div style="flex-grow:1;">
-                <div style="display:flex; gap:0.4rem; margin-bottom:0.3rem;">
-                    ${gerarIconesAtributosItem(item.tags || [])}
-                </div>
                 <h2 style="font-size:1.85rem; font-family:var(--font-title); color:var(--gold-light); line-height:1.2;">${item.name}</h2>
+                <!-- Badges de atributos abaixo do nome do item (ex: Força da Trindade > AD LP AS) -->
+                <div style="display:flex; gap:0.4rem; margin-top:0.35rem; flex-wrap:wrap;">
+                    ${gerarIconesAtributosItem(item)}
+                </div>
                 <div style="display:flex; gap:1rem; align-items:center; margin-top:0.3rem;">
                     <!-- Apenas a moeda e valor, sem a palavra gold -->
                     <span style="color:var(--gold-bright); font-weight:700; font-size:1.1rem;"><i class="fa-solid fa-coins"></i> ${precoTotal}</span>
@@ -1199,7 +1303,7 @@ function abrirModalItem(itemId) {
                         <input type="checkbox" ${modoResumoItens ? 'checked' : ''} onchange="alternarResumoItens(this.checked)">
                         <span class="hextech-slider"></span>
                     </label>
-                    <span id="itemModalSwitchLabelRes" class="${modoResumoItens ? 'switch-label-active' : ''}">Resumo</span>
+                    <span id="itemModalSwitchLabelRes" class="${modoResumoItens ? 'switch-label-active' : ''}">Resumido</span>
                 </div>
             </div>
             <div class="item-ddragon-desc" style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:1rem;">
@@ -1279,9 +1383,24 @@ async function carregarRunasDoDataDragon() {
 
 function alternarResumoRunas(ativado) {
     modoResumoRunas = ativado;
-    const label = document.getElementById('runeSummaryLabel');
-    if (label) label.classList.toggle('switch-label-active', ativado);
-    renderizarRunas();
+    const detLabel = document.getElementById('runeDetailsLabel');
+    const resLabel = document.getElementById('runeSummaryLabel');
+    if (detLabel) detLabel.classList.toggle('switch-label-active', !ativado);
+    if (resLabel) resLabel.classList.toggle('switch-label-active', ativado);
+
+    const container = document.getElementById('runes-container');
+    if (container) {
+        container.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        container.style.opacity = '0';
+        container.style.transform = 'translateY(4px)';
+        setTimeout(() => {
+            renderizarRunas();
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+        }, 200);
+    } else {
+        renderizarRunas();
+    }
 }
 
 function renderizarRunas() {
@@ -1363,15 +1482,15 @@ function renderizarRunas() {
                     <div class="shard-tier-title"><i class="fa-solid fa-swords"></i> Linha 1: Ofensiva</div>
                     <div class="shard-options">
                         <div class="shard-option">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" class="shard-icon" alt="Força">
+                            <img src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/statmods/statmodsadaptiveforceicon.png" class="shard-icon" alt="Força">
                             <div><strong>+9 de Força Adaptativa</strong> (Dano ou AP)</div>
                         </div>
                         <div class="shard-option">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/StatMods/StatModsAttackSpeedIcon.png" class="shard-icon" alt="Vel. Ataque">
+                            <img src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/statmods/statmodsattackspeedicon.png" class="shard-icon" alt="Vel. Ataque">
                             <div><strong>+10% de Velocidade de Ataque</strong></div>
                         </div>
                         <div class="shard-option">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/StatMods/StatModsCDRIcon.png" class="shard-icon" onerror="this.style.display='none'" alt="Aceleração">
+                            <img src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/statmods/statmodscdrscalingicon.png" class="shard-icon" alt="Aceleração">
                             <div><strong>+8 de Aceleração de Habilidade</strong> (CDR)</div>
                         </div>
                     </div>
@@ -1382,15 +1501,15 @@ function renderizarRunas() {
                     <div class="shard-tier-title"><i class="fa-solid fa-shuffle"></i> Linha 2: Flexível</div>
                     <div class="shard-options">
                         <div class="shard-option">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/StatMods/StatModsAdaptiveForceIcon.png" class="shard-icon" alt="Força">
+                            <img src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/statmods/statmodsadaptiveforceicon.png" class="shard-icon" alt="Força">
                             <div><strong>+9 de Força Adaptativa</strong></div>
                         </div>
                         <div class="shard-option">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/StatMods/StatModsMovementSpeedIcon.png" class="shard-icon" alt="Velocidade">
+                            <img src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/statmods/statmodsmovementspeedicon.png" class="shard-icon" alt="Velocidade">
                             <div><strong>+2% de Velocidade de Movimento</strong></div>
                         </div>
                         <div class="shard-option">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/StatMods/StatModsHealthScalingIcon.png" class="shard-icon" alt="Vida">
+                            <img src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/statmods/statmodshealthscalingicon.png" class="shard-icon" alt="Vida">
                             <div><strong>+10 a 180 de Vida</strong> (baseado no nível)</div>
                         </div>
                     </div>
@@ -1401,15 +1520,15 @@ function renderizarRunas() {
                     <div class="shard-tier-title"><i class="fa-solid fa-shield-heart"></i> Linha 3: Defensiva</div>
                     <div class="shard-options">
                         <div class="shard-option">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/StatMods/StatModsArmorIcon.png" class="shard-icon" alt="Armadura">
+                            <img src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/statmods/statmodshealthplusicon.png" class="shard-icon" alt="Vida Plana">
                             <div><strong>+65 de Vida Plana</strong> imediata</div>
                         </div>
                         <div class="shard-option">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/StatMods/StatModsHealthScalingIcon.png" class="shard-icon" alt="Vida">
+                            <img src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/statmods/statmodshealthscalingicon.png" class="shard-icon" alt="Vida">
                             <div><strong>+10 a 180 de Vida</strong> (baseado no nível)</div>
                         </div>
                         <div class="shard-option">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/img/perk-images/StatMods/StatModsMagicResIcon.png" class="shard-icon" onerror="this.style.display='none'" alt="Tenacidade">
+                            <img src="https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/statmods/statmodstenacityicon.png" class="shard-icon" alt="Tenacidade">
                             <div><strong>+10% de Tenacidade</strong> e Resistência a Redução</div>
                         </div>
                     </div>
@@ -1431,17 +1550,14 @@ function renderizarRunas() {
    ========================================================================== */
 function filtrarCampeoes() {
     const searchInput = document.getElementById('champSearch');
-    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const query = normalizarTextoBusca(searchInput ? searchInput.value : '');
 
     const filtrados = todosCampeoes.filter(champ => {
         const rotaDoChamp = identificarRotaPrincipalCampeao(champ);
         const matchRole = (filtroRotaAtiva === 'all') || (rotaDoChamp === filtroRotaAtiva);
 
-        const matchQuery = !query ||
-            champ.name.toLowerCase().includes(query) ||
-            champ.title.toLowerCase().includes(query) ||
-            champ.id.toLowerCase().includes(query) ||
-            (champ.tags || []).some(t => t.toLowerCase().includes(query) || traduzirTag(t).toLowerCase().includes(query));
+        // Busca APENAS pelo nome do campeão (sem título, sem tags)
+        const matchQuery = !query || normalizarTextoBusca(champ.name).includes(query);
 
         return matchRole && matchQuery;
     });
@@ -1451,38 +1567,250 @@ function filtrarCampeoes() {
 
 function filtrarItens() {
     const searchInput = document.getElementById('itemSearch');
-    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const query = normalizarTextoBusca(searchInput ? searchInput.value : '');
+
+    // Mostrar/ocultar botão limpar busca
+    const clearBtn = document.getElementById('clearItemSearchBtn');
+    if (clearBtn) clearBtn.style.display = (searchInput && searchInput.value.length > 0) ? 'block' : 'none';
 
     const filtrados = itensValidosSR.filter(item => {
-        const matchCat = itemCorrespondeCategoria(item, filtroCategoriaItemAtiva);
-        const matchQuery = !query ||
-            item.name.toLowerCase().includes(query) ||
-            (item.plaintext && item.plaintext.toLowerCase().includes(query)) ||
-            (item.tags && item.tags.some(t => t.toLowerCase().includes(query) || traduzirTag(t).toLowerCase().includes(query)));
+        // Busca APENAS pelo nome do item (sem descrição, sem tags)
+        const matchQuery = !query || normalizarTextoBusca(item.name).includes(query);
 
-        return matchCat && matchQuery;
+        // Se não há filtros ativos, aceita todos
+        const matchAtributos = filtrosAtributosAtivos.size === 0 ||
+            [...filtrosAtributosAtivos].every(attr => itemPossuiAtributo(item, attr));
+
+        return matchQuery && matchAtributos;
     });
 
+    // Atualizar prévia de contagem no modal
+    const countPreview = document.getElementById('filteredItemsCountPreview');
+    if (countPreview) {
+        countPreview.textContent = filtrosAtributosAtivos.size === 0
+            ? 'Mostrando todos os itens'
+            : `${filtrados.length} item(s) encontrado(s)`;
+    }
+
     renderizarItens(filtrados);
+}
+
+/* ==========================================================================
+   SISTEMA DE FILTROS DE ITENS (JANELINHA MODAL)
+   ========================================================================== */
+
+function abrirModalFiltrosItens() {
+    const backdrop = document.getElementById('itemFilterModalBackdrop');
+    if (!backdrop) return;
+    backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    filtrarItens(); // atualiza contagem no modal logo ao abrir
+}
+
+function fecharModalFiltrosItens(event) {
+    // Se chamada via click no backdrop, fecha; se chamada diretamente (sem event), fecha sempre
+    if (event && event.target !== document.getElementById('itemFilterModalBackdrop')) return;
+    const backdrop = document.getElementById('itemFilterModalBackdrop');
+    if (!backdrop) return;
+    backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function toggleFiltroAtributoItem(attr) {
+    if (filtrosAtributosAtivos.has(attr)) {
+        filtrosAtributosAtivos.delete(attr);
+    } else {
+        filtrosAtributosAtivos.add(attr);
+    }
+    atualizarInterfaceFiltrosItens();
+    filtrarItens();
+}
+
+function removerFiltroAtributoItem(attr) {
+    filtrosAtributosAtivos.delete(attr);
+    atualizarInterfaceFiltrosItens();
+    filtrarItens();
+}
+
+function limparTodosFiltrosItens() {
+    filtrosAtributosAtivos.clear();
+    atualizarInterfaceFiltrosItens();
+    filtrarItens();
+}
+
+function limparBuscaItem() {
+    const searchInput = document.getElementById('itemSearch');
+    if (searchInput) {
+        searchInput.value = '';
+        searchInput.focus();
+    }
+    filtrarItens();
+}
+
+function alternarExibicaoDescricaoItens() {
+    mostrarDescricaoCardsItens = !mostrarDescricaoCardsItens;
+    const grid = document.getElementById('items-grid');
+    const btn = document.getElementById('itemInfoToggleBtn');
+    if (grid) {
+        if (mostrarDescricaoCardsItens) {
+            grid.classList.remove('hide-item-desc');
+        } else {
+            grid.classList.add('hide-item-desc');
+        }
+    }
+    if (btn) btn.classList.toggle('active', mostrarDescricaoCardsItens);
+}
+
+// Rótulos legíveis para os chips de filtro
+const ROTULOS_ATRIBUTO = {
+    AD: 'Dano de Ataque (AD)',
+    AP: 'Poder de Habilidade (AP)',
+    AS: 'Velocidade de Ataque (AS)',
+    CRIT: 'Acerto Crítico (CRIT)',
+    LS: 'Roubo de Vida (LS)',
+    VAMP: 'Onivampirismo',
+    ARMOR_PEN: 'Letalidade / Pen. Armadura',
+    MAGIC_PEN: 'Penetração Mágica',
+    HP: 'Vida / Saúde (LP)',
+    ARMOR: 'Armadura (ARMOR)',
+    MR: 'Resistência Mágica (MR)',
+    HP_REGEN: 'Regeneração de Vida',
+    TENACITY: 'Tenacidade / Resist. Lentidão',
+    CDR: 'Aceleração de Habilidade (CDR)',
+    MANA: 'Mana',
+    MANA_REGEN: 'Regeneração de Mana',
+    MOV: 'Velocidade de Movimento / Botas',
+    HEAL_SHIELD: 'Cura e Resistência do Escudo'
+};
+
+function atualizarInterfaceFiltrosItens() {
+    const count = filtrosAtributosAtivos.size;
+
+    // Atualiza badge de contador no botão de filtros
+    const counter = document.getElementById('itemFilterCounter');
+    if (counter) {
+        counter.textContent = count;
+        counter.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+
+    // Atualiza estado visual do botão de filtros
+    const filterBtn = document.getElementById('openItemFilterBtn');
+    if (filterBtn) filterBtn.classList.toggle('active', count > 0);
+
+    // Atualiza os botões pill dentro do modal
+    document.querySelectorAll('#itemFilterModalBackdrop .filter-pill-btn').forEach(btn => {
+        const attr = btn.dataset.attr;
+        btn.classList.toggle('active', filtrosAtributosAtivos.has(attr));
+    });
+
+    // Atualiza chips de filtros ativos abaixo da barra de controles
+    const container = document.getElementById('activeFiltersContainer');
+    if (!container) return;
+
+    if (count === 0) {
+        container.style.display = 'none';
+        container.innerHTML = '';
+        return;
+    }
+
+    container.style.display = 'flex';
+    const chipsHTML = [...filtrosAtributosAtivos].map(attr => {
+        const label = ROTULOS_ATRIBUTO[attr] || attr;
+        return `<span class="filter-chip">
+            ${label}
+            <button class="filter-chip-remove" onclick="removerFiltroAtributoItem('${attr}')" title="Remover filtro">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </span>`;
+    }).join('');
+
+    container.innerHTML = chipsHTML + `
+        <button class="filter-chip-clear-all" onclick="limparTodosFiltrosItens()">
+            <i class="fa-solid fa-rotate-left"></i> Limpar tudo
+        </button>
+    `;
+}
+
+// Verifica se um item possui determinado atributo (para o sistema de multi-filtro)
+function itemPossuiAtributo(item, attr) {
+    const tags = item.tags || [];
+    const stats = item.stats || {};
+    const desc = (item.description || '').toLowerCase();
+
+    switch (attr) {
+        case 'AD':
+            return tags.includes('Damage') || Boolean(stats.FlatPhysicalDamageMod);
+        case 'AP':
+            return tags.includes('SpellDamage') || Boolean(stats.FlatMagicDamageMod);
+        case 'AS':
+            return tags.includes('AttackSpeed') || Boolean(stats.PercentAttackSpeedMod);
+        case 'CRIT':
+            return tags.includes('CriticalStrike') || Boolean(stats.FlatCritChanceMod);
+        case 'LS':
+            return tags.includes('LifeSteal') || Boolean(stats.PercentLifeStealMod);
+        case 'VAMP':
+            return tags.includes('SpellVamp') || tags.includes('Omnivamp') || desc.includes('onivampirismo') || desc.includes('omnivamp');
+        case 'ARMOR_PEN':
+            return tags.includes('ArmorPenetration') || desc.includes('letalidade') || desc.includes('penetra') && desc.includes('armadura');
+        case 'MAGIC_PEN':
+            return tags.includes('MagicPenetration') || desc.includes('penetra') && desc.includes('mágica');
+        case 'HP':
+            return tags.includes('Health') || Boolean(stats.FlatHPPoolMod);
+        case 'ARMOR':
+            return tags.includes('Armor') || Boolean(stats.FlatArmorMod);
+        case 'MR':
+            return tags.includes('SpellBlock') || tags.includes('MagicResist') || Boolean(stats.FlatSpellBlockMod);
+        case 'HP_REGEN':
+            return tags.includes('HealthRegen') || Boolean(stats.FlatHPRegenMod) || Boolean(stats.PercentHPRegenMod);
+        case 'TENACITY':
+            return tags.includes('Tenacity') || desc.includes('tenacidade') || desc.includes('resist') && desc.includes('lentidão');
+        case 'CDR':
+            return tags.includes('CooldownReduction') || tags.includes('AbilityHaste');
+        case 'MANA':
+            return tags.includes('Mana') || Boolean(stats.FlatMPPoolMod);
+        case 'MANA_REGEN':
+            return tags.includes('ManaRegen') || Boolean(stats.FlatMPRegenMod) || Boolean(stats.PercentMPRegenMod);
+        case 'MOV':
+            return tags.includes('Boots') || tags.includes('NonbootsMovement') || Boolean(stats.FlatMovementSpeedMod) || Boolean(stats.PercentMovementSpeedMod);
+        case 'HEAL_SHIELD':
+            return tags.includes('HealAndShieldPower') || desc.includes('cura e') || desc.includes('escudo') && desc.includes('poder');
+        default:
+            return false;
+    }
 }
 
 function itemCorrespondeCategoria(item, categoria) {
     if (categoria === 'all') return true;
     const tags = item.tags || [];
+    const stats = item.stats || {};
 
     switch (categoria) {
-        case 'Ataque':
-            return tags.some(t => ['Damage', 'CriticalStrike', 'AttackSpeed', 'LifeSteal', 'ArmorPenetration', 'OnHit'].includes(t));
+        case 'AD':
+            return tags.includes('Damage') || Boolean(stats.FlatPhysicalDamageMod);
         case 'AP':
-            return tags.some(t => ['SpellDamage', 'Mana', 'ManaRegen', 'MagicPenetration', 'AbilityHaste', 'SpellVamp'].includes(t));
-        case 'Defesa':
-            return tags.some(t => ['Health', 'Armor', 'SpellBlock', 'HealthRegen', 'Tenacity'].includes(t));
-        case 'Velocidade':
-            return tags.includes('AttackSpeed');
-        case 'Critico':
-            return tags.includes('CriticalStrike');
-        case 'Botas':
-            return tags.includes('Boots');
+            return tags.includes('SpellDamage') || Boolean(stats.FlatMagicDamageMod);
+        case 'ARMOR':
+            // ESTRITAMENTE itens que concedem armadura, NUNCA apenas vida!
+            return tags.includes('Armor') || Boolean(stats.FlatArmorMod);
+        case 'LP':
+            // Filtro específico para Vida
+            return tags.includes('Health') || Boolean(stats.FlatHPPoolMod);
+        case 'AS':
+            return tags.includes('AttackSpeed') || Boolean(stats.PercentAttackSpeedMod);
+        case 'CRIT':
+            return tags.includes('CriticalStrike') || Boolean(stats.FlatCritChanceMod);
+        case 'MOV':
+            return tags.includes('Boots') || tags.includes('NonbootsMovement') || Boolean(stats.FlatMovementSpeedMod) || Boolean(stats.PercentMovementSpeedMod);
+        case 'LS':
+            return tags.includes('LifeSteal') || tags.includes('SpellVamp') || tags.includes('Omnivamp') || Boolean(stats.PercentLifeStealMod);
+        case 'CDR':
+            return tags.includes('CooldownReduction') || tags.includes('AbilityHaste');
+        case 'MR':
+            return tags.includes('SpellBlock') || tags.includes('MagicResist') || Boolean(stats.FlatSpellBlockMod);
+        case 'PEN':
+            return tags.includes('ArmorPenetration') || tags.includes('MagicPenetration');
+        case 'MANA':
+            return tags.includes('Mana') || tags.includes('ManaRegen') || Boolean(stats.FlatMPPoolMod);
         default:
             return true;
     }
@@ -1568,7 +1896,15 @@ function configurarFiltros() {
 
 function configurarEventosModais() {
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
+        if (e.key === 'Escape') {
+            // Fechar janelinha de filtros se estiver aberta
+            const filterBackdrop = document.getElementById('itemFilterModalBackdrop');
+            if (filterBackdrop && filterBackdrop.classList.contains('active')) {
+                fecharModalFiltrosItens();
+                return;
+            }
+            closeModal();
+        }
     });
 
     ['champion-modal', 'item-modal', 'detailModal', 'ability-video-modal'].forEach(modalId => {
@@ -1584,6 +1920,16 @@ function configurarEventosModais() {
 /* ==========================================================================
    9. UTILITÁRIOS
    ========================================================================== */
+// Normaliza texto para busca: remove acentos, converte para minúsculas, trim
+function normalizarTextoBusca(str) {
+    if (!str) return '';
+    return str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+}
+
 function limparTagsHTML(str) {
     if (!str) return '';
     return str.replace(/<[^>]*>/g, '').trim();
@@ -1597,18 +1943,22 @@ function traduzirTag(tag) {
         'Assassin': 'Assassino',
         'Marksman': 'Atirador',
         'Support': 'Suporte',
-        'Damage': 'Dano',
-        'CriticalStrike': 'Crítico',
-        'AttackSpeed': 'Vel. de Ataque',
-        'LifeSteal': 'Roubo de Vida',
-        'ArmorPenetration': 'Penetração de Armadura',
-        'Health': 'Vida',
-        'Armor': 'Armadura',
-        'SpellBlock': 'Resistência Mágica',
-        'SpellDamage': 'Poder de Habilidade',
-        'Mana': 'Mana',
-        'AbilityHaste': 'Aceleração de Habilidade',
-        'Boots': 'Botas',
+        'Damage': 'Dano Físico AD',
+        'CriticalStrike': 'Crítico CRIT',
+        'AttackSpeed': 'Velocidade de Ataque AS',
+        'LifeSteal': 'Roubo de Vida LS',
+        'SpellVamp': 'Vampirismo LS',
+        'ArmorPenetration': 'Penetração de Armadura Letalidade PEN',
+        'MagicPenetration': 'Penetração Mágica PEN',
+        'Health': 'Vida LP HP',
+        'Armor': 'Armadura ARMOR Defesa',
+        'SpellBlock': 'Resistência Mágica MR',
+        'SpellDamage': 'Poder de Habilidade AP Magia',
+        'Mana': 'Mana MANA',
+        'AbilityHaste': 'Aceleração de Habilidade CDR Haste',
+        'CooldownReduction': 'Redução de Recarga CDR',
+        'Boots': 'Botas MOV Movimento',
+        'NonbootsMovement': 'Velocidade de Movimento MOV',
         'Consumable': 'Consumível',
         'GoldPer': 'Ouro'
     };

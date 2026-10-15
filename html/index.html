@@ -22,32 +22,25 @@
     <!-- CSS Externo na pasta ../css/ -->
     <link rel="stylesheet" href="../css/style.css" />
 
-    <!-- Favicons / Ícones do site -->
+    <!-- Favicons / Ícones do site com tamanhos respectivos -->
     <link rel="icon" type="image/png" sizes="16x16" href="../img/icon/16.png" />
+    <link rel="icon" type="image/png" sizes="19x19" href="../img/icon/19.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="../img/icon/32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="../img/icon/48.png" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="128x128"
-      href="../img/icon/128.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="512x512"
-      href="../img/icon/512.png"
-    />
+    <link rel="icon" type="image/png" sizes="128x128" href="../img/icon/128.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="../img/icon/512.png" />
+    <link rel="icon" type="image/png" sizes="1024x1024" href="../img/icon/1024.png" />
     <link rel="apple-touch-icon" sizes="128x128" href="../img/icon/128.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="../img/icon/512.png" />
+    <link rel="apple-touch-icon" sizes="1024x1024" href="../img/icon/1024.png" />
     <meta name="theme-color" content="#091428" />
   </head>
   <body>
     <!-- Header Navigation -->
     <header>
       <div class="container header-content">
-        <a href="#" class="logo" onclick="switchTab('home')">
-          <img src="../img/icon/48.png" alt="LoL Codex Logo" class="logo-img" />
-          <div>LoL <span>Codex</span></div>
+        <a href="#" class="logo" onclick="switchTab('home')" title="LoL Codex">
+          <img src="../img/icon/header-logo.png" alt="LoL Codex" class="header-logo-img" />
         </a>
 
         <button
@@ -235,8 +228,9 @@
               <input
                 type="text"
                 id="champSearch"
-                placeholder="Filtrar campeão..."
+                placeholder="Buscar campeão pelo nome..."
                 oninput="filtrarCampeoes()"
+                autocomplete="off"
               />
             </div>
           </div>
@@ -259,71 +253,71 @@
               <i class="fa-solid fa-ring"></i> Compêndio de Itens (Summoner's
               Rift)
             </div>
-            <div class="switch-wrapper">
-              <span>Detalhes</span>
-              <label class="hextech-toggle">
-                <input
-                  type="checkbox"
-                  id="itemSummaryToggle"
-                  onchange="alternarResumoItens(this.checked)"
-                />
-                <span class="hextech-slider"></span>
-              </label>
-              <span id="itemSummaryLabel">Resumo</span>
-            </div>
           </div>
 
-          <div class="filter-bar">
-            <div class="filter-group" id="itemCatFilterGroup">
-              <button class="filter-btn active" data-cat="all">
-                <i class="fa-solid fa-border-all"></i> Todos
-              </button>
-              <button class="filter-btn" data-cat="Ataque">
-                <i class="fa-solid fa-hand-fist" style="color: #f97316"></i>
-                Dano Físico (AD)
-              </button>
-              <button class="filter-btn" data-cat="AP">
-                <i
-                  class="fa-solid fa-wand-magic-sparkles"
-                  style="color: #a78bfa"
-                ></i>
-                Poder de Habilidade (AP)
-              </button>
-              <button class="filter-btn" data-cat="Defesa">
-                <i class="fa-solid fa-shield" style="color: #22c55e"></i>
-                Armadura / Tanque
-              </button>
-              <button class="filter-btn" data-cat="Velocidade">
-                <i class="fa-solid fa-bolt" style="color: #fbbf24"></i> Vel. de
-                Ataque
-              </button>
-              <button class="filter-btn" data-cat="Critico">
-                <i class="fa-solid fa-crosshairs" style="color: #ef4444"></i>
-                Crítico
-              </button>
-              <button class="filter-btn" data-cat="Botas">
-                <i class="fa-solid fa-shoe-prints" style="color: #a855f7"></i>
-                Botas
-              </button>
-            </div>
-
-            <div class="search-input-box" style="min-width: 250px">
+          <!-- Nova Barra de Controle de Itens: Busca por nome + Botão de Filtro (janelinha) + Botão de Informação (i) -->
+          <div class="item-controls-bar">
+            <div class="search-input-box item-search-box">
               <i class="fa-solid fa-magnifying-glass"></i>
               <input
                 type="text"
                 id="itemSearch"
-                placeholder="Buscar item..."
+                placeholder="Buscar item pelo nome..."
                 oninput="filtrarItens()"
+                autocomplete="off"
               />
+              <button
+                id="clearItemSearchBtn"
+                class="clear-search-btn"
+                onclick="limparBuscaItem()"
+                style="display: none"
+                title="Limpar busca"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="item-actions-group">
+              <!-- Botão com tracinhos que abre a janelinha de filtragem -->
+              <button
+                type="button"
+                id="openItemFilterBtn"
+                class="filter-trigger-btn"
+                onclick="abrirModalFiltrosItens()"
+                title="Filtrar atributos dos itens"
+              >
+                <i class="fa-solid fa-sliders"></i>
+                <span>Filtros</span>
+                <span
+                  id="itemFilterCounter"
+                  class="filter-counter-badge"
+                  style="display: none"
+                  >0</span
+                >
+              </button>
+
+              <!-- Botão (i) de informação: ativa/desativa as descrições nos cards -->
+              <button
+                type="button"
+                id="itemInfoToggleBtn"
+                class="item-info-toggle-btn"
+                onclick="alternarExibicaoDescricaoItens()"
+                title="Ativar/desativar descrição nos cards de itens"
+              >
+                <i class="fa-solid fa-circle-info"></i>
+                <span class="info-btn-text">Info</span>
+              </button>
             </div>
           </div>
 
-          <!-- Grid principal de Itens de Summoner's Rift -->
-          <div class="item-grid" id="items-grid">
+          <!-- Barra de chips com filtros ativos (caso algum atributo esteja selecionado) -->
+          <div id="activeFiltersContainer" class="active-filters-chips" style="display: none"></div>
+
+          <!-- Grid principal de Itens de Summoner's Rift (com descrições ocultas por padrão) -->
+          <div class="item-grid hide-item-desc" id="items-grid">
             <div class="loading-box">
               <div class="loading-spinner"></div>
-              <span
-                >Carregando itens de Summoner's Rift via Data Dragon...</span
+              <span>Carregando itens de Summoner's Rift via Data Dragon...</span>
               >
             </div>
           </div>
@@ -339,16 +333,17 @@
               Fragmentos de Atributos
             </div>
             <div class="switch-wrapper">
-              <span>Detalhes</span>
+              <span id="runeDetailsLabel">Detalhado</span>
               <label class="hextech-toggle">
                 <input
                   type="checkbox"
                   id="runeSummaryToggle"
+                  checked
                   onchange="alternarResumoRunas(this.checked)"
                 />
                 <span class="hextech-slider"></span>
               </label>
-              <span id="runeSummaryLabel">Resumo</span>
+              <span id="runeSummaryLabel" class="switch-label-active">Resumido</span>
             </div>
           </div>
 
@@ -435,12 +430,261 @@
       </div>
     </div>
 
+    <!-- Modal Janelinha de Filtros de Itens (#itemFilterModalBackdrop) -->
+    <div
+      class="filter-modal-backdrop"
+      id="itemFilterModalBackdrop"
+      onclick="fecharModalFiltrosItens(event)"
+    >
+      <div class="filter-popup-card" onclick="event.stopPropagation()">
+        <div class="filter-popup-header">
+          <div class="filter-popup-title">
+            <i class="fa-solid fa-sliders"></i> Filtrar Atributos
+          </div>
+          <div class="filter-popup-actions">
+            <button
+              type="button"
+              class="filter-clear-link"
+              onclick="limparTodosFiltrosItens()"
+            >
+              <i class="fa-solid fa-rotate-left"></i> Limpar
+            </button>
+            <button
+              type="button"
+              class="filter-close-btn"
+              onclick="fecharModalFiltrosItens()"
+              aria-label="Fechar"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="filter-popup-body">
+          <!-- Grupo Ofensivo -->
+          <div class="filter-section-block">
+            <div class="filter-section-title">
+              <i class="fa-solid fa-khanda"></i> Ataque &amp; Magia (Ofensivo)
+            </div>
+            <div class="filter-pills-grid">
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="AD"
+                onclick="toggleFiltroAtributoItem('AD')"
+              >
+                <span class="stat-img-icon stat-img-ad"></span>
+                <span>Dano de Ataque (AD)</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="AP"
+                onclick="toggleFiltroAtributoItem('AP')"
+              >
+                <span class="stat-img-icon stat-img-ap"></span>
+                <span>Poder de Habilidade (AP)</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="AS"
+                onclick="toggleFiltroAtributoItem('AS')"
+              >
+                <span class="stat-img-icon stat-img-as"></span>
+                <span>Velocidade de Ataque (AS)</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="CRIT"
+                onclick="toggleFiltroAtributoItem('CRIT')"
+              >
+                <span class="stat-img-icon stat-img-crit"></span>
+                <span>Acerto Crítico (CRIT)</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="LS"
+                onclick="toggleFiltroAtributoItem('LS')"
+              >
+                <span class="stat-img-icon stat-img-ls"></span>
+                <span>Roubo de Vida (LS)</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="VAMP"
+                onclick="toggleFiltroAtributoItem('VAMP')"
+              >
+                <span
+                  class="stat-img-icon stat-img-ls"
+                  style="filter: hue-rotate(45deg)"
+                ></span>
+                <span>Onivampirismo</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="ARMOR_PEN"
+                onclick="toggleFiltroAtributoItem('ARMOR_PEN')"
+              >
+                <span class="stat-img-icon stat-img-pen"></span>
+                <span>Letalidade / Pen. Armadura</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="MAGIC_PEN"
+                onclick="toggleFiltroAtributoItem('MAGIC_PEN')"
+              >
+                <span class="stat-img-icon stat-img-mr"></span>
+                <span>Penetração Mágica</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Grupo Defensivo -->
+          <div class="filter-section-block">
+            <div class="filter-section-title">
+              <i class="fa-solid fa-shield-halved"></i> Atributos Defensivos
+            </div>
+            <div class="filter-pills-grid">
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="HP"
+                onclick="toggleFiltroAtributoItem('HP')"
+              >
+                <span class="stat-img-icon stat-img-health"></span>
+                <span>Vida / Saúde (LP)</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="ARMOR"
+                onclick="toggleFiltroAtributoItem('ARMOR')"
+              >
+                <span class="stat-img-icon stat-img-armor"></span>
+                <span>Armadura (ARMOR)</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="MR"
+                onclick="toggleFiltroAtributoItem('MR')"
+              >
+                <span class="stat-img-icon stat-img-mr"></span>
+                <span>Resistência Mágica (MR)</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="HP_REGEN"
+                onclick="toggleFiltroAtributoItem('HP_REGEN')"
+              >
+                <span
+                  class="stat-img-icon stat-img-health"
+                  style="filter: brightness(1.2)"
+                ></span>
+                <span>Regeneração de Vida</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="TENACITY"
+                onclick="toggleFiltroAtributoItem('TENACITY')"
+              >
+                <span class="stat-img-icon stat-img-tenacity"></span>
+                <span>Tenacidade / Resist. Lentidão</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Grupo Recursos & Utilidade -->
+          <div class="filter-section-block">
+            <div class="filter-section-title">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Recursos &amp;
+              Utilidade
+            </div>
+            <div class="filter-pills-grid">
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="CDR"
+                onclick="toggleFiltroAtributoItem('CDR')"
+              >
+                <span class="stat-img-icon stat-img-cdr"></span>
+                <span>Aceleração de Habilidade (CDR)</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="MANA"
+                onclick="toggleFiltroAtributoItem('MANA')"
+              >
+                <span class="stat-img-icon stat-img-mana"></span>
+                <span>Mana</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="MANA_REGEN"
+                onclick="toggleFiltroAtributoItem('MANA_REGEN')"
+              >
+                <span
+                  class="stat-img-icon stat-img-mana"
+                  style="filter: brightness(1.2)"
+                ></span>
+                <span>Regeneração de Mana</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="MOV"
+                onclick="toggleFiltroAtributoItem('MOV')"
+              >
+                <span class="stat-img-icon stat-img-mov"></span>
+                <span>Velocidade de Movimento / Botas</span>
+              </button>
+              <button
+                type="button"
+                class="filter-pill-btn"
+                data-attr="HEAL_SHIELD"
+                onclick="toggleFiltroAtributoItem('HEAL_SHIELD')"
+              >
+                <i
+                  class="fa-solid fa-heart-pulse"
+                  style="color: #34d399; font-size: 14px"
+                ></i>
+                <span>Cura e Resistência do Escudo</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-popup-footer">
+          <span id="filteredItemsCountPreview" class="filter-preview-text"
+            >Mostrando todos os itens</span
+          >
+          <button
+            type="button"
+            class="filter-apply-btn"
+            onclick="fecharModalFiltrosItens()"
+          >
+            <i class="fa-solid fa-check"></i> Aplicar Filtros
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer>
       <div class="container">
         <div class="footer-brand">
           <img
-            src="../img/icon/48.png"
+            src="../img/icon/128.png"
             alt="LoL Codex"
             class="footer-logo-img"
           />

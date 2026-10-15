@@ -148,6 +148,20 @@ header {
   text-transform: uppercase;
 }
 
+.header-logo-img {
+  height: 48px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover .header-logo-img {
+  filter: drop-shadow(0 0 12px rgba(240, 178, 50, 0.45)) brightness(1.08);
+  transform: scale(1.02);
+}
+
 .logo-icon {
   width: 44px;
   height: 44px;
@@ -163,18 +177,22 @@ header {
 }
 
 .logo-img {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 12px rgba(240, 178, 50, 0.55));
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-primary);
+  filter: drop-shadow(0 0 10px rgba(240, 178, 50, 0.45));
   transition:
     filter 0.3s ease,
-    transform 0.3s ease;
+    transform 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .logo:hover .logo-img {
-  filter: drop-shadow(0 0 20px rgba(240, 178, 50, 0.85)) brightness(1.12);
-  transform: scale(1.06);
+  filter: drop-shadow(0 0 18px rgba(240, 178, 50, 0.85)) brightness(1.1);
+  transform: scale(1.05);
+  border-color: var(--gold-bright);
 }
 
 /* Footer brand com logo */
@@ -191,8 +209,10 @@ header {
 .footer-logo-img {
   width: 28px;
   height: 28px;
-  object-fit: contain;
-  opacity: 0.75;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid rgba(200, 155, 60, 0.4);
+  opacity: 0.85;
   filter: drop-shadow(0 0 6px rgba(240, 178, 50, 0.4));
 }
 
@@ -711,6 +731,15 @@ header {
   font-size: 0.82rem;
   color: var(--gold-primary);
   font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Badges de atributos abaixo do nome do item (ex: Força da Trindade > AD LP AS) */
+.item-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
 }
 
 .item-stats {
@@ -1454,6 +1483,10 @@ footer {
   height: 0;
 }
 
+.switch-wrapper span {
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1), text-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .hextech-slider {
   position: absolute;
   cursor: pointer;
@@ -1463,7 +1496,7 @@ footer {
   bottom: 0;
   background-color: #121c2c;
   border: 1px solid var(--hextech-blue);
-  transition: 0.3s;
+  transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 22px;
 }
 
@@ -1475,7 +1508,7 @@ footer {
   left: 3px;
   bottom: 3px;
   background-color: var(--text-muted);
-  transition: 0.3s;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 50%;
 }
 
@@ -1682,10 +1715,12 @@ footer {
 }
 
 .shard-icon {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   object-fit: contain;
-  filter: drop-shadow(0 0 4px var(--gold-glow));
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 0 3px var(--gold-glow));
 }
 
 /* Item Stat Icons & Badges */
@@ -1700,6 +1735,564 @@ footer {
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--gold-light);
+}
+
+.stat-icon-badge img,
+.stat-img-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+/* Fallback para tags <img> esconderem pixels brancos brutos e usarem a máscara */
+img.stat-img-icon {
+  object-position: -99999px -99999px;
+}
+
+.filter-btn .stat-img-icon,
+.filter-trigger-btn .stat-img-icon,
+.filter-pill-btn .stat-img-icon {
+  width: 15px;
+  height: 15px;
+}
+
+/* ==========================================================================
+   COLORAÇÃO TOTAL DOS ÍCONES DE ATRIBUTO VIA MÁSCARAS CSS (CORES OFICIAIS LOL)
+   Cores sólidas, autênticas e sem brilho ofuscante
+   ========================================================================== */
+.stat-img-ad {
+  --stat-color: #f97316;
+  background-color: #f97316;
+  -webkit-mask-image: url('../img/stats/Attack_damage_icon.png');
+  mask-image: url('../img/stats/Attack_damage_icon.png');
+}
+
+.stat-img-ap {
+  --stat-color: #a855f7;
+  background-color: #a855f7;
+  -webkit-mask-image: url('../img/stats/Ability_power_icon.png');
+  mask-image: url('../img/stats/Ability_power_icon.png');
+}
+
+.stat-img-armor {
+  --stat-color: #eab308;
+  background-color: #eab308;
+  -webkit-mask-image: url('../img/stats/Armor_icon.png');
+  mask-image: url('../img/stats/Armor_icon.png');
+}
+
+.stat-img-health {
+  --stat-color: #22c55e;
+  background-color: #22c55e;
+  -webkit-mask-image: url('../img/stats/Health_icon.png');
+  mask-image: url('../img/stats/Health_icon.png');
+}
+
+.stat-img-mr {
+  --stat-color: #06b6d4;
+  background-color: #06b6d4;
+  -webkit-mask-image: url('../img/stats/Magic_resistance_icon.png');
+  mask-image: url('../img/stats/Magic_resistance_icon.png');
+}
+
+.stat-img-as {
+  --stat-color: #f59e0b;
+  background-color: #f59e0b;
+  -webkit-mask-image: url('../img/stats/Attack_speed_icon.png');
+  mask-image: url('../img/stats/Attack_speed_icon.png');
+}
+
+.stat-img-cdr {
+  --stat-color: #38bdf8;
+  background-color: #38bdf8;
+  -webkit-mask-image: url('../img/stats/Cooldown_reduction_icon.png');
+  mask-image: url('../img/stats/Cooldown_reduction_icon.png');
+}
+
+.stat-img-crit {
+  --stat-color: #ef4444;
+  background-color: #ef4444;
+  -webkit-mask-image: url('../img/stats/Critical_strike_chance_icon.png');
+  mask-image: url('../img/stats/Critical_strike_chance_icon.png');
+}
+
+.stat-img-ls {
+  --stat-color: #f43f5e;
+  background-color: #f43f5e;
+  -webkit-mask-image: url('../img/stats/Life_steal_icon.png');
+  mask-image: url('../img/stats/Life_steal_icon.png');
+}
+
+.stat-img-pen {
+  --stat-color: #cbd5e1;
+  background-color: #cbd5e1;
+  -webkit-mask-image: url('../img/stats/Armor_penetration_icon.png');
+  mask-image: url('../img/stats/Armor_penetration_icon.png');
+}
+
+.stat-img-mana {
+  --stat-color: #3b82f6;
+  background-color: #3b82f6;
+  -webkit-mask-image: url('../img/stats/Mana_icon.png');
+  mask-image: url('../img/stats/Mana_icon.png');
+}
+
+.stat-img-mov {
+  --stat-color: #60a5fa;
+  background-color: #60a5fa;
+  -webkit-mask-image: url('../img/stats/Movement_speed_icon.png');
+  mask-image: url('../img/stats/Movement_speed_icon.png');
+}
+
+.stat-img-tenacity {
+  --stat-color: #f97316;
+  background-color: #f97316;
+  -webkit-mask-image: url('../img/stats/Tenacity_icon.png');
+  mask-image: url('../img/stats/Tenacity_icon.png');
+}
+
+/* ==========================================================================
+   BADGES DE ATRIBUTOS SUAVES (MENOS BRILHANTES, MAIS ELEGANTES E NÍTIDAS)
+   ========================================================================== */
+.stat-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-color);
+  padding: 0.18rem 0.45rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  box-shadow: none !important;
+}
+
+.stat-badge-ad {
+  border-color: rgba(249, 115, 22, 0.35) !important;
+  color: #fb923c !important;
+  background: rgba(249, 115, 22, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-ap {
+  border-color: rgba(168, 85, 247, 0.35) !important;
+  color: #c084fc !important;
+  background: rgba(168, 85, 247, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-armor {
+  border-color: rgba(234, 179, 8, 0.35) !important;
+  color: #facc15 !important;
+  background: rgba(234, 179, 8, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-health {
+  border-color: rgba(34, 197, 94, 0.35) !important;
+  color: #4ade80 !important;
+  background: rgba(34, 197, 94, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-mr {
+  border-color: rgba(6, 182, 212, 0.35) !important;
+  color: #38bdf8 !important;
+  background: rgba(6, 182, 212, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-as {
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #fbbf24 !important;
+  background: rgba(245, 158, 11, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-cdr {
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-crit {
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #f87171 !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-ls {
+  border-color: rgba(244, 63, 94, 0.35) !important;
+  color: #fb7185 !important;
+  background: rgba(244, 63, 94, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-pen {
+  border-color: rgba(203, 213, 225, 0.35) !important;
+  color: #e2e8f0 !important;
+  background: rgba(203, 213, 225, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-mana {
+  border-color: rgba(59, 130, 246, 0.35) !important;
+  color: #60a5fa !important;
+  background: rgba(59, 130, 246, 0.08) !important;
+  box-shadow: none !important;
+}
+.stat-badge-mov {
+  border-color: rgba(96, 165, 250, 0.35) !important;
+  color: #93c5fd !important;
+  background: rgba(96, 165, 250, 0.08) !important;
+  box-shadow: none !important;
+}
+
+/* ==========================================================================
+   BARRA DE CONTROLE DE ITENS (BUSCA, BOTÃO FILTROS E BOTÃO INFO)
+   ========================================================================== */
+.item-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.item-search-box {
+  flex: 1;
+  min-width: 250px;
+  max-width: 440px;
+  position: relative;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+.clear-search-btn:hover {
+  color: var(--gold-bright);
+}
+
+.item-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.filter-trigger-btn,
+.item-info-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-body);
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.filter-trigger-btn:hover,
+.item-info-toggle-btn:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-bright);
+  background: rgba(200, 155, 60, 0.08);
+}
+
+.filter-trigger-btn.active,
+.item-info-toggle-btn.active {
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+  background: rgba(200, 155, 60, 0.15);
+  box-shadow: 0 0 10px rgba(240, 178, 50, 0.2);
+}
+
+.filter-counter-badge {
+  background: var(--gold-bright);
+  color: #000;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  margin-left: 2px;
+}
+
+/* Chips de Filtros Ativos */
+.active-filters-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(20, 26, 36, 0.9);
+  border: 1px solid rgba(200, 155, 60, 0.5);
+  color: var(--gold-light);
+  padding: 0.22rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.filter-chip-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  margin-left: 3px;
+  line-height: 1;
+}
+.filter-chip-remove:hover {
+  color: #ef4444;
+}
+
+.filter-chip-clear-all {
+  background: transparent;
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+  padding: 0.22rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.filter-chip-clear-all:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* Descrição dos cards de itens — visível por padrão, oculta via toggle suave */
+.item-stats {
+  overflow: hidden;
+  max-height: 120px;
+  opacity: 1;
+  transition: max-height 0.3s ease, opacity 0.25s ease, margin 0.3s ease;
+  margin-top: 0;
+}
+
+.hide-item-desc .item-stats {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  margin-top: 0 !important;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   MODAL JANELINHA DE FILTRAGEM DE ATRIBUTOS
+   ========================================================================== */
+.filter-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.filter-modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.filter-popup-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(200, 155, 60, 0.15);
+  width: 100%;
+  max-width: 580px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(12px) scale(0.97);
+  transition: transform 0.25s ease;
+}
+
+.filter-modal-backdrop.active .filter-popup-card {
+  transform: translateY(0) scale(1);
+}
+
+.filter-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-panel);
+}
+
+.filter-popup-title {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-clear-link {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.2s ease;
+}
+.filter-clear-link:hover {
+  color: var(--gold-bright);
+}
+
+.filter-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+.filter-close-btn:hover {
+  color: #fff;
+}
+
+.filter-popup-body {
+  padding: 1.2rem 1.4rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.filter-section-title {
+  font-size: 0.76rem;
+  font-family: var(--font-title);
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.filter-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.45rem;
+}
+
+.filter-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(18, 28, 44, 0.7);
+  border: 1px solid var(--border-color);
+  color: var(--text-body);
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.filter-pill-btn:hover {
+  background: rgba(200, 155, 60, 0.1);
+  border-color: rgba(200, 155, 60, 0.4);
+  color: var(--gold-light);
+}
+
+.filter-pill-btn.active {
+  background: rgba(200, 155, 60, 0.2);
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+  font-weight: 600;
+}
+
+.filter-popup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.4rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-panel);
+}
+
+.filter-preview-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.filter-apply-btn {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
+  color: #000;
+  border: none;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.filter-apply-btn:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+/* Transições suaves para os switches de modo Detalhado / Resumido */
+#items-grid,
+#runes-container,
+.skills-grid,
+.item-ddragon-desc {
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .filter-btn {

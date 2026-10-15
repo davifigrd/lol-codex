@@ -1,8 +1,8 @@
-- mudar os ícone de atributos dos itens (AD, AP, ARMOR e etc) para ícones oficiais do lol
+[X] mudar os ícone de atributos dos itens (AD, AP, ARMOR e etc) para ícones oficiais do lol
 
 - mudar barra de scroll do site e das janelas
 
-- mudar ícones de campeoes itens runas para original do jogo
+[X] mudar ícones de campeoes itens runas para original do jogo
 
 - campeões em destaque aparece os ultimos 4 campeoes acessados pelo usuario, se não tiver clicado em nenhum ainda, faça um link chamando para algum campeão, para que assim ele possa selecionar a um da lista e entrar nos campeões de destaque (guarde no local storage ou coisa do tipo)
 
@@ -10,8 +10,22 @@
 
 - na aba de campeões faça com que a lista seja como uma lista telefonica, que ao descer, mostra um balão com a letra respectiva de A a Z
 
-- parece que o ícone no título do site ficou embaçado, tente colocar um tamanho maior de imagem, elas estão classificadas com o nome = a resolução. Ou seja, 1024.png = uma imagem da logo que tem 1024 x 1024 de resolução, e assim respectivamente. Coloque os tamanhos corretos nos lugares corretos. Arredonde a imagem em tudo tambem, para ficar mais bonito, ela quadrada assim deixa muito feio.
+[X] parece que o ícone no título do site ficou embaçado, tente colocar um tamanho maior de imagem, elas estão classificadas com o nome = a resolução. Ou seja, 1024.png = uma imagem da logo que tem 1024 x 1024 de resolução, e assim respectivamente. Coloque os tamanhos corretos nos lugares corretos. Arredonde a imagem em tudo tambem, para ficar mais bonito, ela quadrada assim deixa muito feio.
 
 - nao acha que meu código ta muito grandee? nao seria melhor dividir em partes menores?? 1500+ linhas
 
 - alguns campeões estão com a cor errada na borda deles
+
+- mudar balão de descrição alt (quando passa o mouse em cima de algo). Por exeplo o simbolo do top, quando passar o mouse não quero que apareça um balão no mouse preto simples e sem graça, tem que estar minimamente tematizado ou principalmente fazendo senetido com as cores do site
+
+- quando abrir a janela dos campeões impossibilitar de dar scroll na tela de fundo, somente na janela aberta atual do champeon
+
+- imagem da categoria de runa embaçada (pegar png oficial do jogo, igual fez com os stats em img)
+
+- borda das runas respectivas as suas cores, e fazer parecido de como há no jogo, primeiro as runas principais, depois as sub runas, uma em cima da outra, nao do lado da outra como está
+
+- badges dos campeões errados
+
+- rotas faltando e duas ou mais rotas (jungle/mid)
+
+- logo header não pode ser selecionada
