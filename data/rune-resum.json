@@ -1,0 +1,156 @@
+{
+  "_comentario": "LoL Codex — Resumos AUTORAIS das runas. Chave = nome EXATO da runa como aparece na API Data Dragon (campo 'name'). Campo 'resumo': sua descrição autoral curta e direta. Quando este arquivo não tiver a runa, o site mostrará automaticamente o shortDesc oficial da Riot.",
+
+  "Eletrocutar": {
+    "resumo": "TODO: Escrever resumo da Eletrocutar."
+  },
+  "Predador": {
+    "resumo": "TODO: Escrever resumo do Predador."
+  },
+  "Colheita Sombria": {
+    "resumo": "TODO: Escrever resumo da Colheita Sombria."
+  },
+  "Conquistador": {
+    "resumo": "TODO: Escrever resumo do Conquistador."
+  },
+  "Pressão de Fase": {
+    "resumo": "TODO: Escrever resumo da Pressão de Fase."
+  },
+  "Quebrando Tudo": {
+    "resumo": "TODO: Escrever resumo de Quebrando Tudo (Grasp of the Undying)."
+  },
+  "Fúria Cega": {
+    "resumo": "TODO: Escrever resumo da Fúria Cega."
+  },
+  "Tempestade Crescente": {
+    "resumo": "TODO: Escrever resumo de Tempestade Crescente."
+  },
+  "Aperto dos Mortos-vivos": {
+    "resumo": "TODO: Escrever resumo de Aperto dos Mortos-vivos."
+  },
+  "Passo de Glacê": {
+    "resumo": "TODO: Escrever resumo do Passo de Glacê."
+  },
+  "Determinação de Pedra": {
+    "resumo": "TODO: Escrever resumo de Determinação de Pedra."
+  },
+  "Sopro de Vida": {
+    "resumo": "TODO: Escrever resumo do Sopro de Vida."
+  },
+  "Arcoverde": {
+    "resumo": "TODO: Escrever resumo do Arcoverde (Summon Aery)."
+  },
+  "Cometa Arcano": {
+    "resumo": "TODO: Escrever resumo do Cometa Arcano."
+  },
+  "Ritmo Fatal": {
+    "resumo": "TODO: Escrever resumo do Ritmo Fatal."
+  },
+  "Lethal Tempo": {
+    "resumo": "TODO: Escrever resumo do Lethal Tempo."
+  },
+  "Glacial Augment": {
+    "resumo": "TODO: Escrever resumo do Augmento Glacial."
+  },
+  "First Strike": {
+    "resumo": "TODO: Escrever resumo do Primeiro Ataque."
+  },
+
+  "Tempo Roubado": {
+    "resumo": "TODO: Escrever resumo do Tempo Roubado."
+  },
+  "Gosto de Sangue": {
+    "resumo": "TODO: Escrever resumo do Gosto de Sangue."
+  },
+  "Visão Fantasmagórica": {
+    "resumo": "TODO: Escrever resumo da Visão Fantasmagórica."
+  },
+  "Golpe Baixo": {
+    "resumo": "TODO: Escrever resumo do Golpe Baixo."
+  },
+  "Zombaria": {
+    "resumo": "TODO: Escrever resumo de Zombaria."
+  },
+
+  "Proteção Nula": {
+    "resumo": "TODO: Escrever resumo da Proteção Nula."
+  },
+  "Sobrecarga": {
+    "resumo": "TODO: Escrever resumo de Sobrecarga."
+  },
+  "Banda de Tornozelo Nula": {
+    "resumo": "TODO: Escrever resumo da Banda de Tornozelo Nula."
+  },
+  "Runa Meteórica": {
+    "resumo": "TODO: Escrever resumo da Runa Meteórica."
+  },
+  "Transcendência": {
+    "resumo": "TODO: Escrever resumo da Transcendência."
+  },
+  "Foco Agudo": {
+    "resumo": "TODO: Escrever resumo do Foco Agudo."
+  },
+  "Chuva de Chamas": {
+    "resumo": "TODO: Escrever resumo da Chuva de Chamas."
+  },
+  "Coleta de Scorch": {
+    "resumo": "TODO: Escrever resumo do Scorch."
+  },
+
+  "Ímpeto": {
+    "resumo": "TODO: Escrever resumo do Ímpeto."
+  },
+  "Lendário: Tenacidade": {
+    "resumo": "TODO: Escrever resumo de Lendário: Tenacidade."
+  },
+  "Lendário: Fantasma": {
+    "resumo": "TODO: Escrever resumo de Lendário: Fantasma."
+  },
+  "Último Apoio": {
+    "resumo": "TODO: Escrever resumo do Último Apoio."
+  },
+  "Lendário: Sangue": {
+    "resumo": "TODO: Escrever resumo de Lendário: Sangue."
+  },
+  "Caça Incansável": {
+    "resumo": "TODO: Escrever resumo da Caça Incansável."
+  },
+  "Presença de Espírito": {
+    "resumo": "TODO: Escrever resumo da Presença de Espírito."
+  },
+
+  "Golpe de Magneto": {
+    "resumo": "TODO: Escrever resumo do Golpe de Magneto."
+  },
+  "Corte Celeste": {
+    "resumo": "TODO: Escrever resumo do Corte Celeste."
+  },
+  "Manto de Nimbus": {
+    "resumo": "TODO: Escrever resumo do Manto de Nimbus."
+  },
+  "Absolver": {
+    "resumo": "TODO: Escrever resumo de Absolver."
+  },
+  "Revitalizar": {
+    "resumo": "TODO: Escrever resumo de Revitalizar."
+  },
+
+  "Guarda": {
+    "resumo": "TODO: Escrever resumo do Guarda (Guardian)."
+  },
+  "Fontão": {
+    "resumo": "TODO: Escrever resumo do Fontão (Font of Life)."
+  },
+  "Proteção": {
+    "resumo": "TODO: Escrever resumo de Proteção (Shield Bash)."
+  },
+  "Condicionamento": {
+    "resumo": "TODO: Escrever resumo do Condicionamento."
+  },
+  "Crescimento Excessivo": {
+    "resumo": "TODO: Escrever resumo do Crescimento Excessivo."
+  },
+  "Armadura de Estalagmito": {
+    "resumo": "TODO: Escrever resumo da Armadura de Estalagmito (Unflinching)."
+  }
+}

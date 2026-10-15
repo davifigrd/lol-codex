@@ -1,0 +1,59 @@
+{
+  "_comentario": "LoL Codex — Resumos AUTORAIS das habilidades dos campeões. Chave = ID oficial da Riot (ex: 'Ahri', 'LeeSin'). Use exatamente como aparece na URL da API Data Dragon. Campos: P (Passiva), Q, W, E, R. Quando este arquivo não tiver o campeão, o site mostrará automaticamente a descrição oficial da Riot.",
+  "Aatrox": {
+    "P": "AA causa dano adicional baseado na vida máxima de Aatrox e restaura 100% do dano causado (reduzido para 25% contra tropas). AA e SKILLS reduzem em 2s o CDR da passiva. A ponta do Q reduz em 4s.",
+    "Q": "Golpeia o chão causando AD e pode ser reconjurado até 3 vezes, alterando o formato e aumentando o dano em 25% a cada golpe. Inimigos atingidos na ponta sofrem KNOCK UP e recebem dano adicional.",
+    "W": "Arremessa uma corrente que causa SLOW e AD. Se o inimigo ou monstro não sair da área a tempo, é puxado de volta para o meio e sofre AD novamente.",
+    "E": "Passiva: Cura Aatrox com base no dano causado.\n\nAtiva: Dá um DASH e pode ser usada durante as animações de outras SKILLS.",
+    "R": "Causa FEAR às tropas próximas, aumenta AD, MS e a cura recebida, que diminui ao longo do tempo. Eliminar um campeão aumenta a duração do R e reseta o bônus de MS."
+  },
+  "Ahri": {
+    "P": "Abater 9 tropas ou monstros cura Ahri. Participar do abate de um campeão inimigo concede uma cura massiva.",
+    "Q": "Lança seu orbe mágico que causa dano mágico na ida e dano verdadeiro ao retornar para sua mão.",
+    "W": "Ganha um pico de velocidade de movimento e dispara três chamas que perseguem alvos inimigos prioritários.",
+    "E": "Manda um beijo apaixonante que encanta o primeiro inimigo atingido, interrompendo avanços e forçando-o a andar na direção de Ahri.",
+    "R": "Avança rapidamente até três vezes disparando raios mágicos. Participar de eliminações de campeões estende a duração e concede avanços adicionais."
+  },
+  "Akali": {
+    "P": "Causar dano a um campeão cria um anel de energia. Cruzar o anel fortalece seu próximo ataque com alcance, dano e restauração de energia.",
+    "Q": "Dispara cinco kunais em leque que causam dano mágico e lentidão na ponta do alcance máximo.",
+    "W": "Solta uma cortina de fumaça que expande, tornando Akali invisível, aumentando sua velocidade e restaurando energia.",
+    "E": "Dá um salto para trás e atira uma shuriken para a frente. Pode reconjurar para voar até o alvo marcado de qualquer distância.",
+    "R": "Dá dois saltos acrobáticos: o primeiro atordoa e salta por cima dos inimigos, o segundo executa alvos com base na vida perdida."
+  },
+  "Jax": {
+    "P": "Ataques básicos consecutivos aumentam progressivamente sua velocidade de ataque.",
+    "Q": "Salta em direção a uma unidade amiga, sentinela ou inimiga, causando dano físico a alvos hostis.",
+    "W": "Energiza sua arma para potencializar o próximo ataque básico ou salto com dano mágico adicional.",
+    "E": "Gira sua arma entrando em postura defensiva por 2 segundos, desviando de todos os ataques básicos e atordoando inimigos ao redor no final.",
+    "R": "Passivo: cada 3º ataque causa dano mágico bônus. Ativo: atinge em área e concede armadura e resistência mágica maciças com base nos campeões atingidos."
+  },
+  "Jinx": {
+    "P": "Ganha velocidade de movimento extrema e velocidade de ataque ao abater campeões, estruturas ou monstros épicos.",
+    "Q": "Alterna entre Pow-Pow (metralhadora com velocidade de ataque crescente) e Fishbones (lança-mísseis em área de longo alcance que gasta mana).",
+    "W": "Dispara um raio com sua pistola elétrica, causando dano físico, aplicando lentidão intensa e revelando a posição do alvo.",
+    "E": "Joga três granadas no chão que se armam e enraízam os primeiros inimigos que passarem por cima.",
+    "R": "Dispara um super foguete global que atravessa o mapa e explode causando dano colossal baseado na vida que o alvo já perdeu."
+  },
+  "LeeSin": {
+    "P": "Após usar qualquer habilidade, seus próximos dois ataques básicos recebem velocidade de ataque e recuperam energia.",
+    "Q": "Dispara onda sonora que marca e revela o primeiro inimigo. Pode reconjurar para avançar rapidamente até ele causando dano por vida perdida.",
+    "W": "Avança até uma unidade aliada ou sentinela concedendo escudo. Ao reconjurar, recebe roubo de vida e vampirismo mágico.",
+    "E": "Golpeia o chão revelando unidades invisíveis próximas. Ao reconjurar, aplica lentidão aos inimigos atingidos.",
+    "R": "Desfere um chute potente que lança um campeão inimigo para trás, arremessando ao ar qualquer outro inimigo com quem ele colidir."
+  },
+  "Thresh": {
+    "P": "Colhe as almas de inimigos abatidos nas redondezas para acumular armadura e poder de habilidade permanentemente.",
+    "Q": "Arremessa sua foice atordoando e puxando a primeira unidade atingida. Ao reconjurar, puxa a si mesmo na direção do alvo.",
+    "W": "Lança uma lanterna que concede escudo aos aliados. Qualquer aliado pode clicar na lanterna para voar imediatamente até Thresh.",
+    "E": "Açoita com suas correntes para empurrar ou puxar inimigos na direção do golpe, aplicando lentidão.",
+    "R": "Ergue uma prisão espectral de 5 paredes ao redor de si. Quebrar uma parede causa dano mágico e 99% de lentidão."
+  },
+  "Yasuo": {
+    "P": "Dobra toda a chance de acerto crítico e gera um escudo protetor conforme se movimenta pelo mapa, ativado ao sofrer dano.",
+    "Q": "Estoca para a frente com a espada. Com duas cargas acumuladas, dispara um tornado que lança os inimigos ao ar.",
+    "W": "Ergue uma barreira de vento que bloqueia e dissolve todos os projéteis inimigos em voo durante 4 segundos.",
+    "E": "Desliza velozmente através de um alvo inimigo causando dano mágico. Possui tempo de recarga individual por unidade.",
+    "R": "Teleporta instantaneamente para qualquer campeão inimigo arremessado ao ar, mantendo todos os alvos suspensos e ganhando penetração de armadura."
+  }
+}

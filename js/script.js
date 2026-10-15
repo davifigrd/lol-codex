@@ -30,7 +30,33 @@ let modoResumoItens = false;
 let modoResumoRunas = true;
 let campeaoModalAbertoAtual = null;
 
-// Símbolos oficiais das rotas de League of Legends (CommunityDragon / Riot Games)
+// Banco de dados de resumos autorais e glossário (carregados da pasta data/)
+let resumoHabilidades = {};
+let resumoItens = {};
+let resumoRunas = {};
+let glossarioLol = {};
+
+// Cache de dados do CommunityDragon por campeão (para os vídeos das habilidades)
+let champCDragonCache = {};
+
+// URL base dos vídeos de habilidades (CommunityDragon / CloudFront da Riot)
+const VIDEO_BASE_URL = 'https://d28xe8vt774jo5.cloudfront.net/';
+
+
+
+
+// Ícones oficiais de CLASSE de League of Legends (CommunityDragon / Riot Games)
+// Usados no cliente do LoL para representar a classe/função de cada campeão
+const ICONES_CLASSES = {
+    Fighter: { url: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/npe-ft-role-icon-fighter.png', label: 'Lutador' },
+    Tank: { url: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/npe-ft-role-icon-tank.png', label: 'Tanque' },
+    Mage: { url: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/npe-ft-role-icon-mage.png', label: 'Mago' },
+    Assassin: { url: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/npe-ft-role-icon-assassin.png', label: 'Assassino' },
+    Marksman: { url: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/npe-ft-role-icon-marksman.png', label: 'Atirador' },
+    Support: { url: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/npe-ft-role-icon-support.png', label: 'Suporte' }
+};
+
+// Ícones oficiais de ROTA (para o card e filtros por posição)
 const ICONES_ROTAS = {
     Top: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-top.png',
     Jungle: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-jungle.png',
@@ -38,6 +64,223 @@ const ICONES_ROTAS = {
     ADC: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-bottom.png',
     Suporte: 'https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png'
 };
+
+// =========================================================================
+// ÍCONES DE DANO / ESPECIAIS — usados nos cards de campeão e itens
+// Todos usando FontAwesome 6 Free (sem ícones Pro)
+// =========================================================================
+const ICONES_ATRIBUTO = {
+    AD: { icon: 'fa-solid fa-hand-fist', color: '#f97316', label: 'Dano Físico (AD)' },
+    AP: { icon: 'fa-solid fa-wand-magic-sparkles', color: '#a78bfa', label: 'Poder de Habilidade (AP)' },
+    Heal: { icon: 'fa-solid fa-heart', color: '#34d399', label: 'Cura' },
+    Shield: { icon: 'fa-solid fa-shield-halved', color: '#818cf8', label: 'Escudo' },
+    Tank: { icon: 'fa-solid fa-shield', color: '#22c55e', label: 'Tanque/Defesa' },
+    CC: { icon: 'fa-solid fa-snowflake', color: '#60a5fa', label: 'Controle de Grupo' },
+    Dash: { icon: 'fa-solid fa-person-running', color: '#fbbf24', label: 'Mobilidade/Dash' },
+    Stealth: { icon: 'fa-solid fa-eye-slash', color: '#94a3b8', label: 'Furtividade' },
+    Summon: { icon: 'fa-solid fa-dragon', color: '#f59e0b', label: 'Invocações' },
+    True: { icon: 'fa-solid fa-circle-half-stroke', color: '#f0e6d2', label: 'Dano Verdadeiro' },
+    Global: { icon: 'fa-solid fa-earth-americas', color: '#06b6d4', label: 'Habilidade Global' },
+    Execute: { icon: 'fa-solid fa-skull', color: '#ef4444', label: 'Execução' },
+    Zone: { icon: 'fa-solid fa-circle-radiation', color: '#fb923c', label: 'Controle de Zona' }
+};
+
+// Perfis de dano/especiais por campeão (ID do Data Dragon)
+// Limitado a 3 badges no card; os mais importantes primeiro
+const PERFIS_CAMPEAO = {
+    Aatrox: ['AD', 'Heal'],
+    Ahri: ['AP', 'CC', 'Dash'],
+    Akali: ['AP', 'Dash', 'Stealth'],
+    Akshan: ['AD', 'Dash'],
+    Alistar: ['Tank', 'CC', 'Heal'],
+    Ambessa: ['AD', 'Dash'],
+    Amumu: ['Tank', 'CC'],
+    Anivia: ['AP', 'CC', 'Zone'],
+    Annie: ['AP', 'CC', 'Summon'],
+    Aphelios: ['AD', 'Zone'],
+    Ashe: ['AD', 'CC'],
+    AurelionSol: ['AP', 'Zone'],
+    Aurora: ['AP', 'Stealth'],
+    Azir: ['AP', 'Summon', 'Zone'],
+    Bard: ['AP', 'CC'],
+    BelVeth: ['AD', 'Dash'],
+    Blitzcrank: ['Tank', 'CC'],
+    Brand: ['AP', 'Zone'],
+    Braum: ['Tank', 'CC', 'Shield'],
+    Briar: ['AD', 'Heal', 'Dash'],
+    Caitlyn: ['AD', 'CC', 'Zone'],
+    Camille: ['AD', 'Dash', 'CC'],
+    Cassiopeia: ['AP', 'CC', 'Zone'],
+    Chogath: ['Tank', 'CC', 'True'],
+    Corki: ['AD', 'AP'],
+    Darius: ['AD', 'CC', 'Execute'],
+    Diana: ['AP', 'Dash', 'CC'],
+    DrMundo: ['Tank', 'Heal'],
+    Draven: ['AD'],
+    Ekko: ['AP', 'Dash', 'Heal'],
+    Elise: ['AP', 'Summon', 'Dash'],
+    Evelynn: ['AP', 'Stealth', 'Dash'],
+    Ezreal: ['AD', 'Dash'],
+    Fiddlesticks: ['AP', 'CC', 'Summon'],
+    Fiora: ['AD', 'True'],
+    Fizz: ['AP', 'Dash', 'CC'],
+    Galio: ['AP', 'Tank', 'CC'],
+    Gangplank: ['AD', 'Zone'],
+    Garen: ['AD', 'Tank', 'Execute'],
+    Gnar: ['AD', 'CC', 'Dash'],
+    Gragas: ['AP', 'CC', 'Dash'],
+    Graves: ['AD', 'Dash'],
+    Gwen: ['AP', 'True'],
+    Hecarim: ['AD', 'Dash', 'Heal'],
+    Heimerdinger: ['AP', 'Summon', 'CC'],
+    Hwei: ['AP', 'CC', 'Zone'],
+    Illaoi: ['AD', 'Summon'],
+    Irelia: ['AD', 'Dash', 'CC'],
+    Ivern: ['AP', 'Summon', 'Shield'],
+    Janna: ['AP', 'Shield', 'CC'],
+    JarvanIV: ['AD', 'CC', 'Zone'],
+    Jax: ['AD', 'Heal'],
+    Jayce: ['AD', 'AP'],
+    Jhin: ['AD', 'CC', 'Zone'],
+    Jinx: ['AD', 'CC'],
+    KSante: ['Tank', 'CC', 'Dash'],
+    Kaisa: ['AD', 'AP', 'Dash'],
+    Kalista: ['AD', 'Dash'],
+    Karma: ['AP', 'Shield', 'CC'],
+    Karthus: ['AP', 'Zone', 'Global'],
+    Kassadin: ['AP', 'Dash'],
+    Katarina: ['AP', 'Dash', 'Execute'],
+    Kayle: ['AP', 'True', 'Heal'],
+    Kayn: ['AD', 'Dash', 'Heal'],
+    Kennen: ['AP', 'CC'],
+    Khazix: ['AD', 'Stealth', 'Execute'],
+    Kindred: ['AD', 'Zone'],
+    Kled: ['AD', 'Dash', 'CC'],
+    KogMaw: ['AD', 'AP', 'Zone'],
+    LeBlanc: ['AP', 'Dash', 'CC'],
+    LeeSin: ['AD', 'Dash', 'CC'],
+    Leona: ['Tank', 'CC', 'Zone'],
+    Lillia: ['AP', 'Dash', 'CC'],
+    Lissandra: ['AP', 'CC', 'Zone'],
+    Lucian: ['AD', 'Dash'],
+    Lulu: ['AP', 'CC', 'Shield'],
+    Lux: ['AP', 'CC', 'Shield'],
+    Malphite: ['Tank', 'CC'],
+    Malzahar: ['AP', 'CC', 'Summon'],
+    Maokai: ['Tank', 'CC', 'Heal'],
+    MasterYi: ['AD', 'True', 'Heal'],
+    Milio: ['AP', 'Shield', 'Heal'],
+    MissFortune: ['AD', 'Zone'],
+    MonkeyKing: ['AD', 'Heal', 'Stealth'],
+    Mordekaiser: ['AP', 'Zone'],
+    Morgana: ['AP', 'CC', 'Shield'],
+    Naafiri: ['AD', 'Dash', 'Execute'],
+    Nami: ['AP', 'CC', 'Heal'],
+    Nasus: ['AD', 'Tank', 'CC'],
+    Nautilus: ['Tank', 'CC', 'Zone'],
+    Neeko: ['AP', 'CC', 'Zone'],
+    Nidalee: ['AP', 'Heal', 'Dash'],
+    Nilah: ['AD', 'Heal', 'Dash'],
+    Nocturne: ['AD', 'Stealth', 'Global'],
+    Nunu: ['Tank', 'CC', 'Heal'],
+    Olaf: ['AD', 'Heal'],
+    Orianna: ['AP', 'CC', 'Shield'],
+    Ornn: ['Tank', 'CC'],
+    Pantheon: ['AD', 'CC', 'Global'],
+    Poppy: ['Tank', 'CC'],
+    Pyke: ['AD', 'CC', 'Execute'],
+    Qiyana: ['AD', 'Stealth', 'CC'],
+    Quinn: ['AD', 'Dash', 'CC'],
+    Rakan: ['AP', 'CC', 'Shield'],
+    Rammus: ['Tank', 'CC'],
+    RekSai: ['AD', 'Dash', 'True'],
+    Rell: ['Tank', 'CC', 'Zone'],
+    Renata: ['AP', 'CC', 'Shield'],
+    Renekton: ['AD', 'Dash', 'CC'],
+    Rengar: ['AD', 'Stealth', 'Execute'],
+    Riven: ['AD', 'Shield', 'Dash'],
+    Rumble: ['AP', 'Zone', 'CC'],
+    Ryze: ['AP', 'CC', 'Zone'],
+    Samira: ['AD', 'Dash'],
+    Sejuani: ['Tank', 'CC', 'Zone'],
+    Senna: ['AD', 'CC', 'Heal'],
+    Seraphine: ['AP', 'CC', 'Heal'],
+    Sett: ['AD', 'Tank', 'True'],
+    Shaco: ['AD', 'Stealth', 'Summon'],
+    Shen: ['Tank', 'CC', 'Global'],
+    Shyvana: ['AD', 'AP', 'Zone'],
+    Singed: ['Tank', 'CC', 'Zone'],
+    Sion: ['Tank', 'CC', 'Zone'],
+    Sivir: ['AD', 'Zone', 'Shield'],
+    Skarner: ['Tank', 'CC'],
+    Smolder: ['AD', 'AP', 'Zone'],
+    Sona: ['AP', 'CC', 'Heal'],
+    Soraka: ['AP', 'CC', 'Heal'],
+    Swain: ['AP', 'CC', 'Heal'],
+    Sylas: ['AP', 'Dash', 'Heal'],
+    Syndra: ['AP', 'CC', 'Zone'],
+    TahmKench: ['Tank', 'CC', 'Heal'],
+    Taliyah: ['AP', 'CC', 'Global'],
+    Talon: ['AD', 'Stealth', 'Dash'],
+    Taric: ['Tank', 'CC', 'Heal'],
+    Teemo: ['AP', 'Stealth', 'Zone'],
+    Thresh: ['Tank', 'CC', 'Shield'],
+    Tristana: ['AD', 'Dash', 'Zone'],
+    Trundle: ['AD', 'Tank', 'CC'],
+    Tryndamere: ['AD', 'Dash', 'Execute'],
+    TwistedFate: ['AP', 'CC', 'Global'],
+    Twitch: ['AD', 'Stealth', 'Zone'],
+    Udyr: ['Tank', 'CC', 'Heal'],
+    Urgot: ['AD', 'Tank', 'Execute'],
+    Varus: ['AD', 'CC', 'Zone'],
+    Vayne: ['AD', 'True', 'Execute'],
+    Veigar: ['AP', 'CC', 'Execute'],
+    VelKoz: ['AP', 'CC', 'True'],
+    Vex: ['AP', 'CC', 'Zone'],
+    Vi: ['AD', 'CC', 'Dash'],
+    Viego: ['AD', 'Stealth', 'Heal'],
+    Viktor: ['AP', 'CC', 'Zone'],
+    Vladimir: ['AP', 'Heal', 'Zone'],
+    Volibear: ['Tank', 'CC'],
+    Warwick: ['Tank', 'CC', 'Heal'],
+    Wukong: ['AD', 'Stealth', 'CC'],
+    Xayah: ['AD', 'CC', 'Dash'],
+    Xerath: ['AP', 'CC', 'Global'],
+    XinZhao: ['AD', 'CC', 'Heal'],
+    Yasuo: ['AD', 'Dash', 'Shield'],
+    Yone: ['AD', 'AP', 'Dash'],
+    Yorick: ['AD', 'Summon', 'Zone'],
+    Yuumi: ['AP', 'Heal', 'Shield'],
+    Zac: ['Tank', 'CC', 'Dash'],
+    Zed: ['AD', 'Stealth', 'Execute'],
+    Zeri: ['AD', 'Dash', 'Shield'],
+    Ziggs: ['AP', 'Zone', 'CC'],
+    Zilean: ['AP', 'CC', 'Zone'],
+    Zoe: ['AP', 'CC', 'Zone'],
+    Zyra: ['AP', 'CC', 'Summon']
+};
+
+// Gera os badges HTML de dano/especiais para um campeão (até 3 badges no card)
+function gerarBadgesDanoCampeao(champId) {
+    const perfil = PERFIS_CAMPEAO[champId];
+    if (!perfil || perfil.length === 0) return '';
+    return perfil.slice(0, 3).map(key => {
+        const attr = ICONES_ATRIBUTO[key];
+        if (!attr) return '';
+        return `<span class="champ-damage-badge" title="${attr.label}"><i class="${attr.icon}" style="color:${attr.color}; font-size:11px;"></i> ${key}</span>`;
+    }).join('');
+}
+
+// Gera badges de dano completos para o modal do campeão (todos os badges)
+function gerarBadgesDanoModalCampeao(champId) {
+    const perfil = PERFIS_CAMPEAO[champId];
+    if (!perfil || perfil.length === 0) return '';
+    return perfil.map(key => {
+        const attr = ICONES_ATRIBUTO[key];
+        if (!attr) return '';
+        return `<span class="stat-icon-badge" title="${attr.label}" style="border-color:${attr.color}44;"><i class="${attr.icon}" style="color:${attr.color};"></i> ${attr.label}</span>`;
+    }).join('');
+}
 
 /* ==========================================================================
    INICIALIZAÇÃO DA APLICAÇÃO
@@ -50,11 +293,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. Sincroniza a versão oficial do Data Dragon
     await carregarVersaoDDragon();
 
-    // 2. Carrega Campeões, Itens e Runas em paralelo
+    // 2. Carrega Campeões, Itens, Runas e Resumos Autorais em paralelo
     await Promise.all([
         carregarCampeoesDoDataDragon(),
         carregarItensDoDataDragon(),
-        carregarRunasDoDataDragon()
+        carregarRunasDoDataDragon(),
+        carregarResumosAutorais()
     ]);
 });
 
@@ -74,6 +318,40 @@ async function carregarVersaoDDragon() {
     } catch (erro) {
         console.warn(`[LoL Codex] Falha ao obter versões, mantendo: ${versaoAtual}`, erro);
     }
+}
+
+/* ==========================================================================
+   1b. RESUMOS AUTORAIS (3 JSONs locais)
+   ========================================================================== */
+async function carregarResumosAutorais() {
+    const carregarJSON = async (caminho, fallback = {}) => {
+        try {
+            const res = await fetch(caminho);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return await res.json();
+        } catch (erro) {
+            console.warn(`[LoL Codex] Resumo não encontrado (${caminho}):`, erro.message);
+            return fallback;
+        }
+    };
+
+    const [habilidades, itens, runas, glossario] = await Promise.all([
+        carregarJSON('../data/skill-resum.json'),
+        carregarJSON('../data/item-resum.json'),
+        carregarJSON('../data/rune-resum.json'),
+        carregarJSON('../data/glossary.json')
+    ]);
+
+    resumoHabilidades = habilidades;
+    resumoItens = itens;
+    resumoRunas = runas;
+    glossarioLol = glossario;
+    console.log('[LoL Codex] Resumos autorais e glossário carregados:', {
+        campeoes: Object.keys(resumoHabilidades).filter(k => !k.startsWith('_')).length,
+        itens: Object.keys(resumoItens).filter(k => !k.startsWith('_')).length,
+        runas: Object.keys(resumoRunas).filter(k => !k.startsWith('_')).length,
+        termosGlossario: Object.keys(glossarioLol).filter(k => !k.startsWith('_')).length
+    });
 }
 
 /* ==========================================================================
@@ -142,18 +420,13 @@ function renderizarCampeoes(lista) {
 
 function criarCardCampeaoHTML(champ) {
     const splashUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champ.id}_0.jpg`;
-    const difficultyLevel = champ.info && champ.info.difficulty ? Math.min(3, Math.ceil(champ.info.difficulty / 3.3)) : 2;
-
-    let dots = '';
-    for (let i = 1; i <= 3; i++) {
-        dots += `<div class="diff-dot ${i <= difficultyLevel ? 'active' : ''}"></div>`;
-    }
-
     const rotaPrincipal = identificarRotaPrincipalCampeao(champ);
     const iconeRotaUrl = ICONES_ROTAS[rotaPrincipal] || ICONES_ROTAS.Mid;
+    const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${versaoAtual}/img/champion/${champ.id}.png`;
+    const badgesDano = gerarBadgesDanoCampeao(champ.id);
 
     return `
-        <div class="champ-card" onclick="abrirModalCampeao('${champ.id}')">
+        <div class="champ-card" onclick="abrirModalCampeao('${champ.id}')" onmouseenter="aplicarCorCardHover(this, '${iconUrl}')">
             <div class="champ-banner" style="background-image: url('${splashUrl}');"></div>
             <!-- Símbolo da rota oficial do LoL em vez de texto escrito -->
             <div class="champ-badge-lane" title="Rota: ${rotaPrincipal}">
@@ -161,18 +434,23 @@ function criarCardCampeaoHTML(champ) {
             </div>
             <div class="champ-info">
                 <h3 class="champ-name">${champ.name}</h3>
-                <p class="champ-title">${champ.title}</p>
                 <div class="champ-tags">
-                    ${(champ.tags || []).map(t => `<span class="tag">${traduzirTag(t)}</span>`).join('')}
+                    ${(champ.tags || []).map(t => {
+        const cls = ICONES_CLASSES[t];
+        if (cls) {
+            return `<span class="tag tag-icon-class" title="${cls.label}"><img src="${cls.url}" alt="${cls.label}" class="tag-class-icon"></span>`;
+        }
+        return `<span class="tag">${traduzirTag(t)}</span>`;
+    }).join('')}
                 </div>
                 <div class="champ-footer">
-                    <span>Dificuldade</span>
-                    <div class="diff-dots">${dots}</div>
+                    ${badgesDano}
                 </div>
             </div>
         </div>
     `;
 }
+
 
 /* ==========================================================================
    3. ITENS VIA DATA DRAGON (COM SÍMBOLOS DE ATRIBUTOS E SEM A PALAVRA GOLD)
@@ -215,11 +493,15 @@ async function carregarItensDoDataDragon() {
     }
 }
 
+// ID do item atualmente aberto no modal (para re-renderizar ao trocar o switch)
+let itemModalAbertoAtual = null;
+
 function alternarResumoItens(ativado) {
     modoResumoItens = ativado;
-    const label = document.getElementById('itemSummaryLabel');
-    if (label) label.classList.toggle('switch-label-active', ativado);
-    filtrarItens();
+    filtrarItens(); // Atualiza os cards
+    if (itemModalAbertoAtual && todosItens[itemModalAbertoAtual]) {
+        abrirModalItem(itemModalAbertoAtual); // Re-renderiza o modal aberto
+    }
 }
 
 function renderizarItens(lista) {
@@ -246,13 +528,17 @@ function criarCardItemHTML(item) {
     // Ícones visuais de atributos em vez de texto escrito
     const iconesAtributos = gerarIconesAtributosItem(item.tags || []);
 
-    // Modo resumo vs detalhado
-    const textoExibicao = modoResumoItens
-        ? (item.plaintext || 'Item de Summoner\'s Rift.')
-        : limparTagsHTML(item.description || item.plaintext || 'Item de Summoner\'s Rift.');
+    // Modo resumo vs detalhado: Resumo = texto autoral do JSON; Detalhado = plaintext limpo do DDragon
+    const resumoItem = resumoItens[item.id];
+    let textoExibicao;
+    if (modoResumoItens && resumoItem && resumoItem.resumo && !resumoItem.resumo.startsWith('TODO:')) {
+        textoExibicao = resumoItem.resumo;
+    } else {
+        textoExibicao = item.plaintext || limparTagsHTML(item.description || '') || 'Item de Summoner\'s Rift.';
+    }
 
     return `
-        <div class="item-card" onclick="abrirModalItem('${item.id}')">
+        <div class="item-card" onclick="abrirModalItem('${item.id}')" onmouseenter="aplicarCorCardHover(this, '${iconUrl}')">
             <div class="item-header">
                 <img src="${iconUrl}" class="item-icon" alt="${item.name}" loading="lazy">
                 <div class="item-title-wrap">
@@ -275,26 +561,30 @@ function criarCardItemHTML(item) {
 
 function gerarIconesAtributosItem(tags) {
     let badges = [];
-    if (tags.some(t => ['Damage', 'AttackSpeed', 'CriticalStrike', 'LifeSteal', 'ArmorPenetration'].includes(t))) {
-        badges.push(`<span class="stat-icon-badge" title="Dano Físico / Ataque"><i class="fa-solid fa-hand-fist" style="color:#f97316;"></i> AD</span>`);
+    if (tags.some(t => ['Damage', 'AttackSpeed', 'CriticalStrike', 'LifeSteal', 'ArmorPenetration', 'OnHit'].includes(t))) {
+        badges.push(`<span class="stat-icon-badge" title="Dano Físico / Ataque (AD)" style="border-color:#f9731633;"><i class="fa-solid fa-hand-fist" style="color:#f97316;"></i> AD</span>`);
     }
-    if (tags.some(t => ['SpellDamage', 'Mana', 'ManaRegen', 'MagicPenetration'].includes(t))) {
-        badges.push(`<span class="stat-icon-badge" title="Poder de Habilidade / Magia"><i class="fa-solid fa-wand-magic-sparkles" style="color:#00A3FF;"></i> AP</span>`);
+    if (tags.some(t => ['SpellDamage', 'Mana', 'ManaRegen', 'MagicPenetration', 'AbilityHaste', 'SpellVamp'].includes(t))) {
+        badges.push(`<span class="stat-icon-badge" title="Poder de Habilidade / Magia (AP)" style="border-color:#a78bfa33;"><i class="fa-solid fa-wand-magic-sparkles" style="color:#a78bfa;"></i> AP</span>`);
     }
-    if (tags.some(t => ['Armor', 'SpellBlock', 'Health', 'HealthRegen'].includes(t))) {
-        badges.push(`<span class="stat-icon-badge" title="Armadura / Defesa / Tanque"><i class="fa-solid fa-shield-halved" style="color:#22c55e;"></i> DEF</span>`);
+    if (tags.some(t => ['Armor', 'SpellBlock', 'Health', 'HealthRegen', 'Tenacity'].includes(t))) {
+        badges.push(`<span class="stat-icon-badge" title="Armadura / Defesa / Tanque" style="border-color:#22c55e33;"><i class="fa-solid fa-shield" style="color:#22c55e;"></i> DEF</span>`);
     }
     if (tags.includes('Boots')) {
-        badges.push(`<span class="stat-icon-badge" title="Velocidade de Movimento"><i class="fa-solid fa-shoe-prints" style="color:#a855f7;"></i> Bota</span>`);
+        badges.push(`<span class="stat-icon-badge" title="Velocidade de Movimento" style="border-color:#a855f733;"><i class="fa-solid fa-shoe-prints" style="color:#a855f7;"></i> MOV</span>`);
     }
     if (tags.includes('CriticalStrike')) {
-        badges.push(`<span class="stat-icon-badge" title="Acerto Crítico"><i class="fa-solid fa-crosshairs" style="color:#ef4444;"></i> Crítico</span>`);
+        badges.push(`<span class="stat-icon-badge" title="Acerto Crítico" style="border-color:#ef444433;"><i class="fa-solid fa-crosshairs" style="color:#ef4444;"></i> CRIT</span>`);
+    }
+    if (tags.includes('LifeSteal') || tags.includes('SpellVamp')) {
+        badges.push(`<span class="stat-icon-badge" title="Roubo de Vida" style="border-color:#34d39933;"><i class="fa-solid fa-heart" style="color:#34d399;"></i> Roubo</span>`);
     }
     if (badges.length === 0) {
-        badges.push(`<span class="stat-icon-badge" title="Utilidade / Loja"><i class="fa-solid fa-gem" style="color:var(--gold-primary);"></i> Item</span>`);
+        badges.push(`<span class="stat-icon-badge" title="Utilidade / Loja"><i class="fa-solid fa-gem" style="color:var(--gold-primary);"></i> Util</span>`);
     }
     return badges.join('');
 }
+
 
 /* ==========================================================================
    4. MODAL DETALHADO DE CAMPEÕES (COM CHAVE SWITCH E SEM LORE)
@@ -342,8 +632,243 @@ async function abrirModalCampeao(championId) {
 function alternarResumoHabilidadesCampeao(ativado) {
     modoResumoHabilidades = ativado;
     if (campeaoModalAbertoAtual && detalhesCampeoesCache[campeaoModalAbertoAtual]) {
-        renderizarConteudoModalCampeao(detalhesCampeoesCache[campeaoModalAbertoAtual]);
+        // Fade out suave antes de re-renderizar o conteúdo
+        const grid = document.querySelector('#champion-modal-content .skills-grid');
+        if (grid) {
+            grid.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            grid.style.opacity = '0';
+            grid.style.transform = 'translateY(4px)';
+            setTimeout(() => {
+                renderizarConteudoModalCampeao(detalhesCampeoesCache[campeaoModalAbertoAtual]);
+            }, 200);
+        } else {
+            renderizarConteudoModalCampeao(detalhesCampeoesCache[campeaoModalAbertoAtual]);
+        }
     }
+}
+
+/* ==========================================================================
+   4.1. EXTRAÇÃO DE COR PREDOMINANTE DINÂMICA — HSL Cluster Voting
+   Agrupa os pixels por matiz (hue) em 36 buckets de 10° e escolhe o
+   bucket com maior saturação×peso acumulado. Ignora cinzas e extremos.
+   ========================================================================== */
+const COR_CACHE_VERSION = 'v4'; // Incrementar aqui para invalidar o cache
+const COR_CACHE_KEY = `lol_codex_cores_${COR_CACHE_VERSION}`;
+const cacheCoresDinamicas = {};
+
+// Cores temáticas fiéis/oficiais fixadas para campeões onde a roupa/identidade
+// é muito específica e pode ser mascarada pelo fundo do ícone (ex: Akali ninja verde)
+const CORES_CUSTOMIZADAS_CAMPEAO = {
+    'Akali': { r: 16, g: 185, b: 129 },       // Verde ninja esmeralda característico da roupa clássica
+    'Zac': { r: 34, g: 197, b: 94 },          // Verde gosma
+    'Singed': { r: 132, g: 204, b: 22 },      // Verde tóxico
+    'Vladimir': { r: 220, g: 38, b: 38 }      // Vermelho sangue hemomante
+};
+
+// Limpa versões antigas do cache ao iniciar
+(function limparCacheAntigo() {
+    try {
+        ['lol_codex_cores_cache', 'lol_codex_cores_v1', 'lol_codex_cores_v2', 'lol_codex_cores_v3'].forEach(k => {
+            if (localStorage.getItem(k)) localStorage.removeItem(k);
+        });
+        const salvo = localStorage.getItem(COR_CACHE_KEY);
+        if (salvo) Object.assign(cacheCoresDinamicas, JSON.parse(salvo));
+    } catch (e) { }
+})();
+
+function salvarCacheCores() {
+    try {
+        localStorage.setItem(COR_CACHE_KEY, JSON.stringify(cacheCoresDinamicas));
+    } catch (e) { }
+}
+
+// Converte RGB para HSL, retornando { h: 0-360, s: 0-1, l: 0-1 }
+function rgbParaHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+    if (max === min) return { h: 0, s: 0, l };
+    const d = max - min;
+    const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    let h;
+    switch (max) {
+        case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+        case g: h = ((b - r) / d + 2) / 6; break;
+        default: h = ((r - g) / d + 4) / 6;
+    }
+    return { h: h * 360, s, l };
+}
+
+// Converte HSL de volta para RGB (retorna { r, g, b })
+function hslParaRgb(h, s, l) {
+    h /= 360;
+    const hue2rgb = (p, q, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    return {
+        r: Math.round(hue2rgb(p, q, h + 1 / 3) * 255),
+        g: Math.round(hue2rgb(p, q, h) * 255),
+        b: Math.round(hue2rgb(p, q, h - 1 / 3) * 255)
+    };
+}
+
+function obterCorPredominante(imgUrl) {
+    if (!imgUrl) return Promise.resolve({ rgb: 'rgb(200, 170, 110)', rgba: 'rgba(200, 170, 110, 0.65)', rgbaGlow: 'rgba(200, 170, 110, 0.35)' });
+
+    // Verifica se é uma URL de campeão com cor customizada prioritária
+    for (const [champKey, corCustom] of Object.entries(CORES_CUSTOMIZADAS_CAMPEAO)) {
+        if (imgUrl.includes(`champion/${champKey}.png`)) {
+            const res = {
+                rgb: `rgb(${corCustom.r}, ${corCustom.g}, ${corCustom.b})`,
+                rgba: `rgba(${corCustom.r}, ${corCustom.g}, ${corCustom.b}, 0.65)`,
+                rgbaGlow: `rgba(${corCustom.r}, ${corCustom.g}, ${corCustom.b}, 0.35)`
+            };
+            cacheCoresDinamicas[imgUrl] = res;
+            return Promise.resolve(res);
+        }
+    }
+
+    if (cacheCoresDinamicas[imgUrl]) {
+        return Promise.resolve(cacheCoresDinamicas[imgUrl]);
+    }
+
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+
+        img.onload = () => {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                // Usa 48×48 para ter mais amostragem sem custo excessivo
+                canvas.width = 48;
+                canvas.height = 48;
+                ctx.drawImage(img, 0, 0, 48, 48);
+
+                const data = ctx.getImageData(0, 0, 48, 48).data;
+
+                // 36 buckets de 10° cada cobrindo 0-360°
+                const BUCKETS = 36;
+                const buckets = new Float64Array(BUCKETS); // score acumulado por hue bucket
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+                    if (a < 128) continue;
+
+                    const { h, s, l } = rgbParaHsl(r, g, b);
+
+                    // Descarta cinzas (s < 0.15), muito escuros (l < 0.10) e muito claros/estourados (l > 0.92)
+                    if (s < 0.15 || l < 0.10 || l > 0.92) continue;
+
+                    // Score: saturação * (1 - |l - 0.5|*1.4) — favorece tons médios e saturados
+                    // Quanto mais perto de l=0.5 e s=1.0, maior o score
+                    const luminanceWeight = 1 - Math.abs(l - 0.5) * 1.4;
+                    const score = s * Math.max(0, luminanceWeight);
+
+                    const bucket = Math.floor(h / (360 / BUCKETS)) % BUCKETS;
+                    buckets[bucket] += score;
+                }
+
+                // Encontra o bucket dominante (com suavização de janela de 3 buckets)
+                let maxVal = -1, bestBucket = 0;
+                for (let i = 0; i < BUCKETS; i++) {
+                    // Suaviza com vizinhos para evitar picos artificiais numa única borda de cor
+                    const smoothed = (buckets[(i - 1 + BUCKETS) % BUCKETS] * 0.25)
+                        + (buckets[i] * 0.5)
+                        + (buckets[(i + 1) % BUCKETS] * 0.25);
+                    if (smoothed > maxVal) {
+                        maxVal = smoothed;
+                        bestBucket = i;
+                    }
+                }
+
+                let bestColor;
+                if (maxVal <= 0) {
+                    // Fallback: nenhum hue dominante (ícone muito cinza/branco/preto)
+                    bestColor = { r: 200, g: 170, b: 110 };
+                } else {
+                    // Hue central do bucket vencedor, com saturação e luminosidade calibradas para UI
+                    const hue = (bestBucket + 0.5) * (360 / BUCKETS);
+                    bestColor = hslParaRgb(hue, 0.85, 0.52);
+                }
+
+                const result = {
+                    rgb: `rgb(${bestColor.r}, ${bestColor.g}, ${bestColor.b})`,
+                    rgba: `rgba(${bestColor.r}, ${bestColor.g}, ${bestColor.b}, 0.65)`,
+                    rgbaGlow: `rgba(${bestColor.r}, ${bestColor.g}, ${bestColor.b}, 0.35)`
+                };
+
+                cacheCoresDinamicas[imgUrl] = result;
+                salvarCacheCores();
+                resolve(result);
+            } catch (err) {
+                const fb = { rgb: 'rgb(200, 170, 110)', rgba: 'rgba(200, 170, 110, 0.65)', rgbaGlow: 'rgba(200, 170, 110, 0.35)' };
+                resolve(fb);
+            }
+        };
+
+        img.onerror = () => {
+            const fb = { rgb: 'rgb(200, 170, 110)', rgba: 'rgba(200, 170, 110, 0.65)', rgbaGlow: 'rgba(200, 170, 110, 0.35)' };
+            resolve(fb);
+        };
+
+        img.src = imgUrl;
+    });
+}
+
+function aplicarCorCardHover(cardEl, imgUrl) {
+    if (cardEl.dataset.corCarregada) return;
+    obterCorPredominante(imgUrl).then(cor => {
+        if (!cor) return;
+        cardEl.style.setProperty('--card-glow-color', cor.rgb);
+        cardEl.style.setProperty('--card-glow-rgba', cor.rgba);
+        cardEl.dataset.corCarregada = 'true';
+    });
+}
+
+function escaparParaAtributo(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/'/g, '&#39;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+function formatarDescricaoComGlossario(texto) {
+    if (!texto) return '';
+
+    const termos = Object.keys(glossarioLol).filter(k => !k.startsWith('_')).sort((a, b) => b.length - a.length);
+    if (termos.length === 0) {
+        return texto.replace(/\n/g, '<br>');
+    }
+
+    const pattern = `\\b(${termos.map(t => t.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|')})\\b`;
+    const regex = new RegExp(pattern, 'g');
+
+    // Divide entre tags HTML e texto puro para não corromper tags oficiais (ex: <physicalDamage>, <br>)
+    const partes = texto.split(/(<[^>]+>)/g);
+    const resultado = partes.map(parte => {
+        if (parte.startsWith('<') && parte.endsWith('>')) {
+            return parte; // Preserva tag HTML oficial intacta
+        }
+        return parte.replace(regex, (match) => {
+            const uppercase = match.toUpperCase();
+            const tooltip = glossarioLol[uppercase] || glossarioLol[match];
+            if (!tooltip) return match;
+            return `<span class="lol-glossary-term" data-tooltip="${escaparParaAtributo(tooltip)}">${match}</span>`;
+        });
+    }).join('');
+
+    return resultado.replace(/\n/g, '<br>');
 }
 
 function renderizarConteudoModalCampeao(champData) {
@@ -352,64 +877,118 @@ function renderizarConteudoModalCampeao(champData) {
 
     const splashUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champData.id}_0.jpg`;
     const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${versaoAtual}/img/champion/${champData.id}.png`;
+    const champKeyPad = String(champData.key || '').padStart(4, '0');
+    const safeChampName = escaparParaAtributo(champData.name);
 
-    // Passiva
-    const passiveImg = champData.passive && champData.passive.image 
+    // Aplica a cor predominante do campeão dinamicamente na borda, luz, nome e detalhes da janela modal
+    obterCorPredominante(iconUrl).then(cor => {
+        const modalContainer = document.querySelector('#champion-modal .modal-container');
+        if (modalContainer) {
+            modalContainer.style.setProperty('--modal-accent-color', cor.rgb);
+            modalContainer.style.setProperty('--modal-accent-glow', cor.rgba);
+            modalContainer.style.setProperty('--modal-accent-border', cor.rgba.replace('0.65', '0.25'));
+            modalContainer.style.setProperty('--modal-accent-glow-soft', cor.rgba.replace('0.65', '0.15'));
+        }
+        const champAvatar = document.getElementById('champ-modal-avatar');
+        if (champAvatar) {
+            champAvatar.style.borderColor = cor.rgb;
+            champAvatar.style.boxShadow = `0 0 20px ${cor.rgba}`;
+        }
+        // Aplica cor dinâmica no nome do campeão
+        const champNameEl = document.getElementById('champ-modal-name');
+        if (champNameEl) {
+            champNameEl.style.color = cor.rgb;
+            champNameEl.style.textShadow = `0 0 18px ${cor.rgba}`;
+        }
+    });
+
+    // Passiva: No modo detalhado, preserva 100% fiel com o Data Dragon / LoL (com tags <physicalDamage>, etc.)
+    const passiveImg = champData.passive && champData.passive.image
         ? `https://ddragon.leagueoflegends.com/cdn/${versaoAtual}/img/passive/${champData.passive.image.full}`
         : '';
     const passiveName = champData.passive ? champData.passive.name : 'Passiva';
-    const rawPassiveDesc = champData.passive ? limparTagsHTML(champData.passive.description) : '';
-    const passiveDesc = modoResumoHabilidades ? extrairResumoHabilidade(rawPassiveDesc) : rawPassiveDesc;
+    const safePassiveName = escaparParaAtributo(passiveName);
+    const rawPassiveDesc = champData.passive ? (champData.passive.description || '') : '';
+
+    // Busca o resumo autoral no JSON (ou usa o texto oficial como fallback)
+    const resumoChamp = modoResumoHabilidades ? (resumoHabilidades[champData.id] || null) : null;
+    const indicadorFallback = modoResumoHabilidades && !resumoChamp
+        ? '<span style="font-size:0.72rem; color:var(--text-muted); font-style:italic;">(Resumo autoral ainda não escrito)</span><br>'
+        : '';
+
+    const passiveDesc = resumoChamp
+        ? (resumoChamp.P && !resumoChamp.P.startsWith('TODO:') ? resumoChamp.P : `${indicadorFallback}${rawPassiveDesc}`)
+        : rawPassiveDesc;
 
     // Habilidades Q, W, E, R
     const keys = ['Q', 'W', 'E', 'R'];
     const spellsHtml = (champData.spells || []).map((spell, index) => {
         const spellKey = keys[index] || `H${index + 1}`;
         const spellImg = `https://ddragon.leagueoflegends.com/cdn/${versaoAtual}/img/spell/${spell.image.full}`;
-        const rawDesc = limparTagsHTML(spell.description);
-        const desc = modoResumoHabilidades ? extrairResumoHabilidade(rawDesc) : rawDesc;
+        const safeSpellName = escaparParaAtributo(spell.name);
+
+        // No modo detalhado, 100% fiel ao Data Dragon com todas as quebras de linha e tags
+        const rawDesc = spell.description || '';
+
+        let desc;
+        if (resumoChamp && resumoChamp[spellKey] && !resumoChamp[spellKey].startsWith('TODO:')) {
+            desc = resumoChamp[spellKey];
+        } else if (modoResumoHabilidades && !resumoChamp) {
+            desc = `${indicadorFallback}${rawDesc}`;
+        } else {
+            desc = rawDesc;
+        }
+
         const cooldown = spell.cooldownBurn ? `${spell.cooldownBurn}s Recarga` : '';
         const custo = spell.costBurn && spell.costBurn !== '0' ? `${spell.costBurn} Custo` : 'Sem Custo';
 
         return `
-            <div class="skill-card" title="${spell.name}">
-                <div class="skill-img-wrap">
+            <div class="skill-card">
+                <div class="skill-img-wrap" onclick="abrirVideoHabilidade('${champKeyPad}', '${spellKey}', '${safeChampName}', '${safeSpellName}')" title="Clique para assistir ao vídeo da habilidade ${spellKey}">
                     <img src="${spellImg}" alt="${spell.name}" class="skill-img" loading="lazy">
+                    <div class="skill-img-play-overlay"><i class="fa-solid fa-play"></i></div>
                     <span class="skill-key-badge">${spellKey}</span>
                 </div>
                 <div class="skill-info">
-                    <div class="skill-name">${spell.name}</div>
-                    <div style="font-size:0.7rem; color:var(--gold-primary); margin-bottom:0.2rem;">${cooldown} • ${custo}</div>
-                    <div class="skill-desc" style="${modoResumoHabilidades ? '-webkit-line-clamp: 3; color:var(--gold-light); font-weight:500;' : ''}">${desc}</div>
+                    <div class="skill-header-row">
+                        <div class="skill-title-group">
+                            <h4 class="skill-name">${spell.name}</h4>
+                            <span class="skill-meta-tags">${cooldown ? cooldown + ' • ' : ''}${custo}</span>
+                        </div>
+                    </div>
+                    <div class="skill-desc" style="${modoResumoHabilidades && resumoChamp ? 'color:var(--gold-light); font-weight:500;' : ''}">${formatarDescricaoComGlossario(desc)}</div>
                 </div>
             </div>
         `;
     }).join('');
 
-    const rolesStr = (champData.tags || []).map(traduzirTag).join(' • ');
+    const rolesStr = (champData.tags || []).map(t => {
+        const cls = ICONES_CLASSES[t];
+        if (cls) return `<img src="${cls.url}" alt="${cls.label}" title="${cls.label}" class="modal-class-icon">`;
+        return `<span style="font-size:0.85rem; font-weight:700; color:var(--hextech-cyan-accent);">${traduzirTag(t)}</span>`;
+    }).join('');
 
     modalContent.innerHTML = `
         <!-- Top Banner do Campeão com Splash Art (Sem Lore/Biografia) -->
-        <div style="position:relative; border-radius:var(--radius-md); overflow:hidden; margin-bottom:1.5rem; border:1px solid var(--border-gold);">
+        <div style="position:relative; border-radius:var(--radius-md); overflow:hidden; margin-bottom:1.5rem; border:1px solid var(--modal-accent-border, var(--border-gold));">
             <div style="height:170px; background-image:url('${splashUrl}'); background-size:cover; background-position:center 20%; position:relative;">
                 <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(9,20,40,0.2) 0%, rgba(9,20,40,0.95) 100%);"></div>
             </div>
             <div style="display:flex; gap:1.25rem; align-items:flex-end; padding:0 1.5rem 1.25rem 1.5rem; margin-top:-55px; position:relative;">
-                <img src="${iconUrl}" style="width:90px; height:90px; border-radius:var(--radius-md); border:2px solid var(--gold-bright); box-shadow:0 0 18px var(--gold-glow); object-fit:cover; background:#000;">
+                <img id="champ-modal-avatar" src="${iconUrl}" style="width:90px; height:90px; border-radius:var(--radius-md); border:2px solid var(--gold-bright); box-shadow:0 0 18px var(--gold-glow); object-fit:cover; background:#000; transition:border-color 0.3s ease, box-shadow 0.3s ease;">
                 <div>
-                    <span style="color:var(--hextech-cyan-accent); font-size:0.85rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase;">${rolesStr}</span>
-                    <h2 style="font-size:2.2rem; font-family:var(--font-title); color:var(--gold-light); line-height:1.1;">${champData.name}</h2>
-                    <p style="color:var(--text-muted); font-size:0.9rem;">${champData.title}</p>
+                    <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.2rem;">${rolesStr}</div>
+                    <h2 id="champ-modal-name" style="font-size:2.2rem; font-family:var(--font-title); color:var(--gold-light); line-height:1.1; transition:color 0.35s ease, text-shadow 0.35s ease;">${champData.name}</h2>
+                    <!-- Badges de dano/especiais do campeão -->
+                    <div style="display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.5rem;">
+                        ${gerarBadgesDanoModalCampeao(champData.id)}
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Seção de Habilidades com Chave Switch de Resumo -->
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
-            <h3 style="color:var(--gold-light); font-size:1.15rem; display:flex; align-items:center; gap:0.5rem; margin:0;">
-                <i class="fa-solid fa-bolt" style="color:var(--gold-bright);"></i> Habilidades (P, Q, W, E, R)
-            </h3>
-            
+        <div style="display:flex; align-items:center; justify-content:flex-end; margin-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
             <!-- Chave Switch de Resumo das Habilidades -->
             <div class="switch-wrapper">
                 <span class="${!modoResumoHabilidades ? 'switch-label-active' : ''}">Detalhado</span>
@@ -423,30 +1002,100 @@ function renderizarConteudoModalCampeao(champData) {
         
         <div class="skills-grid">
             <!-- Passiva -->
-            <div class="skill-card" title="${passiveName}">
-                <div class="skill-img-wrap">
+            <div class="skill-card">
+                <div class="skill-img-wrap" onclick="abrirVideoHabilidade('${champKeyPad}', 'P', '${safeChampName}', '${safePassiveName}')" title="Clique para assistir ao vídeo da Passiva">
                     <img src="${passiveImg}" alt="${passiveName}" class="skill-img" loading="lazy">
-                    <span class="skill-key-badge" style="background:#091428; color:var(--hextech-cyan-accent); border-color:var(--hextech-cyan-accent);">P</span>
+                    <div class="skill-img-play-overlay"><i class="fa-solid fa-play"></i></div>
+                    <span class="skill-key-badge">P</span>
                 </div>
                 <div class="skill-info">
-                    <div class="skill-name">${passiveName}</div>
-                    <div style="font-size:0.7rem; color:var(--hextech-cyan-accent); margin-bottom:0.2rem;">Passiva Inata</div>
-                    <div class="skill-desc" style="${modoResumoHabilidades ? '-webkit-line-clamp: 3; color:var(--gold-light); font-weight:500;' : ''}">${passiveDesc}</div>
+                    <div class="skill-header-row">
+                        <div class="skill-title-group">
+                            <h4 class="skill-name">${passiveName}</h4>
+                            <span class="skill-meta-tags">Passiva Inata</span>
+                        </div>
+                    </div>
+                    <div class="skill-desc" style="${modoResumoHabilidades && resumoChamp ? 'color:var(--gold-light); font-weight:500;' : ''}">${formatarDescricaoComGlossario(passiveDesc)}</div>
                 </div>
             </div>
 
             <!-- Q, W, E, R -->
             ${spellsHtml}
         </div>
-
-        <!-- Dica Estratégica -->
-        ${champData.allytips && champData.allytips.length > 0 ? `
-            <div style="background:rgba(240, 178, 50, 0.1); border:1px solid var(--gold-primary); padding:1rem; border-radius:var(--radius-sm); margin-top:1rem;">
-                <h4 style="color:var(--gold-bright); font-size:0.9rem; margin-bottom:0.4rem;"><i class="fa-solid fa-lightbulb"></i> Dica de Mecânica</h4>
-                <p style="font-size:0.85rem; color:var(--gold-light); line-height:1.5;">${champData.allytips[0]}</p>
-            </div>
-        ` : ''}
     `;
+}
+
+
+/* ==========================================================================
+   4.2. MODAL DE VÍDEO DE PRÉVIA DA HABILIDADE (CDN OFICIAL RIOT / CATALYST)
+   ========================================================================== */
+function abrirVideoHabilidade(champKeyPad, slotKey, champName, skillName) {
+    const modal = document.getElementById('ability-video-modal');
+    const container = document.getElementById('ability-video-content');
+    if (!modal || !container) return;
+
+    // CDN oficial da Riot Games utilizado pelo aplicativo Catalyst e pelo cliente LoL
+    const mp4Url = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/${champKeyPad}/ability_${champKeyPad}_${slotKey}1.mp4`;
+    const webmUrl = `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/${champKeyPad}/ability_${champKeyPad}_${slotKey}1.webm`;
+
+    // Subtítulo removido conforme solicitação
+    container.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:center; gap:0.6rem; margin-bottom:1rem; flex-wrap:wrap;">
+            <span class="badge" style="background:#091428; border:1.5px solid var(--gold-bright); color:var(--gold-bright); font-size:0.9rem; padding:0.25rem 0.65rem; border-radius:var(--radius-sm); font-weight:800;">${slotKey}</span>
+            <h3 style="font-family:var(--font-title); color:var(--gold-light); font-size:1.35rem; margin:0;">${champName} — ${skillName}</h3>
+        </div>
+        <div class="ability-video-player-wrap">
+            <video id="active-ability-video" controls autoplay loop playsinline>
+                <source src="${mp4Url}" type="video/mp4">
+                <source src="${webmUrl}" type="video/webm">
+                Seu navegador não suporta a reprodução deste vídeo.
+            </video>
+        </div>
+        <div id="video-fallback-msg" style="display:none; margin-top:0.75rem; font-size:0.8rem; color:#f87171; background:rgba(239,68,68,0.12); border:1px solid #ef4444; padding:0.6rem; border-radius:var(--radius-sm);">
+            <i class="fa-solid fa-circle-exclamation"></i> O vídeo oficial da Riot para esta habilidade não pôde ser carregado.<br>
+            <span style="font-size:0.75rem; color:var(--text-muted);">URL testada: <code>${mp4Url}</code></span>
+        </div>
+    `;
+
+    const videoEl = document.getElementById('active-ability-video');
+    if (videoEl) {
+        videoEl.play().catch(() => {
+            videoEl.muted = true;
+            videoEl.play().catch(e => console.warn('Autoplay bloqueado pelo navegador:', e));
+        });
+
+        const sources = videoEl.querySelectorAll('source');
+        if (sources.length > 0) {
+            const lastSource = sources[sources.length - 1];
+            lastSource.addEventListener('error', () => {
+                const fallback = document.getElementById('video-fallback-msg');
+                if (fallback) fallback.style.display = 'block';
+            });
+        }
+    }
+
+    modal.classList.add('active');
+}
+
+function fecharVideoHabilidade() {
+    const modal = document.getElementById('ability-video-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        const videoEl = document.getElementById('active-ability-video');
+        if (videoEl) {
+            videoEl.pause();
+            videoEl.removeAttribute('src');
+            videoEl.load();
+        }
+        const container = document.getElementById('ability-video-content');
+        if (container) container.innerHTML = '';
+    }
+}
+
+function fecharVideoHabilidadeSeClicarOverlay(event) {
+    if (event.target && event.target.id === 'ability-video-modal') {
+        fecharVideoHabilidade();
+    }
 }
 
 function extrairResumoHabilidade(texto) {
@@ -473,9 +1122,25 @@ function abrirModalItem(itemId) {
     const item = todosItens[itemId];
     if (!item) return;
 
+    itemModalAbertoAtual = itemId; // Rastreia o item aberto para re-renderizar no switch
+
     const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${versaoAtual}/img/item/${itemId}.png`;
     const precoTotal = item.gold && item.gold.total ? item.gold.total : 0;
     const precoBase = item.gold && item.gold.base ? item.gold.base : precoTotal;
+
+    // Aplica a cor predominante do item dinamicamente na borda e luz da janela modal
+    obterCorPredominante(iconUrl).then(cor => {
+        const modalContainer = document.querySelector('#item-modal .modal-container');
+        if (modalContainer) {
+            modalContainer.style.setProperty('--modal-accent-color', cor.rgb);
+            modalContainer.style.setProperty('--modal-accent-glow', cor.rgba);
+        }
+        const itemAvatar = document.getElementById('item-modal-avatar');
+        if (itemAvatar) {
+            itemAvatar.style.borderColor = cor.rgb;
+            itemAvatar.style.boxShadow = `0 0 20px ${cor.rgba}`;
+        }
+    });
 
     const componentesHtml = (item.from && item.from.length > 0)
         ? item.from.map(compId => {
@@ -509,7 +1174,7 @@ function abrirModalItem(itemId) {
 
     modalContent.innerHTML = `
         <div style="display:flex; gap:1.25rem; align-items:center; margin-bottom:1.5rem; border-bottom:1px solid var(--border-color); padding-bottom:1.25rem;">
-            <img src="${iconUrl}" style="width:75px; height:75px; border-radius:var(--radius-md); border:2px solid var(--gold-bright); box-shadow:0 0 15px var(--gold-glow); object-fit:cover; background:#000;">
+            <img id="item-modal-avatar" src="${iconUrl}" style="width:75px; height:75px; border-radius:var(--radius-md); border:2px solid var(--gold-bright); box-shadow:0 0 15px var(--gold-glow); object-fit:cover; background:#000; transition:border-color 0.3s ease, box-shadow 0.3s ease;">
             <div style="flex-grow:1;">
                 <div style="display:flex; gap:0.4rem; margin-bottom:0.3rem;">
                     ${gerarIconesAtributosItem(item.tags || [])}
@@ -524,13 +1189,34 @@ function abrirModalItem(itemId) {
         </div>
 
         <div style="margin-bottom:1.5rem;">
-            <h4 style="color:var(--gold-light); font-size:0.92rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem;">
-                <i class="fa-solid fa-shield-halved" style="color:var(--gold-bright);"></i> Atributos & Efeitos:
-            </h4>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; gap:0.75rem; flex-wrap:wrap;">
+                <h4 style="color:var(--gold-light); font-size:0.92rem; margin:0; display:flex; align-items:center; gap:0.4rem;">
+                    <i class="fa-solid fa-shield-halved" style="color:var(--gold-bright);"></i> Atributos &amp; Efeitos:
+                </h4>
+                <div class="switch-wrapper" style="font-size:0.8rem;">
+                    <span id="itemModalSwitchLabelDet" class="${!modoResumoItens ? 'switch-label-active' : ''}">Detalhado</span>
+                    <label class="hextech-toggle">
+                        <input type="checkbox" ${modoResumoItens ? 'checked' : ''} onchange="alternarResumoItens(this.checked)">
+                        <span class="hextech-slider"></span>
+                    </label>
+                    <span id="itemModalSwitchLabelRes" class="${modoResumoItens ? 'switch-label-active' : ''}">Resumo</span>
+                </div>
+            </div>
             <div class="item-ddragon-desc" style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:1rem;">
-                ${item.description || '<p>Sem descrição adicional.</p>'}
+                ${(() => {
+            const resumoItemModal = resumoItens[itemId];
+            if (modoResumoItens) {
+                if (resumoItemModal && resumoItemModal.resumo && !resumoItemModal.resumo.startsWith('TODO:')) {
+                    return `<p style="color:var(--gold-light); font-weight:500;">${resumoItemModal.resumo}</p>`;
+                }
+                const fallbackText = item.plaintext || limparTagsHTML(item.description || '') || 'Descrição não disponível.';
+                return `<span style="font-size:0.72rem; color:var(--text-muted); font-style:italic;">(Resumo autoral ainda não escrito)</span><br><p>${fallbackText}</p>`;
+            }
+            return item.description || '<p>Sem descrição adicional.</p>';
+        })()}
             </div>
         </div>
+
 
         <div class="recipe-section">
             <div class="recipe-header"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--gold-bright);"></i> Construído a partir de (Componentes):</div>
@@ -555,9 +1241,11 @@ function abrirModalItem(itemId) {
 function fecharModalItem() {
     const modal = document.getElementById('item-modal');
     if (modal) modal.classList.remove('active');
+    itemModalAbertoAtual = null;
 }
 
 function closeModal() {
+    fecharVideoHabilidade();
     fecharModalCampeao();
     fecharModalItem();
     const detailModal = document.getElementById('detailModal');
@@ -609,8 +1297,19 @@ function renderizarRunas() {
 
             const runasSlotHtml = slot.runes.map(r => {
                 const runeIcon = `https://ddragon.leagueoflegends.com/cdn/img/${r.icon}`;
-                const rawDesc = modoResumoRunas ? r.shortDesc : r.longDesc;
-                const desc = limparTagsHTML(rawDesc);
+
+                // Modo resumo: busca texto autoral no JSON, fallback para shortDesc da Riot
+                let desc;
+                if (modoResumoRunas) {
+                    const resumoRuna = resumoRunas[r.name];
+                    if (resumoRuna && resumoRuna.resumo && !resumoRuna.resumo.startsWith('TODO:')) {
+                        desc = resumoRuna.resumo;
+                    } else {
+                        desc = limparTagsHTML(r.shortDesc); // Fallback para o shortDesc oficial
+                    }
+                } else {
+                    desc = limparTagsHTML(r.longDesc); // Modo detalhado: descrição completa
+                }
 
                 return `
                     <div class="rune-item ${sIdx === 0 ? 'keystone' : ''}" title="${r.name}">
@@ -622,6 +1321,7 @@ function renderizarRunas() {
                     </div>
                 `;
             }).join('');
+
 
             return `
                 <div class="rune-slot-col">
@@ -736,9 +1436,9 @@ function filtrarCampeoes() {
     const filtrados = todosCampeoes.filter(champ => {
         const rotaDoChamp = identificarRotaPrincipalCampeao(champ);
         const matchRole = (filtroRotaAtiva === 'all') || (rotaDoChamp === filtroRotaAtiva);
-        
-        const matchQuery = !query || 
-            champ.name.toLowerCase().includes(query) || 
+
+        const matchQuery = !query ||
+            champ.name.toLowerCase().includes(query) ||
             champ.title.toLowerCase().includes(query) ||
             champ.id.toLowerCase().includes(query) ||
             (champ.tags || []).some(t => t.toLowerCase().includes(query) || traduzirTag(t).toLowerCase().includes(query));
@@ -871,7 +1571,7 @@ function configurarEventosModais() {
         if (e.key === 'Escape') closeModal();
     });
 
-    ['champion-modal', 'item-modal', 'detailModal'].forEach(modalId => {
+    ['champion-modal', 'item-modal', 'detailModal', 'ability-video-modal'].forEach(modalId => {
         const modalEl = document.getElementById(modalId);
         if (modalEl) {
             modalEl.addEventListener('click', (e) => {
