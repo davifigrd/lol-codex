@@ -1,59 +1,1214 @@
 {
-  "_comentario": "LoL Codex — Resumos AUTORAIS das habilidades dos campeões. Chave = ID oficial da Riot (ex: 'Ahri', 'LeeSin'). Use exatamente como aparece na URL da API Data Dragon. Campos: P (Passiva), Q, W, E, R. Quando este arquivo não tiver o campeão, o site mostrará automaticamente a descrição oficial da Riot.",
+  "_comentario": "LoL Codex — Resumos AUTORAIS das habilidades dos campeões (fonte: resum-skill.txt). Chave = ID oficial da Riot (ex: 'Ahri', 'LeeSin', 'MonkeyKing'). Campos: P (Passiva), Q, W, E, R. Quando este arquivo não tiver o campeão, o site mostrará automaticamente a descrição oficial da Riot (Data Dragon).",
   "Aatrox": {
-    "P": "AA causa dano adicional baseado na vida máxima de Aatrox e restaura 100% do dano causado (reduzido para 25% contra tropas). AA e SKILLS reduzem em 2s o CDR da passiva. A ponta do Q reduz em 4s.",
-    "Q": "Golpeia o chão causando AD e pode ser reconjurado até 3 vezes, alterando o formato e aumentando o dano em 25% a cada golpe. Inimigos atingidos na ponta sofrem KNOCK UP e recebem dano adicional.",
-    "W": "Arremessa uma corrente que causa SLOW e AD. Se o inimigo ou monstro não sair da área a tempo, é puxado de volta para o meio e sofre AD novamente.",
-    "E": "Passiva: Cura Aatrox com base no dano causado.\n\nAtiva: Dá um DASH e pode ser usada durante as animações de outras SKILLS.",
-    "R": "Causa FEAR às tropas próximas, aumenta AD, MS e a cura recebida, que diminui ao longo do tempo. Eliminar um campeão aumenta a duração do R e reseta o bônus de MS."
+    "P": "O próximo AA causa dano físico adicional baseado na vida máxima do alvo e cura Aatrox com base no dano causado (reduzido contra tropas). AA e SKILLS reduzem em 2s o CDR da passiva. A ponta do Q reduz em 4s.",
+    "Q": "Golpeia o chão, causando dano físico e podendo ser reconjurado até 3 vezes, alterando o formato e aumentando o dano a cada golpe. Inimigos atingidos na ponta sofrem KNOCK UP e recebem dano adicional.",
+    "W": "Arremessa uma corrente que causa dano físico e SLOW. Se o inimigo ou monstro não sair da área a tempo, é puxado de volta para o centro e sofre dano físico novamente.",
+    "E": "Passiva: Cura Aatrox com base no dano causado a campeões.\n\nAtiva: Dá um DASH e pode ser usada durante as animações de outras SKILLS.",
+    "R": "Causa FEAR às tropas próximas, aumenta AD, MS e a cura recebida. Eliminar um campeão aumenta a duração do R e renova o bônus de MS."
   },
   "Ahri": {
-    "P": "Abater 9 tropas ou monstros cura Ahri. Participar do abate de um campeão inimigo concede uma cura massiva.",
-    "Q": "Lança seu orbe mágico que causa dano mágico na ida e dano verdadeiro ao retornar para sua mão.",
-    "W": "Ganha um pico de velocidade de movimento e dispara três chamas que perseguem alvos inimigos prioritários.",
-    "E": "Manda um beijo apaixonante que encanta o primeiro inimigo atingido, interrompendo avanços e forçando-o a andar na direção de Ahri.",
-    "R": "Avança rapidamente até três vezes disparando raios mágicos. Participar de eliminações de campeões estende a duração e concede avanços adicionais."
+    "P": "Recebe um fragmento de essência ao FARMAR. Após 9 fragmentos, consome-os para restaurar vida com base no AP. Ao participar de uma KILL de um campeão inimigo em até 3s após causar dano a ele, restaura vida com base no AP.",
+    "Q": "Lança um orbe que causa dano mágico baseado no AP na ida e dano verdadeiro baseado no AP na volta.",
+    "W": "Invoca 3 fogos que causam dano mágico baseado no AP em inimigos próximos, com dano reduzido após o primeiro acerto no mesmo alvo. Recebe 40% de MS por 2s.",
+    "E": "Lança um CHARM que causa dano mágico e atrai o inimigo.",
+    "R": "Pode dar até 3 DASH em 15s. Cada um lança um raio que causa dano mágico baseado no AP em inimigos próximos (prioriza campeões). Participar de uma KILL de um campeão inimigo em até 3s após causar dano a ele aumenta o tempo para reconjurar em 10s e concede mais um DASH, respeitando o máximo de 3 cargas disponíveis."
   },
   "Akali": {
-    "P": "Causar dano a um campeão cria um anel de energia. Cruzar o anel fortalece seu próximo ataque com alcance, dano e restauração de energia.",
-    "Q": "Dispara cinco kunais em leque que causam dano mágico e lentidão na ponta do alcance máximo.",
-    "W": "Solta uma cortina de fumaça que expande, tornando Akali invisível, aumentando sua velocidade e restaurando energia.",
-    "E": "Dá um salto para trás e atira uma shuriken para a frente. Pode reconjurar para voar até o alvo marcado de qualquer distância.",
-    "R": "Dá dois saltos acrobáticos: o primeiro atordoa e salta por cima dos inimigos, o segundo executa alvos com base na vida perdida."
+    "P": "Ao acertar um campeão com uma SKILL, cria um círculo ao redor dele. Ao cruzar a borda, o próximo AA causa dano mágico adicional e Akali recebe MS em direção ao campeão.",
+    "Q": "Lança um ataque que causa dano mágico. Se atingir o inimigo na ponta, causa SLOW por 0,5s.",
+    "W": "Solta um círculo de fumaça que dura 7s. Dentro dele, recebe invisibilidade e MS, que diminui ao longo de 2s. Também aumenta a energia máxima em 100.",
+    "E": "Dá um DASH para trás e lança uma shuriken para a frente, causando dano mágico e marcando o primeiro alvo ou a nuvem de fumaça que atingir.\n\nReconjurar: Vai em direção ao alvo marcado, causando dano mágico.",
+    "R": "Atravessa um campeão inimigo, causando dano físico.\n\nReconjurar: Após 2,5s, pode avançar em qualquer direção, causando dano mágico baseado na vida perdida do inimigo atingido."
+  },
+  "Akshan": {
+    "P": "Após um AA, dá outro disparo que causa dano físico. Se cancelar esse disparo, ganha MS por 1s. AA ou SKILLS atingindo o mesmo alvo 3 vezes causam dano mágico adicional. Se o alvo for um campeão, Akshan recebe SHIELD.",
+    "Q": "Arremessa um bumerangue que causa dano físico e aumenta o alcance ao atingir um alvo. Se atingir um campeão, recebe MS que diminui ao longo do tempo.",
+    "W": "Passiva: Campeões que eliminam seus aliados ficam marcados como Canalhas por determinado tempo. Se Akshan participar da KILL de um Canalha, recebe ouro, ressuscita os aliados mortos por ele e remove a marca.\n\nAtiva: Recebe camuflagem por determinado tempo ou indefinidamente enquanto estiver perto de terreno ou arbustos. Ao se mover em direção a Canalhas, recebe MS e regeneração de mana.",
+    "E": "Prende um arpão em um terreno.\n\nReconjurar: Balança pelo terreno e dispara contra o inimigo mais próximo, causando dano físico.\n\nReconjurar 2: Salta da corda e faz um último disparo.\n\nColidir com um inimigo ou atingir um terreno interrompe o balanço. Participar de uma KILL redefine o CDR da SKILL.",
+    "R": "Canaliza e carrega sua arma por determinado tempo, armazenando balas.\n\nReconjurar: Dispara as balas carregadas, causando dano físico ao primeiro inimigo ou estrutura atingidos. O dano aumenta com base na vida perdida do alvo."
+  },
+  "Alistar": {
+    "P": "Recebe um acúmulo ao aplicar efeitos de controle de grupo ou participar de uma KILL. Com 7 acúmulos, restaura a própria vida e a de aliados próximos. Campeões e monstros da selva abatidos também reduzem o CDR da passiva.",
+    "Q": "Golpeia o chão, causando dano mágico e KNOCK UP por 1s.",
+    "W": "Dá um KNOCKBACK em um inimigo e causa dano mágico.",
+    "E": "Causa pulsos de dano mágico em inimigos próximos por 5s. Recebe um acúmulo por pulso que atinge um inimigo.\n\nCom 5 acúmulos, o próximo AA causa dano mágico adicional e STUN por 1s.",
+    "R": "Remove os efeitos debilitantes e recebe redução de dano por 7s."
+  },
+  "Ambessa": {
+    "P": "Após conjurar uma SKILL, um comando de movimento ou AA faz com que ela avance na mesma direção ao terminar a conjuração. Cada conjuração concede uma carga por 4s (máx. 3). Enquanto tiver uma carga, recebe alcance de ataque e AS adicionais. Os ataques consomem uma carga, causando dano físico adicional e restaurando energia.",
+    "Q": "Realiza um golpe que causa dano físico. Os inimigos atingidos na extremidade sofrem dano adicional baseado na vida máxima. Se atingir um campeão, habilita a reconjuração.\n\nReconjurar: Realiza outro golpe que causa dano físico ao primeiro inimigo atingido. Os demais inimigos atingidos sofrem dano reduzido.",
+    "W": "Recebe SHIELD por 1,5s, canaliza por 0,5s e golpeia o chão, causando dano físico em área. Se bloquear dano com o SHIELD durante a canalização, o golpe causa dano aumentado.",
+    "E": "Realiza um ataque circular que causa dano físico e SLOW por 1s. Se iniciar a SKILL durante o avanço da passiva, realiza um golpe adicional.",
+    "R": "Passiva: Recebe penetração de armadura e suas SKILLS curam com base no dano causado a campeões.\n\nAtiva: Fica INCONTROLÁVEL e avança até o campeão inimigo mais distante em linha reta, causando KNOCK UP, STUN e dano físico."
+  },
+  "Amumu": {
+    "P": "AA e habilidades aplicam uma maldição que faz o inimigo receber dano verdadeiro adicional equivalente a 10% do dano mágico recebido.",
+    "Q": "Arremessa uma bandagem que, ao acertar um inimigo, puxa Amumu até ele, causando dano mágico e STUN por 1s. Tem duas cargas.",
+    "W": "Alternar: Causa dano mágico por segundo ao redor de si mesmo, com base na vida máxima dos inimigos próximos. Renova a duração da passiva ao causar dano.",
+    "E": "Passiva: Reduz o dano físico recebido. Ao ser atingido, o CDR da SKILL é reduzido em 0,75s.\n\nAtiva: Causa dano mágico em área ao redor de si mesmo.",
+    "R": "Causa dano mágico e STUN aos inimigos ao redor de si mesmo, aplicando a passiva."
+  },
+  "Anivia": {
+    "P": "Ao morrer, vira um ovo e começa a se curar. Recebe ARMOR e MR adicionais. Se sobreviver por 6s, volta à vida.",
+    "Q": "Dispara um bloco de gelo que causa dano mágico e SLOW aos inimigos atingidos.\n\nReconjurar: Explode o gelo antecipadamente, causando dano mágico e STUN aos inimigos próximos.",
+    "W": "Invoca uma parede de gelo por 5s.",
+    "E": "Causa dano mágico aos inimigos e o dobro de dano aos que estiverem sob o efeito de congelamento.",
+    "R": "Alternar: Invoca uma tempestade de gelo que causa dano mágico por segundo e SLOW. Aumenta de tamanho ao longo de 1,5s. No tamanho máximo, causa dano e SLOW aumentados."
+  },
+  "Annie": {
+    "P": "Após conjurar 4 SKILLS, a próxima habilidade que causar dano aplica STUN.",
+    "Q": "Lança uma bola de fogo que causa dano mágico. Se o inimigo morrer, recupera o custo de mana e reduz o CDR em 50%.",
+    "W": "Lança uma onda de fogo que causa dano mágico.",
+    "E": "Concede SHIELD a si mesma ou a um campeão aliado e aumenta a MS de Annie. Inimigos que causarem dano ao alvo protegido sofrem dano mágico. Tibbers também recebe os efeitos do E quando é invocado.",
+    "R": "Invoca um urso que causa dano mágico ao ser invocado e dano mágico por segundo aos inimigos próximos enquanto estiver ativo.\n\nSe Annie morrer ou aplicar STUN, o urso recebe AS e MS por 3s.\n\nReconjurar: Comanda o urso manualmente."
+  },
+  "Aphelios": {
+    "P": "Aphelios tem acesso a 2 de 5 armas únicas por vez, trocadas quando a munição se esgota pelo uso de AA e SKILLS.\n\nO Q é desbloqueado no nível 2 e o R no nível 6. Em vez de melhorar as SKILLS, ganha atributos permanentes ao subir de nível (AD, AS e LETALITY).\n\nCalibrum (Rifle) — Ataques de longo alcance. Marca inimigos atingidos pelas habilidades da arma.\n\nSeverum (Pistola-Foice) — Concede cura com base no dano causado e permite receber MS com o Q.\n\nInfernum (Lança-chamas) — Causa dano em área.\n\nCrescendum (Chakram) — Causa dano alto em curto alcance.\n\nGravitum (Canhão) — Causa SLOW e permite aplicar enraizamento.",
+    "Q": "Calibrum: Dispara um tiro de longo alcance que causa dano físico e marca o inimigo. Aphelios pode realizar um AA adicional contra o alvo marcado.\n\nSeverum: Recebe MS e ataca rapidamente o inimigo mais próximo com ambas as armas (prioriza campeões), causando dano físico.\n\nInfernum: Lança uma onda de chamas que causa dano físico e ataca cada inimigo atingido com a arma secundária.\n\nCrescendum: Posiciona no chão uma sentinela lunar equipada com a arma secundária. Ela ataca os inimigos próximos por determinado tempo, causando dano físico.\n\nGravitum: Aplica um campo gravitacional aos inimigos marcados com Gravitum, causando SLOW. Ao ativar o Q, enraíza os inimigos afetados.",
+    "W": "Troca a arma principal pela secundária.",
+    "E": "Mostra a próxima arma da sequência fixa.",
+    "R": "Dispara uma rajada concentrada de luar que causa dano físico em área e aplica o efeito da arma principal atual.\n\nCalibrum: Permite um AA adicional contra os inimigos marcados, causando dano físico adicional.\n\nSeverum: Restaura vida.\n\nInfernum: Causa dano físico adicional na explosão e faz com que os ataques subsequentes causem dano aos alvos ao redor.\n\nCrescendum: Invoca unidades de Chakram espelhadas adicionais.\n\nGravitum: Aumenta o SLOW aplicado aos alvos atingidos."
+  },
+  "Ashe": {
+    "P": "AA e SKILLS causam SLOW por 3s. Acertos críticos não causam dano adicional, mas aumentam o SLOW.",
+    "Q": "Passiva: AA concede acúmulos para ativar a SKILL.\n\nAtiva: Recebe AS e seus ataques passam a disparar uma rajada de flechas, causando dano físico adicional.",
+    "W": "Dispara uma rajada de flechas que causa dano físico.",
+    "E": "Envia um falcão que revela a área ao redor durante o trajeto e concede visão no local explorado por 5s. Tem duas cargas.",
+    "R": "Dispara uma flecha que causa dano mágico e STUN. A duração do STUN aumenta com a distância percorrida. Inimigos próximos ao alvo atingido sofrem SLOW."
+  },
+  "AurelionSol": {
+    "P": "SKILLS que causam dano concedem acúmulos de Poeira Estelar, que aprimoram suas habilidades:\n\nQ: Aumenta o dano da explosão com base na vida máxima do alvo.\n\nW: Aumenta a distância percorrida.\n\nE: Aumenta a área e o limiar de execução.\n\nR: Aumenta a área.",
+    "Q": "Canaliza um sopro de fogo que causa dano mágico ao inimigo atingido e dano reduzido aos inimigos próximos. Ao atingir o mesmo inimigo durante um segundo completo, causa uma explosão de dano mágico baseada na vida máxima do alvo.",
+    "W": "Voa em uma direção. Durante o voo, o Q causa dano aumentado, não possui CDR durante a canalização e pode continuar sendo usado enquanto Aurelion Sol voa. Participar de uma KILL durante o voo reduz o CDR da SKILL.\n\nReconjurar: Encerra o voo antecipadamente.",
+    "E": "Invoca um buraco negro que causa dano mágico por segundo e arrasta inimigos para o centro. Inimigos abaixo de determinado limiar de vida máxima são executados instantaneamente.",
+    "R": "Arremessa uma estrela no chão, causando dano mágico e STUN. Ao obter determinado número de acúmulos, aumenta a área e causa dano mágico, KNOCK UP e SLOW em uma área maior."
+  },
+  "Aurora": {
+    "P": "Ao causar dano a um inimigo com SKILLS ou AA 3 vezes, o exorciza, causando dano mágico baseado na vida máxima. Se for um campeão, liberta um espírito que segue Aurora por 4s, restaurando vida por segundo com base no AP.",
+    "Q": "Dispara energia amaldiçoada em uma direção, causando dano mágico e marcando os inimigos por 3,5s.\n\nReconjurar: Encerra a marca e puxa parte do espírito do inimigo, causando dano mágico aos inimigos atravessados com base na vida perdida deles. O dano causado após o primeiro golpe é reduzido para 20%.",
+    "W": "Salta em uma direção, ficando invisível e recebendo MS. Participar de uma KILL redefine o CDR da SKILL.",
+    "E": "Dá um salto para trás e lança uma explosão em área, causando dano mágico e SLOW por 1s.",
+    "R": "Cria um círculo que causa dano mágico e SLOW por 2s, limitando a movimentação dos inimigos. Inimigos que tentarem entrar ou sair da área sofrem SLOW.\n\nQuando Aurora encosta na borda da área, pula para o lado oposto.\n\nReconjurar: Encerra o efeito da área antecipadamente."
+  },
+  "Azir": {
+    "P": "Invoca uma torre no local de uma torre destruída, por tempo limitado. A torre causa dano mágico nos disparos e possui ARMOR e MR.",
+    "Q": "Envia todos os soldados de areia até uma área, causando dano mágico e SLOW por 1s.",
+    "W": "Invoca um soldado de areia por 10s. Quando Azir ataca um inimigo dentro do alcance dos soldados, eles golpeiam na direção do alvo, causando dano mágico. Tem duas cargas.",
+    "E": "Concede SHIELD a si mesmo com base no AP e avança até um de seus soldados de areia, causando dano mágico aos inimigos atravessados. Se atingir um campeão inimigo, para e recebe uma carga do W.",
+    "R": "Invoca uma barreira de soldados que causa KNOCKBACK e dano mágico aos inimigos. Os soldados bloqueiam o caminho por 5s."
+  },
+  "Bard": {
+    "P": "Sinos aparecem aleatoriamente pelo mapa. Ao coletá-los, recebe MS por 20s (máx. 10), XP e restaura mana. A cada determinados sinos coletados, aumenta o número de Meeps e desbloqueia efeitos adicionais.\nMeeps aparecem continuamente. AA consome um Meep para causar dano mágico baseado no AP e nos sinos coletados. A cada 5 sinos, recebe um Meep adicional (até determinado limite).",
+    "Q": "Libera um raio que causa dano mágico baseado no AP e SLOW. Se atingir um segundo inimigo ou uma parede, os dois alvos sofrem STUN.",
+    "W": "Cria até 3 santuários por vez, que concedem MS e restauram vida com base no AP. Após permanecerem no chão por 5s, ficam mais fortes. Tem duas cargas.\nSe um inimigo tocar no santuário, ele é destruído.",
+    "E": "Abre um portal por 10s que atravessa um terreno. Qualquer campeão pode entrar, aliado ou inimigo.",
+    "R": "Lança um campo mágico em uma área, colocando unidades e estruturas atingidas em ESTASE por 2,5s."
+  },
+  "Belveth": {
+    "P": "Após usar uma SKILL, recebe AS adicional temporária por 3s.\nRecebe acúmulos ao eliminar tropas grandes, monstros grandes e Campeões. Cada acúmulo concede AS permanente. League of Legends",
+    "Q": "DASH que causa dano físico baseado no AD ao atravessar inimigos. Cada direção possui seu próprio CDR, que é reduzido com base na AS.",
+    "W": "Bate no chão, causando dano mágico baseado no AP e SLOW. Se acertar um Campeão, reseta o Q na direção dele.",
+    "E": "Canaliza por 1,5s, atacando várias vezes com base na AS. Durante a canalização, recebe redução de dano e causa dano físico baseado no AD, aumentado conforme a vida perdida do alvo. Prioriza o inimigo próximo com menor vida.",
+    "R": "Ativo: Consome um Coral do Vazio para entrar na Forma Verdadeira, recebendo atributos adicionais. Ao consumir o Coral de um monstro épico, pode invocar Rêmoras do Vazio a partir de tropas mortas. Durante a transformação, causa SLOW aos inimigos próximos e uma explosão de TD baseada no AP."
+  },
+  "Blitzcrank": {
+    "P": "recebe SHIELD baseado no seu Mana quando fica com pouca vida.",
+    "Q": "Dá um HOOK que causa dano mágico e puxa o inimigo até Blitzcrank.",
+    "W": "Recebe MS e AS. Depois sofre SLOW.",
+    "E": "faz com que seu próximo ataque dê KNOCK UP e cause dano físico.",
+    "R": "Passivo: inimigos atingidos pelos AA de Blitzcrank ficam marcados e, após 1s, sofrem dano mágico.\nAtivo: causa dano mágico e SILENCE ao redor de si. Destrói SHIELDS inimigos."
+  },
+  "Brand": {
+    "P": "SKILLS aplicam INCANDESCENTE, causando dano ao longo do tempo e acumulando até 3x. Ao atingir 3 acúmulos em Campeões ou monstros grandes, explode após 2s, causando dano mágico em área. Ao eliminar um inimigo INCANDESCENTE, recupera Mana.",
+    "Q": "Lança uma bola de fogo que causa dano mágico. Se o alvo estiver INCANDESCENTE, causa STUN.",
+    "W": "Cria uma área que, após um breve atraso, causa dano mágico. Causa mais dano contra inimigos INCANDESCENTES.",
+    "E": "Causa dano mágico a um inimigo e se espalha para inimigos próximos. Se o alvo estiver INCANDESCENTE, a propagação tem alcance maior.",
+    "R": "Lança uma explosão de fogo que quica entre Brand e inimigos próximos, causando dano mágico. Se atingir um Campeão INCANDESCENTE, causa SLOW."
+  },
+  "Braum": {
+    "P": "AA aplica um acúmulo no inimigo. Após o primeiro acúmulo, AA de aliados também acumulam. Com 4 acúmulos, o alvo sofre STUN e dano mágico. Depois, Braum causa dano mágico adicional com AA nesse alvo por alguns segundos.",
+    "Q": "Lança um projétil que causa dano mágico e SLOW, além de aplicar um acúmulo da P.",
+    "W": "DASH até um aliado ou tropa, concedendo ARMOR e MR para Braum e o aliado.",
+    "E": "Levanta o escudo, bloqueando o próximo projétil e reduzindo o dano recebido pela frente. Braum intercepta os projéteis que atingiriam aliados atrás dele.",
+    "R": "Bate o escudo no chão, causando dano mágico, KNOCK UP e SLOW. Deixa uma fissura no chão que causa SLOW."
+  },
+  "Briar": {
+    "P": "AA e SKILLS aplicam SANGRAMENTO acumulável, causando dano físico e curando Briar com parte do dano causado. Quanto menor sua vida, maior sua cura. Não possui regeneração de vida.",
+    "Q": "DASH até um alvo, causando dano físico, aplicando a P e STUN. Também faz Briar trocar o alvo do seu FRENESI para o Campeão atingido.",
+    "W": "Entra em FRENESI SANGUINÁRIO, perseguindo o inimigo mais próximo e priorizando Campeões. Recebe AS e MS e seus AA causam dano em área. Pode reativar para dar uma MORDIDA, causando dano adicional baseado na vida perdida do alvo e se curando.",
+    "E": "Canaliza, recebendo redução de dano. Ao recastar, causa dano físico em área e SLOW. O dano aumenta conforme a vida perdida de Briar e, se atingir uma parede, causa KNOCKBACK.",
+    "R": "Lança um projétil que, ao atingir um Campeão, causa dano mágico e FEAR nos inimigos próximos. Depois, DASH até o alvo e entra em FRENESI SANGUINÁRIO aprimorado, recebendo AS, MS, ARMOR e MR. Enquanto estiver nessa forma, seus ataques causam dano adicional."
+  },
+  "Caitlyn": {
+    "P": "A cada determinados AA, recebe um ataque na cabeça que causa dano físico adicional baseado no AD. A frequência é maior ao atacar através de arbustos. Contra inimigos presos em armadilhas ou atingidos pelo E, o alcance do AA aumenta e o dano é maior.",
+    "Q": "Dispara um projétil que causa dano físico em linha. Após atingir o primeiro inimigo, o projétil se abre, causando menos dano aos alvos seguintes.",
+    "W": "Coloca uma armadilha que revela e causa ROOT no Campeão inimigo que a ativar, permitindo um AA fortalecido.",
+    "E": "Dispara uma rede que causa dano mágico e SLOW, enquanto Caitlyn recua com um DASH para trás. Se atingir um inimigo, pode usar a P nele.",
+    "R": "Mira em um Campeão inimigo e dispara um projétil de longo alcance que causa dano físico baseado no AD. Outros Campeões podem interceptar o disparo."
+  },
+  "Camille": {
+    "P": "Ao atacar um Campeão inimigo, recebe um SHIELD temporário baseado no tipo de dano do alvo.",
+    "Q": "O próximo AA causa dano físico adicional e concede MS. Pode ser reconjurada após um breve intervalo; se esperar, o segundo ataque causa dano verdadeiro adicional.",
+    "W": "Após canalizar, causa dano físico em cone. Inimigos na parte externa sofrem SLOW e Camille se cura com base no dano causado a Campeões.",
+    "E": "Dispara um gancho em uma parede e depois avança com um DASH. Se atingir um Campeão, causa STUN e recebe AS adicional.",
+    "R": "Salta até um Campeão inimigo, causando dano mágico e prendendo-o em uma área. Seus AA causam dano mágico adicional ao alvo. A área termina se Camille sair dela."
+  },
+  "Cassiopeia": {
+    "P": "Recebe MS por nível, mas não pode comprar botas.",
+    "Q": "Lança veneno em uma área, causando dano mágico ao longo do tempo. Se atingir um Campeão, recebe MS temporária.",
+    "W": "Lança veneno em uma área, causando dano mágico e SLOW. Inimigos atingidos ficam GROUNDED, impedidos de usar habilidades de movimento.",
+    "E": "Lança um ataque mágico contra um inimigo, causando mais dano se ele estiver envenenado. Também cura Cassiopeia. Se eliminar o alvo, recupera Mana.",
+    "R": "Causa dano mágico em cone. Inimigos de frente para Cassiopeia sofrem STUN; os que estiverem de costas sofrem SLOW."
+  },
+  "Chogath": {
+    "P": "Ao eliminar uma unidade, recupera Vida e Mana.",
+    "Q": "Faz o chão explodir em uma área, causando dano mágico, KNOCK UP e SLOW após os inimigos caírem.",
+    "W": "Solta um grito em cone, causando dano mágico e SILENCE.",
+    "E": "Fortalece os próximos 3 AA, lançando espinhos que causam dano mágico e SLOW. O dano aumenta com os acúmulos da R e é baseado na vida máxima do alvo.",
+    "R": "Devora um inimigo, causando TD. Se eliminar o alvo, recebe Vida máxima permanente e aumenta de tamanho. Pode acumular infinitamente, mas há limite de acúmulos obtidos com tropas e monstros comuns."
+  },
+  "Corki": {
+    "P": "Parte do dano dos AA é convertida em dano verdadeiro adicional.",
+    "Q": "Lança uma bomba que explode em uma área, causando dano físico e revelando a área atingida.",
+    "W": "Avança voando, deixando um rastro de fogo que causa dano mágico aos inimigos que permanecerem nele.",
+    "E": "Dispara sua metralhadora continuamente em cone, causando dano físico e reduzindo ARMOR e MR dos inimigos atingidos.",
+    "R": "Dispara mísseis que explodem ao atingir o primeiro inimigo, causando dano físico em área. Armazena mísseis ao longo do tempo; a cada terceiro míssil armazenado, dispara um míssil fortalecido que causa dano adicional."
+  },
+  "Darius": {
+    "P": "AA e SKILLS que causam dano aplicam SANGRAMENTO, causando dano físico ao longo de 5s e acumulando até 5x. Ao atingir 5 acúmulos em um inimigo, recebe AD adicional e aplica o máximo de acúmulos instantaneamente com seus ataques e habilidades contra outros inimigos.",
+    "Q": "Gira o machado, causando dano físico. Inimigos atingidos pela lâmina externa recebem mais dano e curam Darius com base nos Campeões e monstros grandes atingidos.",
+    "W": "Fortalece o próximo AA, causando dano físico adicional e SLOW. Se eliminar o alvo, recupera parte do CDR e do custo de Mana.",
+    "E": "Puxa inimigos à sua frente, causando SLOW. Também recebe PEN de ARMOR.",
+    "R": "Salta até um Campeão inimigo, causando TD baseada nos acúmulos de SANGRAMENTO. Se eliminar o alvo, pode reconjurar a habilidade sem CDR por um curto período."
+  },
+  "Diana": {
+    "P": "A cada 3 AA, causa dano mágico adicional em área. Após usar uma SKILL, recebe AS por 5s.",
+    "Q": "Lança energia lunar em arco, causando dano mágico e aplicando PLENILÚNIO nos inimigos atingidos, revelando-os por 3s.",
+    "W": "Cria 3 esferas ao redor de si, que explodem ao tocar inimigos, causando dano mágico. Também recebe SHIELD, que fica mais forte quando a terceira esfera explode.",
+    "E": "DASH até um inimigo, causando dano mágico. Se o alvo estiver com PLENILÚNIO, o CDR é resetado.",
+    "R": "Atrai e aplica SLOW nos inimigos próximos. Após um breve atraso, a luz lunar cai, causando dano mágico em área caso tenha atingido pelo menos um Campeão inimigo. O dano aumenta para cada Campeão adicional atingido."
+  },
+  "DrMundo": {
+    "P": "Resiste ao próximo efeito de IMOBILIZAÇÃO, perdendo vida e deixando um recipiente químico no chão. Ao pegá-lo, recupera vida e reduz o CDR da P. Também recebe regeneração de vida adicional.",
+    "Q": "Lança uma serra que causa dano mágico baseado na vida atual do alvo e SLOW.",
+    "W": "Eletrocuta a si mesmo, causando dano mágico contínuo aos inimigos próximos e armazenando parte do dano recebido. Ao reconjurar ou terminar o efeito, explode, causando dano mágico em área e recuperando vida com base no dano armazenado se atingir um inimigo.",
+    "E": "Passivo: recebe AD adicional baseado na vida máxima. Ativo: fortalece o próximo AA, causando dano físico adicional baseado na vida perdida de Mundo. Se eliminar o alvo, arremessa-o contra os inimigos atrás, causando dano físico.",
+    "R": "Injeta medicamentos em si mesmo, recuperando instantaneamente parte da vida perdida. Recebe MS e regenera vida ao longo do tempo, com cura baseada na vida máxima."
+  },
+  "Draven": {
+    "P": "Recebe acúmulos de ADORAÇÃO ao pegar machados fortalecidos e eliminar tropas, monstros ou torres. Ao eliminar um Campeão inimigo, recebe ouro adicional baseado nos acúmulos.",
+    "Q": "Fortalece o próximo AA com um machado giratório, causando dano físico adicional. O machado ricocheteia e pode ser pego para manter o efeito.",
+    "W": "Recebe MS e AS temporárias. Pegar um machado giratório reduz o CDR da habilidade.",
+    "E": "Arremessa machados que causam dano físico, KNOCKBACK e SLOW nos inimigos atingidos.",
+    "R": "Lança dois machados gigantes que causam dano físico aos inimigos atingidos e retornam após atingir um Campeão. Pode reconjurar para fazê-los voltar antes. O dano diminui a cada inimigo atingido e aumenta novamente quando os machados mudam de direção. Executa inimigos com pouca vida com base nos acúmulos de ADORAÇÃO."
+  },
+  "Ekko": {
+    "P": "AA e SKILLS aplicam acúmulos nos inimigos. Ao atingir 3 acúmulos, causa dano mágico adicional e recebe MS temporária. Não pode ativar novamente no mesmo alvo por alguns segundos.",
+    "Q": "Lança um dispositivo que causa dano mágico aos inimigos atravessados. Ao chegar ao alcance máximo, retorna, causando dano mágico novamente e aplicando SLOW.",
+    "W": "Cria uma área que, após um atraso, aplica SLOW aos inimigos. Se Ekko entrar nela, recebe SHIELD e causa STUN nos inimigos. Também revela a área durante a preparação.",
+    "E": "DASH e fortalece o próximo AA, fazendo Ekko avançar até o alvo e causar dano mágico adicional.",
+    "R": "Ekko volta no tempo para sua posição anterior, recupera vida e causa dano mágico em área. Inimigos atingidos recebem dano adicional baseado no AP."
+  },
+  "Elise": {
+    "P": "Forma Humana: SKILLS que atingem inimigos geram crias adormecidas. Forma de Aranha: AA causam dano mágico adicional e restauram vida. As crias atacam os inimigos próximos.",
+    "Q": "Humana: causa dano mágico baseado na vida atual do alvo. Aranha: avança até o alvo e causa dano mágico baseado na vida perdida dele.",
+    "W": "Humana: lança uma aranha explosiva que persegue inimigos e causa dano mágico em área. Aranha: recebe AS temporária.",
+    "E": "Humana: lança uma teia que causa STUN ao primeiro inimigo atingido. Aranha: Elise e suas crias sobem no ar, ficando inalvejáveis. Ao descer, causa dano adicional no próximo AA.",
+    "R": "Alterna entre a Forma Humana e a Forma de Aranha. Na Forma de Aranha, recebe MS, ARMOR e MR adicionais, além de alterar suas habilidades."
+  },
+  "Evelynn": {
+    "P": "Após ficar fora de combate por alguns segundos, entra em CAMUFLAGEM quando atinge o nível 6. Também regenera vida quando está com pouca vida.",
+    "Q": "Lança um espinho que causa dano mágico. Se atingir um inimigo, pode reconjurar para disparar espinhos adicionais contra ele e inimigos próximos.",
+    "W": "Amaldiçoa um Campeão ou monstro. Após aguardar, o próximo ataque ou SKILL causa CHARM e reduz a MR do alvo. Se atingir antes de completar a preparação, aplica SLOW.",
+    "E": "Avança até um inimigo e causa dano mágico. Se estiver em CAMUFLAGEM, o alcance aumenta. A habilidade fortalecida causa dano mágico adicional baseado na vida máxima do alvo e concede MS.",
+    "R": "Causa dano mágico em área e recua com um DASH para trás. Causa dano adicional a inimigos com pouca vida e, ao usar a habilidade, entra em CAMUFLAGEM após o CDR da P."
+  },
+  "Ezreal": {
+    "P": "Ao acertar SKILLS, recebe AS adicional, acumulando até 5x.",
+    "Q": "Dispara um projétil que causa dano físico baseado no AD e no AP. Ao acertar um inimigo, reduz o CDR de todas as habilidades.",
+    "W": "Dispara um orbe que marca o primeiro Campeão, monstro épico ou estrutura atingida. O próximo AA ou SKILL que atingir o alvo consome a marca, causando dano mágico adicional.",
+    "E": "DASH para uma direção e dispara um projétil contra o inimigo mais próximo. Prioriza alvos marcados pela W.",
+    "R": "Dispara uma onda de energia de longo alcance que causa dano mágico a todos os inimigos atravessados. Causa menos dano a cada inimigo atingido."
+  },
+  "Fiddlesticks": {
+    "P": "Enquanto está parado ou canalizando por um tempo, assume a aparência de um Espantalho. Coloca Efígies que funcionam como sentinelas e podem simular ações de Fiddlesticks.",
+    "Q": "Passivo: SKILLS causam FEAR em inimigos se Fiddlesticks estiver fora da visão deles ou disfarçado pela P. Ativo: causa dano mágico e FEAR no alvo. Se o alvo já estiver com FEAR, causa dano mágico adicional.",
+    "W": "Canaliza, drenando vida dos inimigos próximos e causando dano mágico ao longo do tempo. No final, causa dano adicional baseado na vida perdida dos alvos e cura Fiddlesticks.",
+    "E": "Corta uma área com sua foice, causando dano mágico e SLOW. Inimigos no centro também sofrem SILENCE.",
+    "R": "Canaliza e depois se teletransporta para uma área, causando dano mágico contínuo aos inimigos próximos por alguns segundos."
+  },
+  "Fiora": {
+    "P": "Revela uma VULNERABILIDADE em Campeões inimigos próximos. Atacar essa área causa dano verdadeiro baseado na vida máxima do alvo e cura Fiora, além de conceder MS temporária.",
+    "Q": "DASH em uma direção e golpeia o inimigo mais próximo, priorizando Campeões e VULNERABILIDADES. Causa dano físico e aplica efeitos de contato. Ao atingir um inimigo, reduz o CDR da habilidade.",
+    "W": "Bloqueia todo o dano e efeitos de controle recebidos durante a canalização. Depois, golpeia em linha reta, causando dano mágico e SLOW. Se bloquear um efeito de IMOBILIZAÇÃO, aplica STUN em vez de SLOW.",
+    "E": "Fortalece os próximos 2 AA. O primeiro causa SLOW; o segundo causa dano crítico garantido.",
+    "R": "Revela as 4 VULNERABILIDADES de um Campeão, permitindo causar dano verdadeiro adicional ao atingi-las. Se atingir todas ou o alvo morrer após atingir pelo menos uma, cria uma área que cura Fiora e aliados."
+  },
+  "Fizz": {
+    "P": "Reduz o dano recebido de cada ataque e pode atravessar unidades.",
+    "Q": "DASH através de um inimigo, causando dano físico baseado no AD e dano mágico baseado no AP. Aplica efeitos de contato.",
+    "W": "Fortalece o próximo AA, causando dano mágico adicional. Se o ataque eliminar o alvo, recupera Mana e reduz o CDR. Os ataques seguintes causam dano mágico adicional por alguns segundos.",
+    "E": "Salta e fica inalvejável por um breve período. Ao cair, causa dano mágico em área e SLOW. Pode reconjurar para cair mais cedo, causando dano em uma área menor.",
+    "R": "Lança um peixe que gruda no primeiro Campeão atingido, causando SLOW e revelando-o. Após um atraso, um tubarão emerge, causando dano mágico, KNOCK UP e SLOW em área. Quanto maior a distância percorrida pelo peixe, maior o tubarão e o dano causado."
+  },
+  "Galio": {
+    "P": "Após usar uma SKILL, o próximo AA causa dano mágico adicional em área. O CDR é reduzido ao acertar Campeões com SKILLS.",
+    "Q": "Dispara duas rajadas de vento que se unem em um tornado, causando dano mágico ao longo do tempo baseado na vida máxima dos inimigos.",
+    "W": "Passivo: recebe SHIELD contra dano mágico quando fica fora de combate. Ativo: canaliza, recebendo redução de dano e aplicando SLOW nos inimigos próximos. Ao soltar, causa dano mágico e TAUNT.",
+    "E": "Avança para trás e depois para frente, causando dano mágico e KNOCK UP nos inimigos atingidos.",
+    "R": "Marca a posição de um aliado e salta até ela, concedendo o SHIELD da P aos aliados na área. Ao aterrissar, causa dano mágico e KNOCK UP nos inimigos próximos."
+  },
+  "Gangplank": {
+    "P": "O próximo AA incendeia o alvo, causando dano verdadeiro ao longo do tempo e concedendo MS. Destruir um Barril com AA reseta a P.",
+    "Q": "Dispara com sua pistola, causando dano físico. Se eliminar o alvo, recebe ouro adicional e prata.",
+    "W": "Consome frutas cítricas, removendo efeitos de controle e recuperando vida com base na vida perdida.",
+    "E": "Coloca um Barril de Pólvora que pode ser atingido por Gangplank. Se explodir, causa dano físico em área, aplica SLOW e ignora parte da ARMOR dos inimigos atingidos. Gangplank pode conectar vários barris.",
+    "R": "Dispara uma barragem de canhões em uma área global, causando dano mágico e SLOW. Pode ser aprimorada com prata para conceder efeitos adicionais."
+  },
+  "Garen": {
+    "P": "Se ficar fora de combate por alguns segundos, regenera vida continuamente.",
+    "Q": "Remove SLOW e recebe MS. O próximo AA causa dano físico adicional e SILENCE.",
+    "W": "Passivo: recebe ARMOR e MR permanentes ao eliminar inimigos. Ativo: recebe SHIELD e tenacidade, além de reduzir o dano recebido por alguns segundos.",
+    "E": "Gira com a espada, causando dano físico aos inimigos próximos. Acertos repetidos no mesmo alvo causam dano adicional; após vários acertos, reduz a ARMOR do alvo.",
+    "R": "Executa um Campeão inimigo, causando TD baseada na vida perdida do alvo. Também causa dano verdadeiro adicional em área ao redor do alvo."
+  },
+  "Gnar": {
+    "P": "Ao se movimentar e atacar, acumula FÚRIA. Ao atingir o máximo, transforma-se em Mega Gnar, alterando suas SKILLS e recebendo vida, ARMOR e MR adicionais.",
+    "Q": "Mini Gnar: lança um bumerangue que causa dano físico e SLOW. Ao pegar o bumerangue, reduz o CDR. Mega Gnar: arremessa uma pedra que causa dano físico e SLOW. Ao pegá-la, reduz o CDR.",
+    "W": "Mini Gnar: AA e SKILLS aplicam acúmulos, causando dano mágico adicional no terceiro acúmulo e concedendo MS. Mega Gnar: bate no chão, causando dano físico e STUN.",
+    "E": "Mini Gnar: salta sobre uma unidade ou terreno, podendo saltar novamente ao aterrissar sobre uma unidade. Mega Gnar: salta e causa dano físico e SLOW aos inimigos ao aterrissar.",
+    "R": "Mega Gnar: arremessa os inimigos próximos em uma direção, causando dano físico e SLOW. Se atingirem uma parede, sofrem STUN e dano adicional."
+  },
+  "Gragas": {
+    "P": "Ao usar uma SKILL, recupera vida. Possui um CDR próprio.",
+    "Q": "Lança um barril que causa SLOW e, após um atraso, explode causando dano mágico em área. O dano aumenta conforme o tempo de fermentação.",
+    "W": "Bebe de seu barril, reduzindo o dano recebido. O próximo AA causa dano mágico adicional em área, baseado na vida máxima do alvo.",
+    "E": "Avança com a barriga, causando dano mágico e STUN aos inimigos atingidos. Se colidir com um inimigo, reduz o CDR.",
+    "R": "Lança um barril que explode, causando dano mágico e arremessando os inimigos para longe do centro."
+  },
+  "Graves": {
+    "P": "Sua espingarda possui 2 projéteis. AA dispara vários projéteis que causam dano físico; eles podem atingir o mesmo alvo, mas não atravessam unidades. Os projéteis podem ser bloqueados por inimigos.",
+    "Q": "Dispara uma carga explosiva que causa dano físico. Após um atraso ou ao atingir um terreno, explode novamente, causando dano físico em linha.",
+    "W": "Lança uma bomba de fumaça que causa dano mágico e SLOW. Inimigos dentro da fumaça não conseguem enxergar o que está fora dela.",
+    "E": "DASH, recarregando um projétil e recebendo ARMOR temporária. Acertar inimigos com AA reduz o CDR.",
+    "R": "Dispara um projétil explosivo que causa dano físico e empurra Graves para trás. Ao atingir um inimigo ou chegar ao alcance máximo, explode em cone."
+  },
+  "Gwen": {
+    "P": "AA causam dano mágico adicional baseado na vida máxima do alvo. Contra Campeões, recupera vida com base no dano causado.",
+    "Q": "Corta várias vezes em cone, causando dano verdadeiro no centro. Aplica dano mágico adicional com base nos acúmulos de CORTES E COSTURAS, obtidos ao acertar AA.",
+    "W": "Cria uma névoa que concede ARMOR e MR. Gwen fica inalvejável para inimigos fora da área. A névoa acompanha Gwen uma vez quando ela sai dela.",
+    "E": "DASH e fortalece os próximos AA, aumentando o alcance, a AS e causando dano mágico adicional. Acertar AA reduz o CDR da habilidade.",
+    "R": "Lança uma agulha que causa dano mágico e SLOW. Pode reconjurar até duas vezes, lançando mais agulhas a cada uso. Para lançar as conjurações seguintes, Gwen precisa acertar um inimigo com AA ou SKILL entre os usos."
+  },
+  "Hecarim": {
+    "P": "Recebe AD adicional baseado na MS adicional.",
+    "Q": "Causa dano físico em área ao redor de si. Acertar inimigos reduz o CDR e concede acúmulos que aumentam o dano da habilidade.",
+    "W": "Causa dano mágico contínuo aos inimigos próximos e recebe cura baseada no dano que eles recebem. A cura é aumentada conforme o dano causado por Hecarim.",
+    "E": "Recebe MS crescente e pode atravessar unidades. Seu próximo AA empurra o alvo e causa dano físico adicional baseado na distância percorrida.",
+    "R": "Avança até uma área, causando dano mágico aos inimigos no caminho. Ao chegar, causa FEAR nos inimigos próximos. Hecarim se desloca até o destino, enquanto sua onda espectral se espalha."
+  },
+  "Heimerdinger": {
+    "P": "Recebe MS ao se mover perto de torres aliadas e torretas que ele mesmo colocou.",
+    "Q": "Coloca uma torreta que ataca automaticamente os inimigos próximos, causando dano mágico. Armazena cargas ao longo do tempo, até um limite.",
+    "W": "Dispara uma sequência de foguetes que causam dano mágico. Quanto mais foguetes atingem o mesmo alvo, maior o dano total.",
+    "E": "Lança uma granada que causa dano mágico e SLOW. Inimigos no centro sofrem STUN.",
+    "R": "Fortalece a próxima SKILL, sem custo de Mana e com efeitos aprimorados:\n\n- Q: coloca uma torreta maior, que causa mais dano.\n- W: dispara uma sequência de foguetes maiores e mais poderosos.\n- E: lança uma granada maior, que causa mais dano e ricocheteia."
+  },
+  "Hwei": {
+    "P": "Causar dano a um Campeão com 2 SKILLS diferentes cria uma marca. A próxima SKILL que atingir o alvo detona a marca, causando dano mágico em área.",
+    "Q": "Escolhe uma das 3 SKILLS de dano:\n\n- QQ: lança uma bola de fogo que causa dano mágico.\n- QW: dispara um projétil de longo alcance que causa dano mágico baseado na vida perdida do alvo.\n- QE: cria uma linha de fogo que causa dano mágico contínuo e SLOW.",
+    "W": "Escolhe uma das 3 SKILLS de utilidade:\n\n- WQ: cria um caminho que concede MS a Hwei e aliados.\n- WW: cria uma área que concede SHIELD a Hwei e aliados.\n- WE: fortalece os próximos 3 AA ou SKILLS, causando dano mágico adicional e restaurando Mana ao acertar.",
+    "E": "Escolhe uma das 3 SKILLS de controle:\n\n- EQ: lança um projétil que causa FEAR e dano mágico.\n- EW: cria um olho que marca o inimigo mais próximo em sua área e o imobiliza ao atingi-lo.\n- EE: cria uma área que puxa inimigos para o centro, causando dano mágico e SLOW.",
+    "R": "Lança um projétil que se prende ao primeiro Campeão atingido, causando dano mágico e SLOW. A área de efeito aumenta progressivamente; ao atingir o máximo, explode, causando dano mágico em área."
+  },
+  "Illaoi": {
+    "P": "Invoca um Tentáculo em terrenos próximos. Os Tentáculos atacam automaticamente quando Illaoi usa a W ou quando a E atinge um inimigo próximo.",
+    "Q": "Passivo: aumenta o dano dos Tentáculos. Ativo: faz os Tentáculos baterem em linha reta, causando dano físico.",
+    "W": "Fortalece o próximo AA, fazendo Illaoi avançar até o alvo e causar dano físico. Os Tentáculos próximos também atacam o alvo.",
+    "E": "Lança um tentáculo espiritual que causa dano físico e puxa o espírito do Campeão atingido para fora do corpo. Causar dano ao espírito também causa parte do dano ao Campeão. Se o espírito morrer ou o alvo se afastar demais, ele se torna um VASCALO, que sofre SLOW e é atacado pelos Tentáculos.",
+    "R": "Salta e bate no chão, causando dano físico em área. Invoca um Tentáculo para cada Campeão inimigo atingido. Durante o efeito, a W tem CDR reduzido e os Tentáculos atacam mais rapidamente."
+  },
+  "Irelia": {
+    "P": "Ao acertar inimigos com SKILLS, recebe acúmulos de FERVOR. Cada acúmulo concede AS adicional. No máximo de acúmulos, os AA causam dano mágico adicional.",
+    "Q": "DASH até um inimigo, causando dano físico e aplicando efeitos de contato. Se eliminar o alvo ou atingir um inimigo marcado pela E ou R, o CDR é resetado.",
+    "W": "Canaliza e reduz o dano recebido. Ao soltar, causa dano físico em linha, que aumenta conforme o tempo de canalização.",
+    "E": "Lança duas lâminas que se encontram em uma área, causando dano mágico e STUN. Marca os inimigos atingidos.",
+    "R": "Lança várias lâminas em linha, causando dano mágico e marcando Campeões atingidos. As lâminas formam uma parede que causa dano mágico e SLOW aos inimigos que a atravessam."
+  },
+  "Ivern": {
+    "P": "Não pode atacar nem causar dano a monstros da selva normalmente. Pode libertá-los ao gastar vida e Mana e aguardar um tempo. Quando o processo termina, o monstro é libertado e Ivern recebe ouro e XP. A partir do nível 5, pode compartilhar o efeito do Buff Azul e Vermelho com um aliado.",
+    "Q": "Lança uma raiz que causa dano mágico e ROOT. Aliados podem avançar até o alvo marcado com um DASH ou AA de longo alcance.",
+    "W": "Passivo: dentro dos arbustos, os AA causam dano mágico adicional. Ativo: cria um arbusto temporário que concede visão.",
+    "E": "Concede SHIELD a um aliado. Após alguns segundos, o escudo explode, causando dano mágico e SLOW aos inimigos próximos.",
+    "R": "Invoca Daisy, que ataca os inimigos. Ao atingir o mesmo alvo três vezes consecutivas, Daisy causa KNOCK UP em linha. Pode reconjurar para comandar seus movimentos."
+  },
+  "Janna": {
+    "P": "Janna e aliados próximos recebem MS ao se moverem em direção a aliados. Janna não causa mais dano mágico adicional nos AA ou no W com base na MS adicional; esse efeito foi removido. A passiva concede MS a aliados que se movem em sua direção.",
+    "Q": "Canaliza um tornado que avança, causando dano mágico e KNOCK UP nos inimigos atingidos. Quanto mais tempo canalizar, maior o alcance, a velocidade e a duração do KNOCK UP.",
+    "W": "Causa dano mágico e SLOW a um inimigo. Enquanto estiver em CDR, Janna perde a MS adicional da passiva dessa habilidade.",
+    "E": "Concede SHIELD a um aliado, aumentando seu AD enquanto o escudo durar. Acertar inimigos com SKILLS reduz o CDR da habilidade.",
+    "R": "Afasta os inimigos próximos com KNOCKBACK e canaliza uma área de cura para os aliados próximos."
+  },
+  "JarvanIV": {
+    "P": "O primeiro AA contra um inimigo causa dano físico adicional baseado na vida atual dele. O mesmo alvo só pode ser afetado novamente após alguns segundos.",
+    "Q": "Estende a lança em linha reta, causando dano físico e reduzindo a ARMOR dos inimigos atingidos. Se atingir a bandeira da E, Jarvan avança até ela com um DASH, causando KNOCK UP nos inimigos atravessados.",
+    "W": "Recebe SHIELD e aplica SLOW aos inimigos próximos.",
+    "E": "Lança uma bandeira que causa dano mágico ao aterrissar e concede AS a Jarvan e aliados próximos.",
+    "R": "Avança até um Campeão inimigo, causando dano físico e criando uma arena de terreno ao redor do alvo."
   },
   "Jax": {
-    "P": "Ataques básicos consecutivos aumentam progressivamente sua velocidade de ataque.",
-    "Q": "Salta em direção a uma unidade amiga, sentinela ou inimiga, causando dano físico a alvos hostis.",
-    "W": "Energiza sua arma para potencializar o próximo ataque básico ou salto com dano mágico adicional.",
-    "E": "Gira sua arma entrando em postura defensiva por 2 segundos, desviando de todos os ataques básicos e atordoando inimigos ao redor no final.",
-    "R": "Passivo: cada 3º ataque causa dano mágico bônus. Ativo: atinge em área e concede armadura e resistência mágica maciças com base nos campeões atingidos."
+    "P": "AA consecutivos aumentam sua AS, acumulando até um limite.",
+    "Q": "DASH até um alvo, causando dano físico ou mágico adicional baseado no AP.",
+    "W": "Fortalece o próximo AA, causando dano mágico adicional. Também pode ser usado durante o Q para aplicar o efeito no alvo.",
+    "E": "Esquiva de AA e reduz o dano recebido de habilidades em área. Após alguns segundos, ou ao reconjurar, causa dano físico em área e STUN nos inimigos próximos.",
+    "R": "Passivo: a cada 3 AA, causa dano mágico adicional. Ativo: recebe ARMOR e MR temporárias, aumentadas conforme seu AD e AP, respectivamente."
+  },
+  "Jayce": {
+    "P": "Ao trocar entre a forma de martelo e a de canhão, recebe MS temporária e pode atravessar unidades.",
+    "Q": "Canhão: dispara uma esfera de energia que causa dano físico em área. Se atravessar a E, aumenta o alcance, a velocidade e o dano. Martelo: salta até um inimigo, causando dano físico em área e SLOW.",
+    "W": "Canhão: cria um campo elétrico que causa dano mágico contínuo aos inimigos próximos. Martelo: seus AA restauram Mana.",
+    "E": "Canhão: cria um portal que concede MS a aliados que passam por ele e fortalece o Q que o atravessa. Martelo: golpeia um inimigo, causando dano mágico baseado na vida máxima do alvo e KNOCKBACK.",
+    "R": "Alterna entre a forma de canhão e a de martelo, alterando suas habilidades e os efeitos dos ataques. Na forma de martelo, os ataques reduzem ARMOR e MR do alvo; na forma de canhão, o próximo AA causa dano mágico adicional e reduz as resistências do inimigo."
+  },
+  "Jhin": {
+    "P": "A arma possui 4 balas, sendo a última um crítico garantido que causa dano adicional baseado na vida perdida do alvo. Jhin não recebe AS normalmente; parte da AS e da chance de crítico é convertida em AD. Críticos concedem MS temporária.",
+    "Q": "Lança uma granada que causa dano físico e salta para inimigos próximos. O dano aumenta a cada unidade eliminada pelos saltos anteriores.",
+    "W": "Dispara um projétil de longo alcance que causa dano físico. Inimigos atingidos por Jhin ou aliados recentemente ficam marcados; se Jhin atingir um Campeão marcado, causa ROOT.",
+    "E": "Coloca uma armadilha invisível que revela e aplica SLOW aos inimigos próximos. Após um atraso, explode, causando dano mágico.",
+    "R": "Canaliza e dispara até 4 tiros de longo alcance em cone. Os tiros causam dano físico e SLOW; o quarto causa dano adicional baseado na vida perdida do alvo."
   },
   "Jinx": {
-    "P": "Ganha velocidade de movimento extrema e velocidade de ataque ao abater campeões, estruturas ou monstros épicos.",
-    "Q": "Alterna entre Pow-Pow (metralhadora com velocidade de ataque crescente) e Fishbones (lança-mísseis em área de longo alcance que gasta mana).",
-    "W": "Dispara um raio com sua pistola elétrica, causando dano físico, aplicando lentidão intensa e revelando a posição do alvo.",
-    "E": "Joga três granadas no chão que se armam e enraízam os primeiros inimigos que passarem por cima.",
-    "R": "Dispara um super foguete global que atravessa o mapa e explode causando dano colossal baseado na vida que o alvo já perdeu."
+    "P": "Ao participar da eliminação de um Campeão, monstro épico ou estrutura, recebe grande quantidade de MS e AS temporárias. Durante o efeito, pode ultrapassar o limite de AS.",
+    "Q": "Alterna entre duas armas:\n\n- Pow-Pow: AA concedem AS acumulável.\n- Fishbones: AA ganham alcance, causam dano físico em área e consomem Mana.",
+    "W": "Dispara um projétil de longo alcance que causa dano físico e SLOW. Revela o primeiro inimigo atingido.",
+    "E": "Lança 3 armadilhas que, após um atraso, causam ROOT e dano mágico aos inimigos que as ativarem.",
+    "R": "Dispara um supermíssil global que causa dano físico em área. O dano aumenta conforme a distância percorrida e a vida perdida do alvo. Causa dano adicional a Campeões com pouca vida."
+  },
+  "KSante": {
+    "P": "Causar dano com SKILLS marca inimigos. O próximo AA contra um alvo marcado causa dano físico adicional; durante a R, causa dano verdadeiro adicional.",
+    "Q": "Golpeia em linha reta, causando dano físico e SLOW. Ao acertar inimigos, recebe acúmulos. Com 2 acúmulos, o próximo Q puxa os inimigos atingidos em sua direção.",
+    "W": "Canaliza enquanto avança, recebendo redução de dano e ficando imune a efeitos de controle. Ao soltar, avança, causando dano físico, KNOCKBACK e STUN.",
+    "E": "DASH em direção a um aliado ou local, recebendo SHIELD. Se usar em um aliado, também concede SHIELD a ele.",
+    "R": "Empurra um Campeão inimigo para longe. Se atingir uma parede, atravessa com o alvo para o outro lado, causando dano físico. K'Sante entra em TUDO PARA O TUDO, perdendo vida máxima, ARMOR e MR, mas recebendo AD, omnivamp e habilidades aprimoradas."
+  },
+  "Kaisa": {
+    "P": "AA e efeitos de imobilização de aliados aplicam acúmulos de Plasma. Ao atingir 5 acúmulos, o Plasma explode, causando dano mágico baseado na vida perdida do alvo. Os ataques de Kai'Sa aplicam acúmulos.",
+    "Q": "Dispara mísseis que causam dano físico aos inimigos próximos, priorizando Campeões. Ao evoluir, dispara mais mísseis.",
+    "W": "Dispara um projétil de longo alcance que causa dano mágico e aplica acúmulos de Plasma. Ao evoluir, aplica mais acúmulos e reduz o CDR ao atingir Campeões.",
+    "E": "Canaliza enquanto recebe MS, depois ganha AS temporária. Durante a canalização, não pode atacar. Ao evoluir, fica invisível durante a preparação.",
+    "R": "DASH para perto de um Campeão inimigo marcado com Plasma, recebendo SHIELD temporário."
+  },
+  "Kalista": {
+    "P": "Ao comandar um movimento durante o AA ou Q, Kalista salta na direção escolhida após o ataque. Seus AA causam menos dano que o normal, e ela não pode cancelar a animação de ataque.",
+    "Q": "Lança uma lança que causa dano físico. Se eliminar um alvo, a lança continua e transfere os acúmulos da E para o próximo inimigo atingido.",
+    "W": "Passivo: Kalista e seu aliado juramentado causam dano mágico adicional ao atingir o mesmo alvo em sequência. Ativo: envia um espírito para patrulhar uma área, revelando inimigos à sua frente.",
+    "E": "As lanças ficam presas nos inimigos atingidos por AA e Q. Ao ativar, remove as lanças, causando dano físico e SLOW. Se eliminar um alvo, o CDR e o custo de Mana são restaurados.",
+    "R": "Puxa o aliado juramentado para Kalista, deixando-o inalvejável. Ele pode avançar até uma direção, causando KNOCKBACK nos inimigos atingidos."
+  },
+  "Karma": {
+    "P": "Reduz o CDR da R ao causar dano com SKILLS contra Campeões inimigos.",
+    "Q": "Lança uma esfera que causa dano mágico e SLOW. R+Q: causa mais dano e cria uma área que explode, causando dano mágico adicional.",
+    "W": "Conecta Karma a um inimigo, causando dano mágico e revelando-o. Se o vínculo não for quebrado, causa ROOT e dano mágico novamente. R+W: fortalece o vínculo, causando mais dano e curando Karma. Se o vínculo continuar, o ROOT dura mais.",
+    "E": "Concede SHIELD e MS a um aliado. R+E: concede SHIELD e MS a vários aliados próximos.",
+    "R": "Fortalece a próxima SKILL, concedendo efeitos adicionais."
+  },
+  "Karthus": {
+    "P": "Ao morrer, continua podendo usar SKILLS por alguns segundos, sem custo de Mana.",
+    "Q": "Causa dano mágico em uma pequena área. Se atingir apenas um inimigo, causa dano adicional.",
+    "W": "Cria uma parede que reduz a MS e a MR dos inimigos que a atravessam.",
+    "E": "Passivo: recupera Mana ao eliminar unidades. Ativo: causa dano mágico contínuo aos inimigos próximos, consumindo Mana enquanto estiver ativa.",
+    "R": "Canaliza e causa dano mágico a todos os Campeões inimigos após alguns segundos."
+  },
+  "Kassadin": {
+    "P": "Recebe redução de dano mágico e pode atravessar unidades.",
+    "Q": "Lança uma esfera de energia que causa dano mágico e concede a Kassadin um SHIELD contra dano mágico. Não silencia nem interrompe canalizações.",
+    "W": "Fortalece o próximo AA, causando dano mágico adicional e restaurando Mana. Se atingir um Campeão, restaura ainda mais Mana.",
+    "E": "Causa dano mágico em cone e SLOW. Fica disponível após SKILLS serem usadas nas proximidades.",
+    "R": "DASH para uma área, causando dano mágico aos inimigos próximos. Cada conjuração em sequência aumenta o custo de Mana e o dano, acumulando até um limite."
+  },
+  "Katarina": {
+    "P": "Ao participar de uma eliminação, reduz bastante o CDR das habilidades. Ao pegar uma adaga, gira, causando dano mágico aos inimigos próximos.",
+    "Q": "Lança adagas que causam dano mágico ao alvo e ricocheteiam em inimigos próximos, caindo depois no chão.",
+    "W": "Recebe MS temporária e deixa uma adaga no chão.",
+    "E": "DASH até um alvo ou adaga, causando dano mágico ao inimigo mais próximo. Pegar uma adaga reduz bastante o CDR da habilidade.",
+    "R": "Gira e lança adagas contra os inimigos próximos, causando dano mágico e aplicando efeitos de contato e Feridas Dolorosas."
+  },
+  "Kayle": {
+    "P": "Ao subir de nível e acumular AS, Kayle evolui suas habilidades de ataque, recebendo MS e alcance adicional. Ao atingir níveis específicos, seus ataques passam por diferentes estágios, tornando-se mais fortes.",
+    "Q": "Dispara uma espada de energia que causa dano mágico, reduz ARMOR e MR e aplica SLOW aos inimigos atingidos.",
+    "W": "Cura Kayle e um aliado, concedendo MS temporária.",
+    "E": "Passivo: AA causam dano mágico adicional. Ativo: fortalece o próximo AA, que causa dano mágico adicional baseado na vida perdida do alvo e tem alcance aumentado.",
+    "R": "Torna Kayle ou um aliado invulnerável por alguns segundos. Ao final, espadas caem ao redor do alvo, causando dano mágico em área."
+  },
+  "Kayn": {
+    "P": "Kayn coleta orbes ao causar dano a Campeões. Ao acumular o suficiente, pode escolher entre duas formas: Assassino das Sombras, que fortalece seu dano contra alvos frágeis, ou Rhaast, que fortalece a cura e o dano contra Campeões resistentes.",
+    "Q": "DASH e gira com a foice, causando dano físico. Rhaast causa dano adicional baseado na vida máxima do alvo.",
+    "W": "Golpeia em linha reta, causando dano físico e SLOW. Na forma Assassino das Sombras, pode se mover durante a habilidade. Na forma Rhaast, causa KNOCK UP.",
+    "E": "Atravessa terrenos temporariamente, recebendo MS e curando-se. Na forma Assassino das Sombras, recebe mais MS e pode ficar imune a SLOW.",
+    "R": "Entra no corpo de um Campeão atingido recentemente, ficando inalvejável. Após um breve período, sai causando dano físico. Rhaast causa dano baseado na vida máxima do alvo e cura-se; o Assassino das Sombras causa dano adicional."
+  },
+  "Kennen": {
+    "P": "SKILLS aplicam acúmulos de Marca da Tempestade. Com 3 acúmulos, o inimigo sofre STUN e Kennen recupera Energia.",
+    "Q": "Lança uma shuriken que causa dano mágico ao primeiro inimigo atingido.",
+    "W": "Passivo: a cada determinados AA, o próximo ataque causa dano mágico adicional e aplica uma marca. Ativo: causa dano mágico aos inimigos próximos que tenham uma marca.",
+    "E": "Transforma-se em uma bola de eletricidade, recebendo MS e causando dano mágico aos inimigos atravessados. Ao terminar, recebe AS temporária.",
+    "R": "Invoca uma tempestade elétrica ao redor de si, causando dano mágico repetidamente aos inimigos próximos e concedendo ARMOR e MR."
+  },
+  "Khazix": {
+    "P": "Ao ficar fora da visão dos inimigos, seu próximo AA contra um Campeão causa dano mágico adicional e SLOW.",
+    "Q": "Golpeia um inimigo, causando dano físico. Causa dano adicional se o alvo estiver isolado. Ao evoluir, aumenta o alcance e reduz o CDR ao atingir alvos isolados.",
+    "W": "Dispara espinhos que causam dano físico e SLOW. Se Kha'Zix estiver na área da explosão, recupera vida. Ao evoluir, dispara mais espinhos e aplica SLOW mais forte.",
+    "E": "Salta para uma área, causando dano físico ao aterrissar. Ao evoluir, aumenta o alcance e reseta o CDR ao participar de eliminações.",
+    "R": "Passivo: evolui uma habilidade ao atingir níveis específicos. Ativo: fica invisível e recebe MS temporária. Pode reconjurar para ficar invisível novamente. Ao evoluir, pode usar a invisibilidade mais vezes e recebe MS adicional."
+  },
+  "Kindred": {
+    "P": "Marca Campeões inimigos para caçar e acumula marcas ao eliminar monstros. As marcas aumentam o alcance dos AA e fortalecem as habilidades.",
+    "Q": "Salta e dispara flechas que causam dano físico. Ao usar a W ou estar dentro dela, o CDR é reduzido.",
+    "W": "Cria uma área na qual Lobo ataca inimigos próximos. Os ataques e habilidades de Kindred dentro da área reduzem o CDR do Q.",
+    "E": "Reduz a MS do alvo e acumula marcas com AA. No terceiro acúmulo, Lobo ataca o alvo, causando dano físico baseado na vida perdida.",
+    "R": "Cria uma área que impede todas as unidades dentro dela de morrerem enquanto estiver ativa. Ao terminar, todas as unidades são curadas."
+  },
+  "Kled": {
+    "P": "Kled luta montado em Skaarl. Ao perder toda a vida de Skaarl, desmonta e suas habilidades mudam. Causar dano a Campeões e eliminar unidades enche a coragem; ao atingir o máximo, Skaarl retorna com parte da vida.",
+    "Q": "Montado: dispara uma armadilha que causa dano físico e se prende ao primeiro Campeão atingido. Se permanecer perto, puxa o alvo e causa dano adicional. Desmontado: lança uma arma de longo alcance que causa dano físico.",
+    "W": "Os próximos 4 AA recebem AS adicional, com o quarto ataque causando dano físico adicional baseado na vida máxima do alvo. A habilidade é ativada automaticamente e possui CDR próprio.",
+    "E": "Montado: avança, causando dano físico. Se atingir um inimigo, pode reconjurar para avançar novamente através dele. Desmontado: não pode usar esta habilidade.",
+    "R": "Montado, avança em direção a uma área, recebendo SHIELD e MS. Skaarl colide com o primeiro Campeão inimigo, causando dano físico e KNOCK UP."
+  },
+  "KogMaw": {
+    "P": "Ao morrer, recebe MS e explode após alguns segundos, causando dano verdadeiro em área.",
+    "Q": "Dispara um projétil que causa dano mágico e reduz ARMOR e MR do inimigo atingido. Também concede AS passiva.",
+    "W": "Aumenta o alcance dos AA e faz com que causem dano mágico adicional baseado na vida máxima do alvo.",
+    "E": "Dispara uma gosma em linha, causando dano mágico e SLOW aos inimigos atingidos.",
+    "R": "Dispara um projétil de longo alcance que causa dano mágico em área, aumentado contra inimigos com pouca vida. Cada conjuração consecutiva em um curto período custa mais Mana."
+  },
+  "Leblanc": {
+    "P": "Ao ficar com pouca vida, fica invisível por um breve período e cria uma imagem espelhada que dura alguns segundos.",
+    "Q": "Lança um selo que causa dano mágico e marca o alvo. Se LeBlanc atingir o alvo marcado com outra SKILL, a marca é ativada, causando dano mágico adicional.",
+    "W": "Avança para uma área, causando dano mágico aos inimigos próximos. Pode reconjurar para retornar à posição inicial.",
+    "E": "Lança uma corrente que causa dano mágico e conecta LeBlanc ao primeiro inimigo atingido. Se o vínculo durar, causa ROOT e dano mágico adicional.",
+    "R": "Repete a última SKILL utilizada, com efeitos aprimorados."
   },
   "LeeSin": {
-    "P": "Após usar qualquer habilidade, seus próximos dois ataques básicos recebem velocidade de ataque e recuperam energia.",
-    "Q": "Dispara onda sonora que marca e revela o primeiro inimigo. Pode reconjurar para avançar rapidamente até ele causando dano por vida perdida.",
-    "W": "Avança até uma unidade aliada ou sentinela concedendo escudo. Ao reconjurar, recebe roubo de vida e vampirismo mágico.",
-    "E": "Golpeia o chão revelando unidades invisíveis próximas. Ao reconjurar, aplica lentidão aos inimigos atingidos.",
-    "R": "Desfere um chute potente que lança um campeão inimigo para trás, arremessando ao ar qualquer outro inimigo com quem ele colidir."
+    "P": "Após usar uma habilidade, os próximos 2 AA recebem AS adicional e restauram Energia.",
+    "Q": "Onda Sônica: lança um projétil que causa dano físico ao primeiro inimigo atingido. Se acertar, pode reconjurar em até 3s.\n\nReconjurar — Ataque Ressonante: avança até o inimigo marcado e causa dano físico aumentado conforme a vida perdida do alvo.",
+    "W": "Proteger: avança até um aliado ou sentinela, concedendo SHIELD a Lee Sin e ao aliado. Pode reconjurar por um breve período.\n\nReconjurar — Vontade de Ferro: recebe Vampirismo Universal e cura com base no dano causado por alguns segundos.",
+    "E": "Tempestade: golpeia o chão, causando dano mágico e revelando inimigos atingidos. Se atingir um inimigo, pode reconjurar em até 3s.\n\nReconjurar — Mutilar: causa dano mágico e SLOW aos inimigos próximos atingidos por Tempestade; o SLOW diminui ao longo da duração.",
+    "R": "Chuta um Campeão inimigo, causando dano físico e arremessando-o para trás. Inimigos atingidos pelo Campeão chutado também sofrem dano físico e são arremessados ao ar."
+  },
+  "Leona": {
+    "P": "SKILLS aplicam uma marca nos inimigos, fazendo com que recebam dano mágico adicional da próxima habilidade ou ataque de um aliado.",
+    "Q": "Fortalece o próximo AA, causando dano mágico adicional e STUN.",
+    "W": "Recebe ARMOR e MR e causa dano mágico aos inimigos próximos após um breve atraso. Se atingir inimigos, mantém os atributos defensivos por mais tempo.",
+    "E": "Dispara uma espada de luz que causa dano mágico aos inimigos em linha. O primeiro Campeão atingido fica marcado, e Leona avança até ele, causando ROOT.",
+    "R": "Invoca um feixe de luz em uma área, causando dano mágico e SLOW. Inimigos no centro sofrem STUN."
+  },
+  "Lillia": {
+    "P": "SKILLS aplicam dano mágico ao longo do tempo, baseado na vida máxima dos inimigos. Ao atingir Campeões ou monstros grandes, recupera vida.",
+    "Q": "Gira seu cajado, causando dano mágico aos inimigos próximos. A borda externa causa dano verdadeiro adicional. Acertar inimigos concede MS acumulável.",
+    "W": "Após canalizar, salta e golpeia uma área, causando dano mágico. O centro causa dano adicional.",
+    "E": "Lança uma semente que causa dano mágico e SLOW. Continua rolando até atingir um inimigo ou terreno.",
+    "R": "Faz os inimigos afetados pela P adormecerem após um atraso. Ao receberem dano, acordam, sofrendo dano mágico adicional."
+  },
+  "Lissandra": {
+    "P": "Quando um Campeão inimigo morre perto dela, cria um Servo de Gelo que persegue inimigos próximos, causando SLOW e explodindo para causar dano mágico.",
+    "Q": "Lança uma lança de gelo que causa dano mágico e SLOW. Ao atingir um inimigo, os fragmentos continuam, causando dano mágico aos inimigos atrás dele.",
+    "W": "Causa dano mágico aos inimigos próximos e aplica ROOT.",
+    "E": "Lança uma garra de gelo que causa dano mágico. Pode reconjurar para se teleportar até a posição da garra.",
+    "R": "Em um inimigo, causa STUN e dano mágico. Em si mesma, entra em ESTASE, recuperando vida e causando dano mágico e SLOW aos inimigos próximos."
+  },
+  "Locke": {
+    "P": "AA causam dano mágico adicional baseado no AP. O dano aumenta conforme a vida perdida do inimigo.",
+    "Q": "Lança pregos ritualísticos que causam dano mágico, SLOW e aplicam acúmulos de Pregos Anímicos. AA consomem as marcas para causar dano adicional.",
+    "W": "Incendeia a própria alma, recebendo AS e MS, mas sofrendo dano verdadeiro. Ao terminar ou reconjurar, recupera vida com base no dano armazenado durante o efeito.",
+    "E": "Teleporta-se para uma área, causando dano mágico ao redor. Depois, pode avançar com um ataque contra um alvo, causando dano mágico aos inimigos atravessados.",
+    "R": "Lança um artefato que prende os inimigos próximos com pregos, causando dano mágico e SLOW intenso. Campeões atingidos ficam marcados e podem ser executados quando estão abaixo do limite de vida da habilidade. Ao executar Campeões, Locke ganha poder adicional para a R."
+  },
+  "Lucian": {
+    "P": "Após usar uma SKILL, o próximo AA dispara dois tiros. O segundo causa dano físico adicional. Contra inimigos afetados por efeitos de controle de aliados, seus AA causam dano adicional.",
+    "Q": "Dispara um raio de luz em linha reta, causando dano físico aos inimigos atingidos.",
+    "W": "Dispara um projétil que explode em forma de estrela, causando dano mágico e marcando inimigos. Ao atingir alvos marcados, Lucian e aliados que causarem dano recebem MS.",
+    "E": "DASH em uma direção. Acertar inimigos marcados pela W reduz o CDR da habilidade.",
+    "R": "Dispara uma sequência de tiros em uma direção enquanto pode se movimentar. Os tiros causam dano físico e priorizam o primeiro inimigo atingido."
+  },
+  "Lulu": {
+    "P": "Pix dispara projéteis mágicos adicionais quando Lulu realiza AA. Os projéteis seguem o alvo e podem ser bloqueados por outras unidades.",
+    "Q": "Lulu e Pix disparam raios que causam dano mágico e SLOW aos inimigos atingidos.",
+    "W": "Em um aliado, concede AS e MS temporárias. Em um inimigo, transforma-o em um bichinho, aplicando POLYMORPH e SLOW, além de impedir ataques e habilidades.",
+    "E": "Em um aliado, concede SHIELD e faz Pix acompanhá-lo, fortalecendo seus AA. Em um inimigo, causa dano mágico e revela o alvo.",
+    "R": "Aumenta o tamanho de um aliado Campeão, concedendo vida adicional e causando KNOCK UP nos inimigos próximos. O aliado também aplica SLOW aos inimigos próximos."
+  },
+  "Lux": {
+    "P": "SKILLS que causam dano aplicam uma marca de Iluminação. O próximo AA de Lux consome a marca, causando dano mágico adicional.",
+    "Q": "Dispara uma esfera de luz que causa dano mágico e ROOT em até dois inimigos.",
+    "W": "Lança seu cajado, concedendo SHIELD a aliados atravessados na ida e na volta.",
+    "E": "Lança uma esfera que revela a área e aplica SLOW aos inimigos próximos. Pode reconjurar para detoná-la, causando dano mágico.",
+    "R": "Dispara um raio de luz de longo alcance que causa dano mágico em linha reta e ativa a P nos inimigos marcados."
+  },
+  "Malphite": {
+    "P": "Recebe SHIELD equivalente a parte da vida máxima. O escudo é restaurado após ficar alguns segundos sem receber dano.&#x20;\n\n[image](https://www.google.com/s2/favicons?domain=https://www.leagueoflegends.com\\&sz=32)\n\nLeague of Legends",
+    "Q": "Lança um fragmento que causa dano mágico e SLOW, roubando parte da MS do alvo.",
+    "W": "Passivo: recebe ARMOR adicional. Ativo: fortalece os AA, causando dano físico adicional e em cone.",
+    "E": "Bate no chão, causando dano mágico em área e reduzindo a AS dos inimigos.",
+    "R": "Avança com um DASH imparável até uma área, causando dano mágico e KNOCK UP nos inimigos atingidos."
+  },
+  "Malzahar": {
+    "P": "Após ficar sem sofrer dano ou efeitos de controle por um tempo, recebe redução de dano e imunidade a controles.",
+    "Q": "Abre duas fendas que disparam energia do Vazio, causando dano mágico e SILENCE aos inimigos atingidos.",
+    "W": "Invoca Voidlings que atacam inimigos próximos. Eles causam dano físico e priorizam alvos afetados pela E e pela R.",
+    "E": "Infecta um inimigo com energia do Vazio, causando dano mágico ao longo do tempo. Se o alvo morrer, a infecção se espalha para um inimigo próximo e Malzahar recupera Mana.",
+    "R": "Suprime um Campeão inimigo, causando dano mágico contínuo. Cria uma área de energia do Vazio sob o alvo, causando dano mágico aos inimigos próximos."
+  },
+  "Maokai": {
+    "P": "AA curam Maokai periodicamente. O CDR da passiva é reduzido quando Maokai usa SKILLS ou é atingido por habilidades inimigas.",
+    "Q": "Golpeia em linha reta, causando dano mágico e SLOW. Inimigos próximos são empurrados para trás.",
+    "W": "Avança até um inimigo, ficando inalvejável durante o movimento. Ao chegar, causa dano mágico e ROOT.",
+    "E": "Lança um broto que fica no chão, revelando a área e perseguindo inimigos próximos. Ao explodir, causa dano mágico e SLOW; se estiver em um arbusto, causa mais dano.",
+    "R": "Lança uma enorme parede de raízes que avança, causando dano mágico e ROOT aos inimigos atingidos."
+  },
+  "MasterYi": {
+    "P": "A cada determinados AA consecutivos, o próximo ataque atinge duas vezes, causando dano físico adicional.",
+    "Q": "Desaparece e ataca rapidamente inimigos próximos, causando dano físico. Pode causar acertos críticos e aplicar efeitos de contato.",
+    "W": "Canaliza, recuperando vida e recebendo redução de dano. Durante os primeiros instantes, a redução é maior. Também acumula acúmulos de P enquanto canaliza.",
+    "E": "Passivo: recebe AD adicional enquanto a habilidade não estiver em CDR. Ativo: seus AA causam dano verdadeiro adicional por alguns segundos.",
+    "R": "Recebe MS e AS e fica imune a SLOW. Eliminações e assistências prolongam a duração. Durante o efeito, fica imune a SLOW e recebe redução do CDR das outras habilidades ao participar de eliminações."
+  },
+  "Mel": {
+    "P": "AA e SKILLS aplicam marcas que acumulam nos inimigos. Ao atingir acúmulos suficientes, causa dano adicional e pode executar inimigos com pouca vida. Após usar uma SKILL, o próximo AA dispara projéteis adicionais.",
+    "Q": "Dispara uma sequência de projéteis que explodem ao atingir inimigos, causando dano mágico em área.",
+    "W": "Cria uma barreira que bloqueia projéteis inimigos e os reflete de volta. Mel recebe MS e fica imune a dano durante o efeito da barreira.",
+    "E": "Dispara um projétil que causa dano mágico e ROOT. Ao atingir um inimigo, cria uma área que causa dano mágico e SLOW aos inimigos próximos.",
+    "R": "Detona as marcas aplicadas por Mel em todos os Campeões inimigos, causando dano mágico baseado nos acúmulos. O dano aumenta conforme os acúmulos de P."
+  },
+  "Milio": {
+    "P": "SKILLS fortalecem os próximos AA dos aliados atingidos, causando dano mágico adicional e queimando o inimigo.",
+    "Q": "Chuta uma bola de fogo que causa dano mágico e KNOCKBACK. Ao atingir um inimigo, explode, causando dano mágico e SLOW em área.",
+    "W": "Cria uma área que cura o aliado mais próximo e aumenta o alcance dos AA dos aliados dentro dela. Pode reconjurar para mover a área.",
+    "E": "Concede SHIELD e MS temporária a um aliado. Possui duas cargas.",
+    "R": "Libera uma onda de fogo que cura aliados próximos e remove efeitos de controle."
+  },
+  "MissFortune": {
+    "P": "Ao atacar um novo alvo com AA, causa dano físico adicional.",
+    "Q": "Dispara contra um inimigo, causando dano físico. O projétil ricocheteia para um segundo alvo e causa dano adicional se o primeiro ataque eliminar o alvo.",
+    "W": "Passivo: recebe MS enquanto não sofre dano. Ativo: recebe AS temporária e ativa imediatamente a MS passiva.",
+    "E": "Dispara uma chuva de balas em uma área, causando dano mágico contínuo e SLOW.",
+    "R": "Canaliza e dispara várias ondas de balas em cone, causando dano físico. As ondas podem causar acertos críticos."
+  },
+  "Mordekaiser": {
+    "P": "Ao atingir inimigos com 3 AA ou SKILLS, causa dano mágico contínuo aos inimigos próximos e recebe MS.",
+    "Q": "Golpeia o chão com sua maça, causando dano mágico em área. Se atingir apenas um inimigo, causa dano adicional.",
+    "W": "Armazena parte do dano causado e recebido. Ao ativar, recebe SHIELD baseado no valor armazenado. Pode reconjurar para consumir o escudo e recuperar vida.",
+    "E": "Puxa os inimigos em uma área, causando dano mágico e trazendo-os em sua direção.",
+    "R": "Arrasta um Campeão inimigo para o Reino da Morte por alguns segundos, isolando os dois. Rouba parte dos atributos do alvo enquanto estiverem no reino; se Mordekaiser eliminar o inimigo, mantém os atributos roubados até o alvo renascer."
+  },
+  "Morgana": {
+    "P": "Recupera vida ao causar dano a Campeões, tropas grandes e monstros médios ou grandes da selva.",
+    "Q": "Lança uma esfera de energia sombria que causa dano mágico e ROOT no primeiro inimigo atingido.",
+    "W": "Amaldiçoa uma área, causando dano mágico contínuo aos inimigos dentro dela. O dano aumenta conforme a vida perdida dos alvos e o CDR diminui quando a P cura Morgana.",
+    "E": "Concede SHIELD mágico a um aliado, absorvendo dano mágico e bloqueando efeitos de controle enquanto o escudo durar.",
+    "R": "Cria correntes de energia que se conectam aos Campeões inimigos próximos, causando dano mágico e SLOW. Se os alvos não romperem as correntes, sofrem STUN e recebem dano mágico adicional. Morgana recebe MS enquanto as correntes estiverem ativas."
+  },
+  "Naafiri": {
+    "P": "A cada intervalo, o próximo AA causa dano físico adicional. Seus cães aliados atacam os alvos que ela ataca e ajudam a causar dano.",
+    "Q": "Lança adagas que causam dano físico e aplicam SANGRAMENTO. Pode reconjurar para lançar novamente; se acertar um inimigo já afetado, causa dano adicional. Se o alvo for campeão, cura Naafiri.",
+    "W": "Avança em direção a um campeão inimigo, causando dano físico ao atingi-lo. Os cães aliados acompanham o avanço.",
+    "E": "Avança em uma direção, causando dano físico aos inimigos atingidos e curando Naafiri. Os cães aliados retornam para ela.",
+    "R": "Recebe MS, visão e um SHIELD, além de fortalecer os cães aliados. Ao participar de um abate, os efeitos de duração são renovados."
+  },
+  "Nami": {
+    "P": "Suas habilidades que atingem aliados concedem MS por alguns segundos.",
+    "Q": "Lança uma bolha que causa dano mágico e aplica KNOCK UP aos inimigos atingidos.",
+    "W": "Lança uma onda que causa dano mágico aos inimigos ou cura aliados. A onda pode ricochetear entre campeões, alternando entre dano e cura.",
+    "E": "Fortalece um campeão aliado por alguns ataques ou habilidades, adicionando dano mágico e SLOW aos alvos atingidos.",
+    "R": "Invoca uma grande onda que causa dano mágico e KNOCK UP aos inimigos atingidos, além de aplicar SLOW. Aliados atingidos recebem o efeito da passiva com duração aumentada."
+  },
+  "Nasus": {
+    "P": "Recebe roubo de vida nos ataques básicos.",
+    "Q": "Fortalece o próximo AA para causar dano físico adicional. Se eliminar uma unidade com essa habilidade, acumula dano permanentemente.",
+    "W": "Reduz a MS e a AS de um inimigo ao longo da duração.",
+    "E": "Cria uma área que causa dano mágico aos inimigos e reduz sua ARMOR enquanto permanecerem nela.",
+    "R": "Aumenta a vida, o alcance de ataque e as resistências. Causa dano mágico contínuo aos inimigos próximos e reduz o CDR do Q durante a duração."
+  },
+  "Nautilus": {
+    "P": "O primeiro AA contra um inimigo causa dano físico adicional e aplica ROOT.",
+    "Q": "Lança a âncora; se atingir um inimigo, causa dano mágico e puxa Nautilus e o alvo um em direção ao outro. Se atingir terreno, Nautilus é puxado até ele.",
+    "W": "Recebe um SHIELD. Enquanto estiver ativo, seus AAs causam dano mágico contínuo ao alvo.",
+    "E": "Causa dano mágico aos inimigos próximos e aplica SLOW.",
+    "R": "Lança uma onda de choque que persegue um campeão inimigo, causando KNOCK UP aos inimigos pelo caminho. Ao atingir o alvo, causa dano mágico e KNOCK UP."
+  },
+  "Neeko": {
+    "P": "Pode assumir a aparência de um aliado, de uma unidade aliada ou de si mesma disfarçada, enquanto não sofrer dano ou usar habilidades que revelem sua identidade.",
+    "Q": "Lança uma semente que causa dano mágico e explode novamente se atingir inimigos ou unidades que morrerem com a explosão.",
+    "W": "Passivamente, a cada três AAs, causa dano mágico adicional. Ativada, cria um clone que corre em uma direção e pode imitar seus movimentos, enquanto Neeko recebe MS e fica invisível brevemente.",
+    "E": "Lança uma raiz que causa dano mágico e ROOT. Ao atravessar inimigos, fica mais forte, aumentando de tamanho e a duração do ROOT.",
+    "R": "Salta e canaliza energia, recebendo um SHIELD. Depois, causa dano mágico e KNOCK UP aos inimigos próximos."
+  },
+  "Nidalee": {
+    "P": "Ao atingir campeões ou monstros com Q ou W na forma humana, ou ao passar por eles com a passiva, marca-os como PRESAS e recebe MS em direção a eles.",
+    "Q": "Humana: lança uma lança que causa dano mágico, aumentado conforme a distância percorrida. Puma: fortalece o próximo AA para causar dano mágico adicional, aumentado contra alvos com pouca vida.",
+    "W": "Humana: coloca uma armadilha que causa dano mágico ao inimigo que a ativa e o revela. Puma: avança em uma direção, causando dano mágico aos inimigos próximos; o alcance aumenta contra PRESAS.",
+    "E": "Humana: cura um aliado e concede AS temporariamente. Puma: golpeia os inimigos à frente, causando dano mágico.",
+    "R": "Alterna entre as formas humana e puma, modificando suas habilidades Q, W e E."
+  },
+  "Nilah": {
+    "P": "Compartilha parte da experiência recebida por aliados próximos ao eliminar tropas. Ao receber cura ou SHIELD de aliados, aumenta o efeito recebido e também beneficia o aliado. Ao eliminar tropas, pode receber cura e SHIELD adicionais.",
+    "Q": "Passivamente, ganha penetração de ARMOR e cura com parte do dano causado por ataques críticos. Ativada, golpeia em linha reta, causando dano físico aos inimigos atingidos. Ao acertar, aumenta temporariamente o alcance, a AS e o dano dos AAs, que atingem os inimigos em uma área.",
+    "W": "Envolve-se em névoa, recebendo MS e evitando AAs inimigos. Também reduz o dano mágico recebido. Aliados tocados pela névoa recebem esses efeitos por um curto período.",
+    "E": "Avança através de uma unidade, causando dano físico aos inimigos atravessados. Pode acumular duas conjurações. Pode usar Q durante o avanço para atacar em uma área maior.",
+    "R": "Gira o chicote, causando dano físico aos inimigos próximos e puxando-os para si. Ao final, causa dano adicional e os puxa novamente. Cura Nilah com parte do dano causado e converte a cura excedente em SHIELD."
+  },
+  "Nocturne": {
+    "P": "A cada intervalo, seu próximo AA causa dano físico adicional aos inimigos próximos e cura Nocturne por cada inimigo atingido. AAs reduzem o tempo de recarga da passiva.",
+    "Q": "Lança uma lâmina que causa dano físico e deixa um rastro. Inimigos atingidos também deixam um rastro. Enquanto estiver sobre ele, Nocturne recebe MS e AD adicionais.",
+    "W": "Passivamente, recebe AS. Ativada, bloqueia uma habilidade inimiga e, se conseguir bloqueá-la, dobra o bônus de AS por alguns segundos.",
+    "E": "Cria um vínculo com um campeão inimigo, causando dano mágico ao longo do tempo e aplicando FEAR caso o vínculo não seja rompido.",
+    "R": "Reduz a visão de todos os campeões inimigos e impede que enxerguem seus aliados próximos. Pode reconjurar para avançar contra um campeão inimigo, causando dano físico ao chegar."
+  },
+  "Nunu": {
+    "P": "Ao causar dano a campeões ou monstros grandes, aumenta a AS e a MS de Nunu, Willump e de um aliado próximo. Os AAs de Willump também causam dano adicional aos inimigos próximos ao alvo.",
+    "Q": "Willump morde um inimigo ou monstro, causando dano verdadeiro a monstros e dano verdadeiro ou mágico a campeões, além de recuperar vida.",
+    "W": "Começa a rolar uma bola de neve que cresce enquanto avança, aumentando seu dano e tamanho. Ao atingir inimigos, causa dano mágico e KNOCK UP.",
+    "E": "Lança bolas de neve que causam dano mágico e aplicam SLOW. Ao terminar, os inimigos atingidos repetidamente recebem ROOT.",
+    "R": "Canaliza uma tempestade de neve que aplica SLOW aos inimigos próximos e causa dano mágico crescente. Ao terminar a canalização, causa dano mágico adicional; pode ser interrompida antes do fim. Recebe um SHIELD durante a canalização."
+  },
+  "Olaf": {
+    "P": "Ganha AS e roubo de vida conforme perde vida.",
+    "Q": "Lança um machado que causa dano físico e aplica SLOW aos inimigos atingidos. Pode recolher o machado para reduzir o CDR da habilidade.",
+    "W": "Recebe SHIELD e aumenta sua AS e cura recebida temporariamente.",
+    "E": "Causa dano verdadeiro a um inimigo. O custo da habilidade é recuperado caso elimine o alvo.",
+    "R": "Remove efeitos de controle de grupo, ficando imune a eles durante a duração. Passivamente, recebe ARMOR e MR; ao ativar, perde esses bônus, mas ganha AD e pode avançar em direção a campeões inimigos."
+  },
+  "Orianna": {
+    "P": "Seus AAs causam dano mágico adicional, aumentando quando ataca o mesmo alvo repetidamente.",
+    "Q": "Ordena que a bola avance até uma localização, causando dano mágico aos inimigos atravessados. O dano diminui a cada inimigo atingido.",
+    "W": "A bola libera uma onda de energia que causa dano mágico e aplica SLOW aos inimigos, enquanto concede MS aos aliados atingidos.",
+    "E": "Ordena que a bola se prenda a um aliado ou retorne para Orianna, concedendo SHIELD e ARMOR/MR ao alvo. A bola causa dano mágico aos inimigos atravessados durante o trajeto.",
+    "R": "A bola libera uma explosão que causa dano mágico e puxa os inimigos próximos em direção ao seu centro."
+  },
+  "Ornn": {
+    "P": "Pode comprar itens na própria lane, sem precisar voltar à base. Também aumenta sua vida, ARMOR e MR recebidas de todas as fontes. A partir de determinado nível, pode aprimorar itens elegíveis de aliados.",
+    "Q": "Golpeia o chão, causando dano físico e SLOW aos inimigos atingidos. Após um curto intervalo, surge um pilar de terreno no local.",
+    "W": "Avança lentamente enquanto cospe fogo, causando dano mágico. Durante a habilidade, fica imparável. O último sopro aplica FRÁGIL aos inimigos atingidos.",
+    "E": "Avança, causando dano físico aos inimigos atravessados. Se colidir com terreno, provoca uma onda de choque que causa dano físico e KNOCK UP aos inimigos próximos.",
+    "R": "Invoca um elemental que avança, causando dano mágico e aplicando SLOW e FRÁGIL aos inimigos atingidos. Pode reconjurar para avançar contra o elemental, redirecioná-lo e causar KNOCK UP aos inimigos atingidos."
+  },
+  "Pantheon": {
+    "P": "Após usar 5 ataques ou habilidades, fortalece a próxima habilidade básica.",
+    "Q": "Lança uma lança que causa dano físico aos inimigos atingidos. Pode reconjurar para arremessá-la à distância. Inimigos com pouca vida recebem dano adicional.",
+    "W": "Salta até um inimigo, causando dano mágico e STUN. Fortalecida, o próximo AA realiza vários ataques rápidos, causando dano físico.",
+    "E": "Bloqueia dano vindo de uma direção enquanto golpeia os inimigos à frente, causando dano físico. Ao final, golpeia com o escudo, causando dano físico adicional. Fortalecida, causa mais dano.",
+    "R": "Salta para o céu e aterrissa em uma linha, causando dano mágico aos inimigos atingidos. Ao aterrissar, sua passiva fica fortalecida."
+  },
+  "Poppy": {
+    "P": "Arremessa o escudo, causando dano mágico e ganhando alcance no próximo AA. O escudo pode cair no chão; ao recolhê-lo, Poppy recebe um SHIELD. Se eliminar o alvo, o escudo retorna automaticamente.",
+    "Q": "Golpeia o chão, causando dano físico e reduzindo a MS dos inimigos. A área explode após um intervalo, causando dano físico adicional.",
+    "W": "Recebe MS e cria uma área ao redor de si que impede inimigos de usar DASH. Inimigos interrompidos sofrem dano mágico e ficam GROUNDED e SLOWED.",
+    "E": "Avança contra um inimigo, causando dano físico e empurrando-o. Se o alvo colidir com uma parede, sofre dano físico adicional e STUN.",
+    "R": "Canaliza e golpeia com o martelo, causando dano físico e arremessando os inimigos para longe. Quanto mais canaliza, maior a distância do arremesso. Se usar rapidamente, causa dano e KNOCK UP sem afastar os inimigos."
+  },
+  "Pyke": {
+    "P": "Quando não é visto pelos inimigos, recupera parte do dano recebido de campeões como vida cinza. Também converte vida adicional recebida em AD.",
+    "Q": "Pode tocar para golpear inimigos próximos com a adaga, causando dano físico e SLOW, ou segurar para arremessar a adaga, causando dano físico e puxando o primeiro inimigo atingido.",
+    "W": "Mergulha, ficando camuflado e recebendo MS que diminui ao longo da duração.",
+    "E": "Avança em uma direção, deixando para trás um fantasma. Após um intervalo, o fantasma retorna a Pyke, causando dano físico e STUN aos inimigos atravessados.",
+    "R": "Golpeia uma área em formato de X, teleportando-se até campeões inimigos com vida abaixo do limite de execução e eliminando-os. Inimigos não executados recebem dano físico. Ao executar um campeão, Pyke pode reconjurar a habilidade e recebe ouro adicional para si e para um aliado que tenha ajudado no abate."
+  },
+  "Qiyana": {
+    "P": "O primeiro AA ou habilidade contra um inimigo causa dano físico adicional. O efeito tem recarga por alvo.",
+    "Q": "Golpeia em uma direção, causando dano físico aos inimigos atingidos. Se estiver com um elemento coletado pelo W, consome-o para fortalecer o Q e aplicar um efeito adicional:\n\n- Rio: aplica ROOT e depois SLOW.\n- Parede: causa dano adicional contra inimigos com pouca vida.\n- Mato: deixa um rastro que concede invisibilidade e MS.",
+    "W": "Coleta um elemento de terreno (rio, parede ou mato), causando dano mágico próximo ao local e encantando sua arma. Enquanto estiver encantada, recebe MS e AS, e seus AAs e habilidades causam dano mágico adicional.",
+    "E": "Avança até um inimigo, causando dano físico.",
+    "R": "Cria uma onda de choque que empurra inimigos e explode ao atingir paredes, arbustos ou o rio. A explosão causa dano físico e STUN aos inimigos atingidos."
+  },
+  "Quinn": {
+    "P": "Marca periodicamente inimigos próximos como VULNERÁVEIS. O próximo AA de Quinn contra um alvo marcado causa dano físico adicional.",
+    "Q": "Envia Valor para atacar em uma área, causando dano físico e reduzindo a visão dos inimigos atingidos. Campeões atingidos ficam impossibilitados de atacar por um breve período.",
+    "W": "Passivamente, atacar um alvo VULNERÁVEL concede AS e MS temporárias. Ativada, revela uma área ao redor por alguns segundos.",
+    "E": "Avança contra um inimigo, causando dano físico, marcando-o como VULNERÁVEL e reduzindo sua MS. Quinn salta para trás após o contato.",
+    "R": "Valor carrega Quinn, concedendo grande MS fora de combate. Ao reconjurar ou atacar, Quinn encerra o efeito, causando dano físico em área ao redor."
+  },
+  "Rakan": {
+    "P": "Ganha periodicamente um SHIELD que se regenera fora de combate.",
+    "Q": "Lança uma pena mágica que causa dano mágico. Ao atingir um campeão ou monstro épico, Rakan pode curar aliados próximos ao se aproximar deles.",
+    "W": "Avança para uma área e, após um breve intervalo, causa dano mágico e KNOCK UP aos inimigos próximos.",
+    "E": "Avança até um aliado, concedendo SHIELD a ele. Pode reconjurar uma vez dentro de um curto intervalo.",
+    "R": "Recebe MS e encanta os inimigos que toca, causando dano mágico. O primeiro campeão atingido concede um grande aumento de MS temporário."
+  },
+  "Rammus": {
+    "P": "Seus AAs causam dano mágico adicional com base na ARMOR.",
+    "Q": "Enrola-se em uma bola, recebendo MS crescente. Ao colidir com um inimigo, causa dano mágico e aplica KNOCKBACK e SLOW aos inimigos próximos.",
+    "W": "Assume uma postura defensiva, aumentando ARMOR e MR, além de causar dano mágico aos inimigos que o atingem com AAs. Sua MS é reduzida enquanto estiver ativo.",
+    "E": "Provoca um inimigo, forçando-o a atacá-lo, e recebe AS temporária.",
+    "R": "Salta para uma área, causando dano mágico e KNOCK UP aos inimigos próximos. A área recebe ondas de choque que causam dano mágico e SLOW. Se usado durante Q, Rammus também empurra os inimigos próximos ao aterrissar."
+  },
+  "RekSai": {
+    "P": "Converte parte da fúria acumulada em cura quando está enterrada.",
+    "Q": "Não enterrada: fortalece os próximos três AAs, causando dano físico adicional em área. Enterrada: lança uma onda de energia que causa dano físico e revela o primeiro inimigo atingido.",
+    "W": "Alterna entre ficar enterrada e emergir. Enterrada, recebe MS, perde a capacidade de atacar e ganha detecção de inimigos próximos. Ao emergir, causa dano físico e KNOCK UP aos inimigos próximos.",
+    "E": "Não enterrada: morde um inimigo, causando dano físico; com fúria máxima, causa dano verdadeiro. Enterrada: escava um túnel que pode ser reutilizado para atravessar o mapa.",
+    "R": "Marca um campeão inimigo que sofreu dano de Rek'Sai recentemente. Salta até ele, causando dano físico adicional com base na vida perdida do alvo."
+  },
+  "Rell": {
+    "P": "Seus ataques e habilidades roubam temporariamente ARMOR e MR dos inimigos atingidos.",
+    "Q": "Golpeia em linha reta com a lança, causando dano mágico e destruindo SHIELDS dos inimigos atingidos. Cura Rell e aliados vinculados se atingir campeões.",
+    "W": "Montada: desmonta, salta e causa KNOCK UP aos inimigos, recebendo um SHIELD e entrando em forma desmontada. Desmontada: monta novamente, recebendo MS e causando KNOCK UP ao primeiro inimigo atingido.",
+    "E": "Vincula-se a um aliado, concedendo ARMOR e MR adicionais a ambos enquanto estiverem próximos. Pode reconjurar para causar dano mágico e STUN aos inimigos próximos.",
+    "R": "Atrai inimigos próximos para si, causando dano mágico e puxando-os durante a duração. Não interrompe outras ações dos inimigos."
+  },
+  "Renata": {
+    "P": "Seus AAs causam dano mágico adicional e marcam os inimigos. Aliados podem consumir a marca para causar dano adicional.",
+    "Q": "Dispara um braço mecânico que causa dano mágico e ROOT ao primeiro inimigo atingido. Pode reconjurar para arremessar o alvo em uma direção, causando dano mágico e STUN aos inimigos atingidos.",
+    "W": "Concede a um aliado AS e MS crescentes em direção a inimigos. Se o aliado morrer durante o efeito, ele é revivido temporariamente e precisa conseguir um abate ou assistência para evitar a morte definitiva.",
+    "E": "Dispara mísseis que concedem SHIELD a aliados e causam dano mágico e SLOW aos inimigos atravessados.",
+    "R": "Lança uma nuvem química que causa FRENZY aos inimigos atingidos, fazendo-os atacar unidades próximas, priorizando campeões aliados, depois unidades neutras e, por último, Renata e seus aliados."
+  },
+  "Renekton": {
+    "P": "Gera FÚRIA ao atacar e usar habilidades. Com FÚRIA suficiente, fortalece suas habilidades básicas.",
+    "Q": "Golpeia os inimigos próximos, causando dano físico e curando Renekton por inimigo atingido. Fortalecida, causa mais dano e cura adicional.",
+    "W": "O próximo AA atinge duas vezes, causando dano físico e STUN. Fortalecida, atinge três vezes e destrói SHIELDS do alvo.",
+    "E": "Avança, causando dano físico aos inimigos atravessados. Se atingir um inimigo, pode reconjurar para avançar novamente. Fortalecida, causa mais dano e reduz ARMOR dos inimigos atingidos.",
+    "R": "Aumenta a vida máxima, o alcance e gera FÚRIA continuamente. Também causa dano mágico aos inimigos próximos durante a duração."
+  },
+  "Rengar": {
+    "P": "Ao saltar de um arbusto ou ficar camuflado, pode saltar sobre inimigos com AAs. Gera FEROCIDADE ao usar habilidades; com FEROCIDADE máxima, sua próxima habilidade é fortalecida. Participações em abates de campeões únicos concedem AD adicional permanentemente.",
+    "Q": "Fortalece o próximo AA para causar dano físico adicional. Com FEROCIDADE máxima, causa mais dano e concede AS temporária.",
+    "W": "Causa dano mágico aos inimigos próximos e cura parte do dano recebido recentemente. Fortalecida, remove efeitos de controle de grupo e concede velocidade de movimento.",
+    "E": "Lança uma rede que causa dano físico e SLOW. Fortalecida, aplica ROOT.",
+    "R": "Fica camuflado, recebe MS e revela o campeão inimigo mais próximo. Pode saltar sobre o alvo revelado e seu primeiro ataque reduz a ARMOR dele."
+  },
+  "Riven": {
+    "P": "Usar habilidades carrega sua espada. Os AAs consomem uma carga para causar dano físico adicional.",
+    "Q": "Realiza até três golpes em sequência, causando dano físico. O terceiro golpe causa KNOCK UP e permite saltar uma curta distância.",
+    "W": "Causa dano físico e STUN aos inimigos próximos.",
+    "E": "Avança em uma direção e recebe um SHIELD.",
+    "R": "Aumenta o alcance de ataque e o AD, além de ampliar o alcance das habilidades. Pode reconjurar para lançar uma onda de energia que causa dano físico, aumentado conforme a vida perdida dos inimigos."
+  },
+  "Rumble": {
+    "P": "Ao usar habilidades, acumula CALOR. Com CALOR alto, recebe AS e causa dano mágico adicional nos AAs. Com CALOR máximo, suas habilidades básicas ficam fortalecidas, mas ele fica SILENCED temporariamente.",
+    "Q": "Cospe fogo em um cone, causando dano mágico contínuo aos inimigos atingidos. Fortalecida, causa dano adicional.",
+    "W": "Recebe um SHIELD e ganha MS temporária. Fortalecida, o SHIELD e o bônus de MS aumentam.",
+    "E": "Lança um arpão que causa dano mágico e SLOW, reduzindo a MR do alvo. Pode acumular duas cargas. Fortalecida, causa mais dano e aplica SLOW maior.",
+    "R": "Lança uma linha de foguetes que cria uma área de fogo, causando dano mágico contínuo e SLOW aos inimigos que permanecerem nela."
+  },
+  "Ryze": {
+    "P": "Seu dano aumenta conforme o bônus de mana. Seu R aumenta o dano de suas habilidades básicas.",
+    "Q": "Lança uma descarga de energia que causa dano mágico. As outras habilidades básicas restauram sua carga de Q. Ao atingir um alvo marcado por E, causa dano adicional e consome a marca. Com duas cargas de Runa, recebe MS ao usar Q.",
+    "W": "Causa dano mágico e aplica SLOW. Se o alvo estiver marcado por E, aplica ROOT em vez de SLOW.",
+    "E": "Causa dano mágico e marca um inimigo. Se o alvo morrer enquanto estiver marcado, a marca se espalha para inimigos próximos.",
+    "R": "Abre um portal em uma área. Após um breve intervalo, Ryze e aliados dentro dele são transportados para a localização escolhida."
+  },
+  "Samira": {
+    "P": "Alternar entre ataques e habilidades diferentes aumenta o estilo de combate, de E até S. Com estilo S, pode usar R. Seus ataques contra inimigos imobilizados causam KNOCK UP brevemente. Contra inimigos com SLOW, avança para atacá-los.",
+    "Q": "Dispara um projétil que causa dano físico ou golpeia com a espada em cone, dependendo da distância do alvo.",
+    "W": "Gira com a espada, causando dano físico aos inimigos próximos e destruindo projéteis inimigos que entrarem na área.",
+    "E": "Avança através de um inimigo, causando dano mágico aos inimigos atravessados e ganhando AS temporária. Eliminações de campeões reiniciam a recarga.",
+    "R": "Dispara continuamente contra inimigos próximos, causando dano físico e podendo aplicar efeitos de contato. Só pode ser usada com estilo S."
+  },
+  "Sejuani": {
+    "P": "Fora de combate, ganha ARMOR e MR e fica imune a SLOW. Após sofrer dano, perde esses efeitos temporariamente. Seus ataques e habilidades contra inimigos congelados causam dano mágico adicional.",
+    "Q": "Avança, causando dano mágico e KNOCK UP aos inimigos atingidos.",
+    "W": "Golpeia com o mangual duas vezes, causando dano físico e aplicando SLOW. O segundo golpe causa mais dano e aplica acúmulos de gelo.",
+    "E": "Aplica acúmulos de gelo com ataques e habilidades. Com acúmulos suficientes, pode congelar um inimigo próximo, causando STUN e dano mágico.",
+    "R": "Lança uma arma de gelo que causa dano mágico e STUN ao primeiro campeão atingido. Quanto mais longe o projétil viajar, maior será a duração do STUN. Deixa uma tempestade de gelo que aplica SLOW e explode causando dano mágico."
+  },
+  "Senna": {
+    "P": "Campeões que ela ataca repetidamente deixam almas. Coletá-las concede AD, alcance e chance de crítico. Seus AAs causam dano físico adicional e permitem absorver parte da vida do alvo.",
+    "Q": "Dispara um raio através de unidades, causando dano físico aos inimigos e curando aliados atingidos. O alcance aumenta conforme o alcance de ataque de Senna.",
+    "W": "Lança uma névoa que causa dano físico ao primeiro inimigo atingido. Após um intervalo, o alvo e inimigos próximos ficam ROOT.",
+    "E": "Cria uma névoa que camufla Senna e aliados próximos. Aliados camuflados parecem espectros e recebem MS.",
+    "R": "Dispara um raio global que causa dano físico aos inimigos atingidos e concede SHIELD aos aliados atingidos."
+  },
+  "Seraphine": {
+    "P": "A cada terceira habilidade básica, conjura duas vezes. Suas habilidades geram notas ao redor dela e de aliados próximos; os AAs consomem notas para aumentar o alcance e causar dano mágico adicional.",
+    "Q": "Causa dano mágico em uma área, com dano aumentado conforme a vida perdida dos inimigos.",
+    "W": "Concede SHIELD e MS a si mesma e aos aliados próximos. Se Seraphine já estiver protegida por SHIELD, também cura os aliados próximos após um breve intervalo.",
+    "E": "Causa dano mágico em linha reta e aplica SLOW. Inimigos já com SLOW ficam ROOT; inimigos com ROOT ficam STUN.",
+    "R": "Causa dano mágico e aplica CHARME aos inimigos atingidos. A habilidade se estende ao atingir campeões aliados ou inimigos."
+  },
+  "Sett": {
+    "P": "Alterna os punhos nos AAs: o segundo golpe é mais rápido. Regenera vida mais rapidamente conforme perde vida.",
+    "Q": "Recebe MS ao se mover em direção a campeões inimigos. Os próximos dois AAs causam dano físico adicional, com dano extra baseado na vida máxima do alvo.",
+    "W": "Armazena parte do dano recebido como DETERMINAÇÃO. Ao ativar, consome a DETERMINAÇÃO, recebe SHIELD e golpeia em uma área, causando dano verdadeiro no centro e dano físico nas laterais.",
+    "E": "Puxa inimigos dos dois lados em sua direção, causando dano físico e SLOW. Se atingir inimigos em ambos os lados, aplica STUN.",
+    "R": "Agarra um campeão inimigo e salta com ele, aterrissando em uma área onde causa dano físico e SLOW. O dano aumenta conforme a vida adicional do alvo agarrado."
+  },
+  "Shaco": {
+    "P": "Seus AAs causam dano crítico adicional ao atingir inimigos por trás.",
+    "Q": "Fica invisível e avança até uma localização. Seu próximo AA durante a invisibilidade causa dano físico adicional e pode causar crítico.",
+    "W": "Coloca uma caixa surpresa invisível que assusta e ataca inimigos próximos quando ativada, causando dano mágico.",
+    "E": "Lança uma adaga que causa dano mágico e SLOW. Causa dano adicional a alvos com pouca vida.",
+    "R": "Cria um clone que imita seus ataques e habilidades. Ao morrer, o clone explode, criando caixas menores que assustam e causam dano mágico."
+  },
+  "Shen": {
+    "P": "Após usar uma habilidade, recebe um SHIELD. Atingir campeões inimigos com habilidades reduz a recarga da passiva.",
+    "Q": "Puxa sua espada espiritual até si. Os próximos AAs causam dano mágico adicional; se a espada atravessar um campeão inimigo, os ataques causam mais dano e aplicam SLOW.",
+    "W": "Cria uma área ao redor da espada espiritual que bloqueia AAs contra Shen e aliados próximos.",
+    "E": "Avança em uma direção, causando dano físico e TAUNT aos campeões inimigos atravessados.",
+    "R": "Canaliza para conceder SHIELD a um aliado em qualquer lugar do mapa. Ao concluir, teleporta-se até ele com sua espada espiritual."
+  },
+  "Shyvana": {
+    "P": "Recebe ARMOR e MR adicionais ao eliminar unidades e participar de abates, conforme as regras da sua versão atual.",
+    "Q": "Fortalece o próximo AA para golpear duas vezes. Na forma de dragão, o golpe atinge os inimigos próximos.",
+    "W": "Recebe MS e causa dano mágico aos inimigos próximos. Na forma de dragão, deixa uma trilha de fogo.",
+    "E": "Lança uma bola de fogo que causa dano mágico e marca os inimigos. AAs contra alvos marcados causam dano adicional. Na forma de dragão, a bola explode e deixa uma área de fogo.",
+    "R": "Transforma-se em dragão, recebe vida adicional e avança voando, causando dano mágico e FEAR aos inimigos no caminho. Suas habilidades ficam fortalecidas durante a transformação."
+  },
+  "Singed": {
+    "P": "Ao passar próximo de campeões, recebe um aumento de MS temporário. Cada campeão tem um tempo de recarga individual.",
+    "Q": "Deixa uma trilha de veneno que causa dano mágico contínuo aos inimigos que a atravessam.",
+    "W": "Derrama uma área de cola que aplica SLOW e impede DASH. Inimigos arremessados para dentro dela ficam ROOT.",
+    "E": "Arremessa um inimigo por cima do ombro, causando dano mágico. Se o alvo cair na cola do W, fica ROOT.",
+    "R": "Recebe atributos adicionais, incluindo AP, ARMOR, MR, MS, AS e regeneração de vida e mana. Também fortalece seus efeitos de veneno durante a duração."
+  },
+  "Sion": {
+    "P": "Ao morrer, revive temporariamente com vida que decai, recebe AS e seus AAs causam dano adicional baseado na vida máxima do alvo. Suas habilidades são substituídas por um ataque especial que o cura ao atingir inimigos.",
+    "Q": "Carrega um golpe em uma área. Ao soltar, causa dano físico; se carregar o suficiente, causa KNOCK UP e STUN.",
+    "W": "Recebe um SHIELD. Após um intervalo, pode reconjurar para explodir o escudo, causando dano mágico. Eliminar unidades aumenta permanentemente sua vida máxima.",
+    "E": "Dispara uma onda de choque que causa dano físico, SLOW e reduz ARMOR. Se atingir uma unidade não campeã, ela é empurrada e causa os mesmos efeitos aos inimigos atravessados.",
+    "R": "Avança em uma direção, ficando imune a efeitos de controle de grupo. Ao colidir, causa dano físico e KNOCK UP; o dano e a duração do KNOCK UP aumentam conforme a distância percorrida."
+  },
+  "Sivir": {
+    "P": "Ao atacar campeões inimigos com ataques ou habilidades, recebe MS temporária.",
+    "Q": "Lança um bumerangue que causa dano físico na ida e na volta.",
+    "W": "Os próximos AAs ricocheteiam entre inimigos, causando dano físico. O primeiro alvo recebe dano normal e os demais recebem dano reduzido.",
+    "E": "Bloqueia a próxima habilidade inimiga e restaura vida se conseguir bloqueá-la.",
+    "R": "Concede MS a si mesma e aos aliados próximos. Enquanto estiver ativa, abates e assistências reduzem a recarga do W."
+  },
+  "Skarner": {
+    "P": "Habilidades e AAs aplicam acúmulos de QUÍMICA aos inimigos. Ao atingir o limite, causam dano mágico adicional baseado na vida máxima do alvo.",
+    "Q": "Arranca uma pedra do chão, fortalecendo seus AAs para causar dano físico adicional. Pode arremessar a pedra, causando dano físico e SLOW ao primeiro inimigo atingido.",
+    "W": "Recebe SHIELD e causa dano mágico aos inimigos próximos, aplicando SLOW.",
+    "E": "Avança em uma direção, atravessando terreno. Ao colidir com um inimigo, agarra-o e pode arrastá-lo contra uma parede para causar dano e STUN.",
+    "R": "Empala campeões inimigos próximos, causando dano físico e suprimindo-os enquanto os arrasta consigo."
+  },
+  "Smolder": {
+    "P": "Coletar acúmulos ao atingir inimigos com habilidades ou eliminar unidades fortalece suas habilidades básicas em determinados marcos.",
+    "Q": "Dispara uma bola de fogo que causa dano físico. Com acúmulos suficientes, ganha efeitos adicionais, incluindo explosão em área e dano adicional baseado na vida perdida dos inimigos.",
+    "W": "Dispara uma baforada que causa dano físico e SLOW. Ao atingir um campeão, provoca uma explosão em área.",
+    "E": "Voa por cima de obstáculos durante um curto período, recebendo MS e disparando projéteis contra inimigos próximos.",
+    "R": "Sua mãe dragão cospe fogo em uma grande área, causando dano físico e SLOW. Smolder é curado se for atingido pela baforada."
+  },
+  "Sona": {
+    "P": "Habilidades básicas geram acúmulos de ACORDE. Ao atingir o limite, seu próximo AA causa dano mágico adicional e um efeito baseado na última habilidade básica usada.",
+    "Q": "Causa dano mágico a dois inimigos próximos, priorizando campeões. Concede uma aura que fortalece o próximo AA de aliados próximos.",
+    "W": "Cura Sona e o aliado próximo com menos vida, além de conceder SHIELD aos aliados próximos.",
+    "E": "Concede MS a Sona e aos aliados próximos. A aura fortalece o próximo AA de um aliado próximo para aplicar SLOW.",
+    "R": "Dispara uma onda sonora que causa dano mágico e STUN aos inimigos atingidos."
+  },
+  "Soraka": {
+    "P": "Recebe MS adicional ao se mover em direção a aliados com pouca vida.",
+    "Q": "Lança uma estrela que causa dano mágico e SLOW aos inimigos. Ao atingir um campeão, Soraka recupera vida ao longo do tempo e recebe MS.",
+    "W": "Sacrifica parte da própria vida para curar um aliado. Se Soraka estiver sob o efeito de cura do Q, o custo de vida é reduzido.",
+    "E": "Cria uma área que causa dano mágico e SILENCE aos inimigos. Ao final, os inimigos que permanecerem na área ficam ROOT.",
+    "R": "Cura todos os campeões aliados no mapa. A cura é aumentada para aliados com pouca vida."
+  },
+  "Swain": {
+    "P": "Fragmentos de alma coletados de campeões inimigos aumentam permanentemente sua vida máxima e restauram vida. Pode puxar inimigos imobilizados por aliados, causando dano mágico.",
+    "Q": "Dispara vários raios de energia que causam dano mágico. Inimigos atingidos por mais de um raio recebem dano adicional.",
+    "W": "Invoca um olho demoníaco em uma área distante, causando dano mágico, SLOW e revelando os inimigos atingidos.",
+    "E": "Lança uma onda demoníaca que causa dano mágico e retorna. Ao reconjurar, detona a onda, causando dano mágico e ROOT aos inimigos próximos.",
+    "R": "Drena vida dos inimigos próximos, causando dano mágico e restaurando a própria vida. Pode reconjurar para lançar uma explosão de energia que causa dano mágico e SLOW. A transformação permanece ativa enquanto houver energia demoníaca."
+  },
+  "Sylas": {
+    "P": "Após usar uma habilidade, o próximo AA gira suas correntes, causando dano mágico aos inimigos próximos. Pode acumular cargas para realizar ataques fortalecidos.",
+    "Q": "Golpeia com as correntes, causando dano mágico e SLOW. As correntes se cruzam e explodem após um intervalo, causando dano mágico adicional.",
+    "W": "Avança contra um inimigo, causando dano mágico e curando Sylas. A cura aumenta quando ele está com pouca vida.",
+    "E": "Avança em uma direção. Pode reconjurar para lançar correntes, causando dano mágico, puxando-se até o inimigo atingido e aplicando KNOCK UP.",
+    "R": "Rouba a ultimate de um campeão inimigo para usá-la. Cada inimigo tem um tempo de recarga individual para ser roubado novamente."
+  },
+  "Syndra": {
+    "P": "Coleta fragmentos de poder ao causar dano e subir de nível. Os fragmentos aprimoram suas habilidades quando atinge determinados limites.",
+    "Q": "Cria uma esfera de energia que causa dano mágico. Pode manter esferas no campo para serem usadas por outras habilidades.",
+    "W": "Pega uma esfera ou unidade inimiga, arremessando-a para causar dano mágico e SLOW.",
+    "E": "Emite uma onda de energia que empurra inimigos e esferas, causando dano mágico e STUN aos inimigos atingidos pelas esferas.",
+    "R": "Lança todas as esferas disponíveis contra um campeão inimigo, causando dano mágico por esfera. Com poder suficiente, executa inimigos com pouca vida."
+  },
+  "TahmKench": {
+    "P": "AAs e habilidades causam dano mágico adicional com base na vida máxima. Ao atingir campeões com ataques e habilidades, acumula ALMA DE GOSTO.",
+    "Q": "Estende a língua, causando dano mágico e SLOW ao primeiro inimigo atingido. Se for campeão, cura Tahm Kench e aplica ALMA DE GOSTO. Com três acúmulos, pode STUNAR o alvo. Se atingir um aliado engolido pelo W, pode puxá-lo até si.",
+    "W": "Mergulha e reaparece em uma área, causando dano mágico e KNOCK UP aos inimigos próximos. Pode transportar um aliado engolido junto.",
+    "E": "Converte parte do dano recebido em vida cinza. Pode transformar essa vida cinza em SHIELD.",
+    "R": "Engole um campeão por alguns segundos. Se for inimigo, causa dano mágico e pode mantê-lo preso; se for aliado, concede SHIELD e o protege do dano enquanto estiver engolido."
+  },
+  "Taliyah": {
+    "P": "Recebe MS ao se mover perto de paredes.",
+    "Q": "Arremessa pedras em uma direção, causando dano mágico. Enquanto conjura, move-se e lança várias pedras. Em terreno trabalhado, lança uma pedra maior que causa dano em área.",
+    "W": "Move o terreno, arremessando inimigos na direção escolhida e causando dano mágico.",
+    "E": "Espalha pedras em uma área, causando dano mágico e SLOW. Inimigos que usam DASH ou são empurrados sobre as pedras sofrem dano adicional.",
+    "R": "Cria uma muralha de pedras e surfa sobre ela. Pode reconjurar para descer da muralha; sofrer dano ou usar outra habilidade pode interromper o deslocamento."
+  },
+  "Talon": {
+    "P": "Habilidades que causam dano a campeões ou monstros grandes aplicam SANGRAMENTO. Ao acumular três marcas, o próximo AA causa dano físico adicional ao longo do tempo.",
+    "Q": "Avança até um alvo e golpeia, causando dano físico. Se usado perto do alvo, causa dano crítico. Eliminações restauram parte da vida e reduzem a recarga.",
+    "W": "Lança lâminas em uma direção, causando dano físico na ida e na volta. No retorno, aplicam SLOW.",
+    "E": "Salta sobre um terreno ou estrutura, atravessando-o. Cada terreno tem um tempo de recarga individual.",
+    "R": "Espalha lâminas ao redor, ficando invisível e recebendo MS. Ao terminar a invisibilidade ou atacar, as lâminas retornam em sua direção, causando dano físico."
+  },
+  "Taric": {
+    "P": "Após usar uma habilidade, os próximos dois AAs ficam fortalecidos, causando dano mágico adicional e reduzindo as recargas das habilidades básicas.",
+    "Q": "Consome cargas para curar Taric e aliados próximos. Acumula cargas ao usar habilidades e realizar AAs fortalecidos.",
+    "W": "Concede SHIELD a um aliado e vincula-se a ele. Enquanto estiver vinculado, as habilidades de Taric também são conjuradas a partir do aliado.",
+    "E": "Após um breve intervalo, dispara um feixe de luz que causa dano mágico e STUN aos inimigos atingidos.",
+    "R": "Após um intervalo, Taric e os aliados próximos ficam invulneráveis por alguns segundos."
+  },
+  "Teemo": {
+    "P": "Fica invisível após permanecer parado e sem realizar ações por um intervalo. Ao sair da invisibilidade, recebe AS temporária.",
+    "Q": "Dispara um dardo que causa dano mágico e BLIND, fazendo o alvo errar AAs por alguns segundos.",
+    "W": "Recebe MS passivamente enquanto não sofre dano de campeões ou torres. Ao ativar, recebe MS adicional por alguns segundos.",
+    "E": "Seus AAs causam dano mágico adicional e envenenam o alvo, causando dano mágico ao longo do tempo.",
+    "R": "Coloca um cogumelo-armadilha invisível. Ao ser ativado por um inimigo, explode, causando dano mágico e SLOW em área."
   },
   "Thresh": {
-    "P": "Colhe as almas de inimigos abatidos nas redondezas para acumular armadura e poder de habilidade permanentemente.",
-    "Q": "Arremessa sua foice atordoando e puxando a primeira unidade atingida. Ao reconjurar, puxa a si mesmo na direção do alvo.",
-    "W": "Lança uma lanterna que concede escudo aos aliados. Qualquer aliado pode clicar na lanterna para voar imediatamente até Thresh.",
-    "E": "Açoita com suas correntes para empurrar ou puxar inimigos na direção do golpe, aplicando lentidão.",
-    "R": "Ergue uma prisão espectral de 5 paredes ao redor de si. Quebrar uma parede causa dano mágico e 99% de lentidão."
+    "P": "Coleta almas de inimigos mortos para aumentar permanentemente sua ARMOR e AP.",
+    "Q": "Lança sua foice, causando dano mágico e STUN ao primeiro inimigo atingido, puxando-o em sua direção. Pode reconjurar para avançar até o alvo.",
+    "W": "Lança uma lanterna que concede SHIELD a um aliado próximo. Aliados podem clicar nela para serem puxados até Thresh.",
+    "E": "Passivamente, seus AAs causam dano mágico adicional que aumenta enquanto ele não ataca. Ativada, golpeia com a corrente, empurrando ou puxando inimigos e aplicando SLOW.",
+    "R": "Cria uma prisão ao redor de si. Inimigos que atravessam as paredes sofrem dano mágico e SLOW."
+  },
+  "Tristana": {
+    "P": "Aumenta o alcance de ataque e de Q, W e R conforme sobe de nível.",
+    "Q": "Recebe AS temporária.",
+    "W": "Salta até uma área, causando dano mágico e SLOW aos inimigos próximos. Abates, assistências e explosões máximas de E reiniciam a recarga.",
+    "E": "Marca um inimigo ou estrutura com uma carga explosiva. AAs e habilidades aumentam o dano da explosão. Ao atingir o máximo de cargas, explode causando dano físico em área.",
+    "R": "Dispara uma enorme bala que causa dano mágico e empurra o alvo para longe."
+  },
+  "Trundle": {
+    "P": "Cura-se quando unidades inimigas próximas morrem.",
+    "Q": "Morde um inimigo, causando dano físico adicional e reduzindo temporariamente seu AD. Trundle recebe parte do AD roubado.",
+    "W": "Cria uma área de gelo que concede MS, AS e aumento de cura recebida.",
+    "E": "Invoca um pilar de gelo que bloqueia o caminho, empurra inimigos próximos e aplica SLOW.",
+    "R": "Rouba vida, ARMOR e MR de um campeão inimigo ao longo de alguns segundos. Parte dos atributos roubados é recebida imediatamente, e o restante é transferido gradualmente."
+  },
+  "Tryndamere": {
+    "P": "Ganha FÚRIA ao atacar, causar acertos críticos e eliminar unidades. A FÚRIA aumenta sua chance de crítico e pode ser consumida pelo Q.",
+    "Q": "Passivamente, recebe AD adicional conforme perde vida. Ao ativar, consome FÚRIA para recuperar vida.",
+    "W": "Reduz o AD dos campeões inimigos próximos. Inimigos de costas para Tryndamere também recebem SLOW.",
+    "E": "Gira com sua espada, causando dano físico aos inimigos atravessados. AAs e acertos críticos reduzem a recarga.",
+    "R": "Fica imortal por alguns segundos e gera FÚRIA, mesmo quando está com pouca vida."
+  },
+  "TwistedFate": {
+    "P": "Ao eliminar uma unidade, recebe uma quantidade aleatória de ouro adicional.",
+    "Q": "Lança três cartas em linha reta, causando dano mágico aos inimigos atingidos.",
+    "W": "Seleciona uma carta e fortalece o próximo AA:\n\n- Azul: causa dano mágico e restaura mana.\n- Vermelha: causa dano mágico em área e aplica SLOW.\n- Dourada: causa dano mágico e STUN.",
+    "E": "Passivamente, ganha AS. A cada determinados ataques, o próximo AA causa dano mágico adicional.",
+    "R": "Revela todos os campeões inimigos no mapa e permite reconjurar para se teleportar a uma localização próxima."
+  },
+  "Twitch": {
+    "P": "AAs aplicam VENENO, causando dano verdadeiro ao longo do tempo e acumulando cargas.",
+    "Q": "Fica camuflado por um período e recebe MS. Ao sair da camuflagem, recebe AS temporária. Abates de inimigos envenenados reduzem a recarga.",
+    "W": "Lança um barril de veneno que cria uma área, aplicando SLOW e VENENO aos inimigos.",
+    "E": "Causa dano verdadeiro aos inimigos envenenados, com dano aumentado conforme as cargas de VENENO acumuladas.",
+    "R": "Recebe AD adicional e aumenta o alcance dos AAs, que passam a atravessar inimigos em linha reta, causando dano físico."
+  },
+  "Udyr": {
+    "P": "Pode despertar sua próxima habilidade básica, fortalecendo-a com um efeito adicional. Despertar habilidades reduz a recarga da passiva.",
+    "Q": "Recebe AS e fortalece os próximos AAs para causar dano físico adicional. Despertada, concede ainda mais AS e os ataques causam dano físico adicional, incluindo raios que atingem o alvo repetidamente.",
+    "W": "Recebe SHIELD e fortalece os próximos AAs para recuperar vida. Despertada, concede um SHIELD maior e aumenta a cura recebida.",
+    "E": "Recebe MS e seus AAs avançam até o alvo, causando STUN individualmente. Despertada, recebe ainda mais MS e fica imune a efeitos de controle de grupo por um breve período.",
+    "R": "Invoca uma tempestade glacial que causa dano mágico e aplica SLOW aos inimigos próximos. Despertada, a tempestade persegue inimigos próximos e causa dano adicional."
+  },
+  "Urgot": {
+    "P": "Seus ataques e habilidades ativam canhões em suas pernas, causando dano físico em cone ao redor do alvo. Cada perna tem sua própria recarga.",
+    "Q": "Dispara uma carga explosiva que causa dano físico e SLOW aos inimigos em uma área.",
+    "W": "Dispara repetidamente contra inimigos próximos, priorizando campeões marcados ou alvos com pouca vida. Enquanto ativa, Urgot anda mais lentamente, mas pode se mover enquanto ataca.",
+    "E": "Avança em uma direção, recebendo SHIELD. Agarra e arremessa o primeiro campeão inimigo atingido para trás, causando dano físico e KNOCK UP aos inimigos atingidos.",
+    "R": "Dispara um projétil que causa dano físico e SLOW ao primeiro campeão atingido, revelando-o. Se o alvo ficar abaixo do limite de vida, Urgot pode reconjurar para executá-lo, puxando-o até si e causando FEAR aos inimigos próximos."
+  },
+  "Varus": {
+    "P": "Ao eliminar unidades, recebe AS temporária. Ao participar de abates de campeões, o bônus é maior.",
+    "Q": "Carrega e dispara uma flecha que causa dano físico. Quanto mais tempo carregar, maior o alcance e o dano.",
+    "W": "Passivamente, os AAs causam dano mágico adicional e aplicam acúmulos de PRAGA. Ativada, fortalece o próximo Q, causando dano mágico adicional baseado na vida perdida do alvo e consumindo os acúmulos.",
+    "E": "Dispara uma chuva de flechas que causa dano físico em área, aplica SLOW e reduz a cura recebida pelos inimigos.",
+    "R": "Lança uma corrente que causa dano mágico e ROOT ao primeiro campeão atingido. A PRAGA se espalha para campeões próximos, enraizando-os também."
+  },
+  "Vayne": {
+    "P": "Recebe MS adicional ao se mover em direção a campeões inimigos.",
+    "Q": "Rola em uma direção e fortalece o próximo AA para causar dano físico adicional.",
+    "W": "A cada terceiro ataque consecutivo contra o mesmo alvo, causa dano verdadeiro baseado na vida máxima dele.",
+    "E": "Dispara um projétil que causa dano físico e empurra o inimigo. Se o alvo colidir com uma parede, sofre dano físico adicional e STUN.",
+    "R": "Recebe AD adicional. Durante a duração, Q concede invisibilidade temporária, a passiva concede mais MS e os abates reduzem a recarga do Q."
+  },
+  "Veigar": {
+    "P": "Ganha AP permanentemente ao atingir campeões inimigos com habilidades e ao participar de abates.",
+    "Q": "Dispara energia que causa dano mágico aos primeiros inimigos atingidos. Eliminar unidades com a habilidade concede AP permanentemente.",
+    "W": "Invoca uma massa de energia que cai em uma área, causando dano mágico. O CDR diminui conforme Veigar acumula AP.",
+    "E": "Cria uma prisão circular que STUNA inimigos que atravessam suas bordas.",
+    "R": "Dispara um projétil de energia que causa dano mágico, aumentado conforme a vida perdida do alvo."
+  },
+  "Velkoz": {
+    "P": "Habilidades aplicam acúmulos de DESINTEGRAÇÃO. Ao atingir três acúmulos, causa dano verdadeiro adicional.",
+    "Q": "Dispara um projétil que causa dano mágico e SLOW. Pode reconjurar para dividir o projétil em duas direções perpendiculares.",
+    "W": "Abre uma fenda que causa dano mágico ao longo do trajeto e explode após um intervalo, causando dano mágico adicional. Pode acumular duas cargas.",
+    "E": "Cria uma explosão em uma área, causando dano mágico e KNOCK UP aos inimigos atingidos.",
+    "R": "Canaliza um raio de energia que causa dano mágico contínuo e SLOW. Aplica acúmulos de DESINTEGRAÇÃO; inimigos completamente analisados recebem dano verdadeiro."
+  },
+  "Vex": {
+    "P": "Periodicamente, sua próxima habilidade básica interrompe DASH e aplica FEAR. Ao aplicar FEAR ou SILENCE a inimigos, marca-os com MELANCOLIA; seu próximo AA contra um alvo marcado causa dano mágico adicional e reduz a recarga da passiva.",
+    "Q": "Dispara uma onda que causa dano mágico. Após percorrer certa distância, acelera e fica mais estreita.",
+    "W": "Emite uma onda de choque ao redor, causando dano mágico e recebendo SHIELD.",
+    "E": "Invoca uma sombra que causa dano mágico em uma área e aplica SLOW. Os inimigos atingidos ficam marcados com MELANCOLIA.",
+    "R": "Lança uma sombra que causa dano mágico ao primeiro campeão atingido e o revela. Pode reconjurar para avançar até o alvo, causando dano mágico. Abates permitem reconjurar novamente por um curto período."
+  },
+  "Vi": {
+    "P": "Ao atingir inimigos com habilidades, reduz sua ARMOR e recebe um SHIELD periodicamente.",
+    "Q": "Carrega um avanço que causa dano físico e empurra inimigos. O alcance e o dano aumentam durante a carga.",
+    "W": "A cada três ataques contra o mesmo alvo, causa dano físico adicional baseado na vida máxima, reduz a ARMOR e concede AS temporária.",
+    "E": "Fortalece o próximo AA para causar dano físico adicional e atingir inimigos atrás do alvo.",
+    "R": "Persegue um campeão inimigo, ficando imune a efeitos de controle de grupo durante o avanço. Ao alcançá-lo, causa dano físico e KNOCK UP, empurrando inimigos pelo caminho."
+  },
+  "Viego": {
+    "P": "Inimigos campeões mortos por Viego deixam espíritos. Ao possuí-los, ele recupera vida, fica camuflado e pode usar as habilidades básicas e os itens do campeão possuído, além de sua ultimate.",
+    "Q": "Golpeia em linha reta, causando dano físico e aplicando efeitos de contato. Passivamente, após atingir um inimigo com habilidade, seu próximo AA contra ele golpeia duas vezes.",
+    "W": "Carrega e dispara uma névoa em forma de projétil, causando dano mágico e STUN ao primeiro inimigo atingido. O alcance e a duração do STUN aumentam com a carga.",
+    "E": "Espalha névoa contra uma parede, camuflando Viego e concedendo MS e AS enquanto estiver na área.",
+    "R": "Avança para uma área, causando dano físico aos inimigos próximos e executando o campeão com menor vida dentro do alcance. Empurra os demais inimigos. Pode ser usada novamente após possuir um espírito."
+  },
+  "Viktor": {
+    "P": "Coleta fragmentos HEX ao eliminar unidades e participar de abates de campeões. Ao reunir fragmentos suficientes, aprimora suas habilidades básicas.",
+    "Q": "Dispara um ataque que causa dano mágico e recebe um SHIELD. Seu próximo AA é fortalecido para causar dano mágico adicional. Ao aprimorar, recebe MS após usar a habilidade.",
+    "W": "Cria um campo gravitacional que aplica SLOW. Inimigos que permanecem nele acumulam efeitos até ficarem STUN. Ao aprimorar, habilidades de Viktor aplicam SLOW aos inimigos atingidos.",
+    "E": "Dispara um raio que causa dano mágico ao longo de uma linha. Ao aprimorar, uma explosão secundária segue o raio e causa dano mágico adicional.",
+    "R": "Invoca uma tempestade arcana que causa dano mágico e interrompe canalizações. A tempestade segue os inimigos próximos e causa dano mágico contínuo. Ao aprimorar, move-se mais rapidamente."
+  },
+  "Vladimir": {
+    "P": "Converte vida adicional em AP e AP em vida adicional, sem acumular os dois efeitos sobre si mesmo.",
+    "Q": "Drena a vida de um inimigo, causando dano mágico e curando Vladimir. Após conjurar duas vezes, a próxima conjuração fica fortalecida, causando dano adicional e curando mais.",
+    "W": "Transforma-se em uma poça de sangue, ficando inalvejável por um curto período. Causa dano mágico e aplica SLOW aos inimigos sobre a poça, além de curar Vladimir com parte do dano causado.",
+    "E": "Carrega uma explosão de sangue que causa dano mágico aos inimigos próximos. Durante a carga, Vladimir fica SLOWED; ao soltar, dispara projéteis que causam dano mágico.",
+    "R": "Infecta uma área com uma praga que aumenta o dano recebido pelos inimigos atingidos. Após alguns segundos, causa dano mágico e cura Vladimir por cada campeão inimigo atingido."
+  },
+  "Volibear": {
+    "P": "Seus ataques e habilidades concedem AS acumulativa. Com acúmulos máximos, seus ataques causam dano mágico adicional e lançam raios contra inimigos próximos.",
+    "Q": "Recebe MS em direção aos inimigos e fortalece o próximo AA, causando dano físico e STUN. Se for interrompido antes de atingir o alvo, a habilidade pode ser reutilizada.",
+    "W": "Morde um inimigo, causando dano físico e marcando-o. Ao usar novamente contra o mesmo alvo, causa dano adicional e cura Volibear.",
+    "E": "Invoca um raio em uma área, causando dano mágico e SLOW. Se Volibear estiver na área, recebe SHIELD.",
+    "R": "Salta para uma área, causando dano físico e SLOW aos inimigos. Recebe vida adicional, aumenta de tamanho e desativa temporariamente as torres inimigas próximas ao local de aterrissagem."
+  },
+  "Warwick": {
+    "P": "AAs causam dano mágico adicional. Quando está com pouca vida, cura-se com parte do dano causado.",
+    "Q": "Morde um inimigo, causando dano mágico e curando Warwick. Se segurar a habilidade, acompanha o alvo caso ele use DASH ou teleporte.",
+    "W": "Detecta campeões inimigos com pouca vida, concedendo MS em direção a eles e AS contra eles. A passiva também detecta inimigos com pouca vida fora de combate.",
+    "E": "Recebe redução de dano por alguns segundos. Ao reconjurar ou terminar a duração, solta um uivo que aplica FEAR aos inimigos próximos.",
+    "R": "Avança uma longa distância, suprimindo o primeiro campeão atingido e causando dano mágico em vários ataques. Warwick aplica efeitos de contato e cura-se durante a habilidade."
+  },
+  "MonkeyKing": {
+    "P": "Recebe ARMOR e regenera vida ao longo do tempo, com efeitos aumentados ao lutar contra campeões ou monstros.",
+    "Q": "Fortalece o próximo AA, aumentando o alcance e causando dano físico adicional. O golpe reduz a ARMOR do alvo.",
+    "W": "Avança em uma direção e fica invisível brevemente, deixando um clone que ataca inimigos próximos e imita algumas habilidades de Wukong.",
+    "E": "Avança contra um inimigo, causando dano mágico e criando clones que atacam alvos próximos. Wukong recebe AS temporária.",
+    "R": "Gira com seu bastão, causando dano físico contínuo e KNOCK UP aos inimigos atingidos. Recebe MS durante a habilidade. Pode reconjurar após interromper o giro; o KNOCK UP não pode ser aplicado novamente ao mesmo alvo em rápida sucessão."
+  },
+  "Xayah": {
+    "P": "Após usar uma habilidade, seus próximos AAs atingem inimigos no caminho e deixam penas no chão.",
+    "Q": "Lança duas adagas que causam dano físico e deixam penas no local atingido.",
+    "W": "Recebe AS e fortalece seus AAs, disparando ataques adicionais. Se atingir um campeão inimigo, recebe MS. Se Rakan estiver próximo, ele também recebe os efeitos da habilidade.",
+    "E": "Recolhe todas as penas, causando dano físico aos inimigos atravessados. Se um inimigo for atingido por penas suficientes, fica ROOT.",
+    "R": "Salta, ficando inalvejável por um breve período, e lança várias penas que causam dano físico e ficam no chão para serem recolhidas pelo E."
+  },
+  "Xerath": {
+    "P": "Seus AAs restauram mana periodicamente. A restauração é maior ao atingir campeões inimigos.",
+    "Q": "Carrega e dispara um raio de energia que causa dano mágico em linha reta. O alcance aumenta durante a carga.",
+    "W": "Dispara uma explosão arcana em uma área, causando dano mágico e SLOW. Inimigos no centro recebem dano adicional e SLOW maior.",
+    "E": "Lança uma esfera de energia que causa dano mágico e STUN ao primeiro inimigo atingido. A duração do STUN aumenta conforme a distância percorrida.",
+    "R": "Entra em posição de artilharia e pode disparar vários ataques mágicos de longo alcance. Cada acerto causa dano mágico, e acertar campeões consecutivamente aumenta o dano dos disparos seguintes."
+  },
+  "XinZhao": {
+    "P": "A cada terceiro AA, causa dano físico adicional e recupera vida.",
+    "Q": "Fortalece os próximos três AAs, causando dano físico adicional. O terceiro golpe causa KNOCK UP.",
+    "W": "Golpeia com a lança em um arco e depois perfura em linha reta, causando dano físico e aplicando SLOW. A segunda parte marca os inimigos atingidos.",
+    "E": "Avança até um inimigo, causando dano mágico e aplicando SLOW aos inimigos próximos. Xin Zhao recebe AS temporária.",
+    "R": "Gira a lança, causando dano físico e empurrando os inimigos próximos, exceto o campeão mais recentemente atingido por seus ataques ou E. Durante a habilidade, bloqueia o dano de inimigos que estejam fora de uma determinada distância."
   },
   "Yasuo": {
-    "P": "Dobra toda a chance de acerto crítico e gera um escudo protetor conforme se movimenta pelo mapa, ativado ao sofrer dano.",
-    "Q": "Estoca para a frente com a espada. Com duas cargas acumuladas, dispara um tornado que lança os inimigos ao ar.",
-    "W": "Ergue uma barreira de vento que bloqueia e dissolve todos os projéteis inimigos em voo durante 4 segundos.",
-    "E": "Desliza velozmente através de um alvo inimigo causando dano mágico. Possui tempo de recarga individual por unidade.",
-    "R": "Teleporta instantaneamente para qualquer campeão inimigo arremessado ao ar, mantendo todos os alvos suspensos e ganhando penetração de armadura."
+    "P": "Ao se mover, acumula um escudo que é ativado ao receber dano de campeões ou monstros. Sua chance de crítico é aumentada, mas o dano crítico é reduzido.",
+    "Q": "Golpeia em linha reta, causando dano físico. Ao acertar, acumula cargas; com duas cargas, o próximo Q lança um tornado que causa KNOCK UP. A habilidade aplica efeitos de contato.",
+    "W": "Cria uma parede de vento que bloqueia projéteis inimigos por alguns segundos.",
+    "E": "Avança através de um inimigo, causando dano mágico. Cada uso consecutivo aumenta o dano até um limite. Não pode usar novamente contra o mesmo alvo por um curto período.",
+    "R": "Teleporta-se até um campeão inimigo no ar, causando dano físico e mantendo no ar os inimigos próximos que também estiverem com KNOCK UP. Reseta as cargas do Q e concede penetração de ARMOR adicional temporária após o uso."
+  },
+  "Yone": {
+    "P": "Alterna os ataques entre dano físico e mágico. Sua chance de crítico é aumentada, mas o dano crítico é reduzido.",
+    "Q": "Golpeia em linha reta, causando dano físico. Ao acertar, acumula cargas; com duas cargas, avança e lança os inimigos no ar. Aplica efeitos de contato.",
+    "W": "Golpeia em um arco à sua frente, causando dano físico e mágico e recebendo SHIELD ao atingir inimigos.",
+    "E": "Deixa seu corpo para trás e avança com sua forma espiritual, recebendo MS. Ao terminar ou reconjurar, retorna ao corpo e causa novamente parte do dano causado durante o avanço.",
+    "R": "Avança em linha reta, causando dano físico e mágico aos inimigos atingidos e teleportando-se para trás do último campeão atingido. Os inimigos são puxados e ficam no ar."
+  },
+  "Yorick": {
+    "P": "Inimigos mortos próximos deixam túmulos. A quantidade de túmulos necessários depende do nível de Yorick.",
+    "Q": "Fortalece o próximo AA, causando dano físico adicional e curando Yorick. Se eliminar uma unidade, deixa um túmulo. Com túmulos suficientes próximos, pode invocar Andarilhos da Névoa.",
+    "W": "Cria uma parede de terra que bloqueia a passagem dos inimigos. A parede pode ser destruída com ataques.",
+    "E": "Lança névoa em uma área, causando dano mágico e SLOW. Campeões atingidos ficam marcados, permitindo que Yorick e seus Andarilhos avancem contra eles.",
+    "R": "Invoca a Donzela da Névoa, que ataca inimigos e causa dano mágico adicional. Os AAs de Yorick contra o alvo dela causam dano adicional baseado na vida máxima do inimigo. A Donzela também pode invocar Andarilhos quando unidades inimigas morrem próximas."
+  },
+  "Yunara": {
+    "P": "Seus ataques críticos causam dano mágico adicional.",
+    "Q": "Passivamente, acumula recursos ao atacar. Ao ativar, consome os recursos para entrar em um estado fortalecido, aumentando a velocidade de ataque e fortalecendo seus ataques.",
+    "W": "Dispara uma onda de energia que causa dano físico e aplica SLOW aos inimigos atingidos.",
+    "E": "Avança em uma direção, recebendo MS e podendo atravessar obstáculos conforme a habilidade.",
+    "R": "Libera seu poder espiritual, fortalecendo suas habilidades básicas por um período."
+  },
+  "Yuumi": {
+    "P": "Periodicamente, ao atacar um campeão inimigo, recupera mana e recebe um SHIELD que protege Yuumi e o aliado ao qual está conectada.",
+    "Q": "Dispara um projétil guiado que causa dano mágico e SLOW. Enquanto estiver conectada a um aliado, pode controlar sua trajetória.",
+    "W": "Conecta-se a um aliado, tornando-se inalvejável por inimigos que não possam atingir seu aliado. Enquanto conectada, acompanha seus movimentos e concede efeitos de adaptação.",
+    "E": "Cura Yuumi e concede MS e AS temporárias. Enquanto conectada, a cura é transferida para o aliado.",
+    "R": "Dispara ondas de energia em uma direção, causando dano mágico aos inimigos e curando aliados atingidos. Enquanto conectada, pode direcionar a habilidade com o movimento do aliado; a cura aumenta ao atingir ondas consecutivas."
+  },
+  "Zaahen": {
+    "P": "Ataques e habilidades contra campeões inimigos concedem acúmulos de Determinação, aumentando o Dano de Ataque. Ao atingir o máximo, recebe Dano de Ataque adicional e pode ressuscitar ao morrer.",
+    "Q": "Fortalece o próximo AA, fazendo Zaahen atacar duas vezes, causar dano físico adicional e se curar. Pode reconjurar para fortalecer o próximo AA, causar dano adicional e arremessar o alvo ao ar.",
+    "W": "Golpeia em uma direção, causando dano físico aos inimigos atingidos e puxando-os em sua direção.",
+    "E": "Avança até um local e desfere um corte ao redor de si, causando dano físico aos inimigos próximos. Inimigos na extremidade do corte recebem dano adicional baseado na vida máxima.",
+    "R": "Ergue-se e desfere uma estocada para baixo, causando dano físico aos inimigos atingidos e recuperando vida com base no dano causado a campeões. Durante a conjuração, recebe redução de dano. Passivamente, recebe penetração de armadura.&#x20;\n\n[image](https://www.google.com/s2/favicons?domain=https://www.leagueofgraphs.com\\&sz=32)\n\nAtualização 16.20\n\n+1"
+  },
+  "Zac": {
+    "P": "Ao sofrer dano letal, divide-se em fragmentos que tentam se reunir. Se algum fragmento sobreviver, Zac pode ressuscitar. Ao atingir inimigos com habilidades, deixa pedaços de si que pode coletar para recuperar vida.",
+    "Q": "Estica um braço, causando dano mágico e aplicando SLOW ao primeiro inimigo atingido. Ao atingir outro inimigo com o próximo AA, arremessa os dois um contra o outro, causando dano e atordoando-os.",
+    "W": "Explode seu corpo, causando dano mágico aos inimigos próximos. O dano aumenta com a vida máxima dos alvos. Coletar pedaços de si reduz a recarga da habilidade.",
+    "E": "Carrega um salto e se lança em direção ao local escolhido, causando dano mágico e arremessando os inimigos atingidos.",
+    "R": "Comprime seu corpo, ficando imune a efeitos de controle e recebendo MS. Ao reconjurar ou concluir a canalização, salta, causando dano mágico e deslocando os inimigos atingidos."
+  },
+  "Zed": {
+    "P": "Seus AAs contra inimigos com pouca vida causam Dano Mágico adicional. O efeito tem recarga por alvo.",
+    "Q": "Lança shurikens em linha reta, causando dano físico aos inimigos atingidos. Shurikens adicionais que atingem o mesmo alvo causam dano reduzido.",
+    "W": "Cria uma sombra que imita suas habilidades básicas. Pode reconjurar para trocar de lugar com a sombra.",
+    "E": "Gira suas lâminas, causando dano físico aos inimigos próximos. Inimigos atingidos pela sombra também sofrem SLOW.",
+    "R": "Avança contra um campeão inimigo, marcando-o e ficando inalvejável durante o avanço. Após um período, a marca explode, causando dano físico com base no dano que Zed causou ao alvo durante sua duração. Deixa uma sombra no local de conjuração, permitindo trocar de lugar com ela."
+  },
+  "Zeri": {
+    "P": "Seus AAs causam Dano Mágico e são considerados habilidades. Movimentar-se e usar Q acumula energia; ao atingir a carga máxima, o próximo AA causa dano adicional.",
+    "Q": "Dispara uma rajada de projéteis que causa dano físico. A habilidade funciona como seu ataque principal e aplica efeitos de contato.",
+    "W": "Dispara um laser que causa dano físico e aplica SLOW. Ao atravessar uma parede, o disparo se transforma em um laser de maior alcance.",
+    "E": "Avança por uma curta distância, atravessando terrenos e obstáculos. Seus próximos Qs atravessam inimigos e causam dano adicional.",
+    "R": "Libera uma descarga elétrica, causando dano mágico aos inimigos próximos e entrando em sobrecarga. Durante esse período, recebe MS e seus Qs disparam três projéteis mais rápidos que encadeiam relâmpagos entre inimigos. Acertar campeões renova e fortalece o efeito de MS.&#x20;\n\n[image](https://www.google.com/s2/favicons?domain=https://www.leagueoflegends.com\\&sz=32)\n\nLeague of Legends\n\n+1"
+  },
+  "Ziggs": {
+    "P": "Periodicamente, seu próximo AA causa Dano Mágico adicional. Usar habilidades reduz a recarga da passiva.",
+    "Q": "Lança uma bomba que quica até explodir, causando Dano Mágico aos inimigos próximos.",
+    "W": "Lança uma carga explosiva que detona após um período ou ao reconjurar. A explosão causa Dano Mágico e arremessa os inimigos. Ziggs também pode usar a explosão para se lançar. A carga destrói torres inimigas com pouca vida.",
+    "E": "Espalha minas pelo chão. Inimigos que entram em contato com elas sofrem Dano Mágico e SLOW.",
+    "R": "Lança uma enorme bomba a longa distância, causando Dano Mágico em uma grande área. Os inimigos no centro da explosão recebem mais dano."
+  },
+  "Zilean": {
+    "P": "Acumula experiência ao longo do tempo e pode concedê-la a um aliado ao ter experiência suficiente. Ao fazer isso, ambos recebem experiência.",
+    "Q": "Lança uma bomba-relógio que se prende ao primeiro inimigo ou unidade atingida, causando Dano Mágico quando explode. Se outra bomba atingir o mesmo alvo antes da primeira explodir, a primeira detona imediatamente e atordoa os inimigos próximos.",
+    "W": "Reduz a recarga de Q e E.",
+    "E": "Aplica SLOW a um inimigo ou concede MS a um aliado por um período.",
+    "R": "Coloca um dispositivo temporal em um aliado. Se ele morrer durante a duração, ressuscita com parte da vida."
+  },
+  "Zoe": {
+    "P": "Após conjurar uma habilidade, seu próximo AA causa Dano Mágico adicional.",
+    "Q": "Lança uma estrela que causa Dano Mágico. Pode reconjurar para redirecioná-la, aumentando seu alcance conforme a distância percorrida.",
+    "W": "Ao usar Feitiços de Invocador ou itens ativos, pode obter fragmentos que permitem usar seus efeitos. Ao conjurar um Feitiço de Invocador, recebe MS e dispara projéteis mágicos contra o inimigo mais próximo.",
+    "E": "Lança uma bolha que causa Dano Mágico e coloca o alvo para dormir após um breve período. Alvos adormecidos ficam imóveis e vulneráveis; o próximo dano recebido desperta o alvo e causa dano adicional.",
+    "R": "Abre um portal e se teletransporta brevemente para um local próximo, retornando em seguida à posição inicial. Pode usar habilidades e AAs durante o efeito."
+  },
+  "Zyra": {
+    "P": "Sementes surgem periodicamente em locais próximos. Suas habilidades podem transformar essas sementes em plantas que atacam inimigos.",
+    "Q": "Faz espinhos brotarem em uma área, causando Dano Mágico. Se houver sementes na área, elas se transformam em plantas que atacam inimigos à distância.",
+    "W": "Planta uma semente que concede visão da área. As sementes podem ser ativadas por Q ou E para gerar plantas. Armazenar sementes tem limite, e eliminar inimigos reduz a recarga da habilidade.",
+    "E": "Lança raízes em linha reta, causando Dano Mágico e enraizando os inimigos atingidos. Se as raízes passarem por sementes, elas se transformam em plantas que atacam à distância e aplicam SLOW.",
+    "R": "Invoca uma área de vegetação que causa Dano Mágico e arremessa os inimigos ao ar ao final da conjuração. As plantas dentro da área ficam enfurecidas, causando mais dano e recebendo velocidade de ataque adicional."
   }
 }

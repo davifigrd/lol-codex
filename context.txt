@@ -1,0 +1,244 @@
+===============================================================================
+  LOL CODEX — COMPÊNDIO DE CONTEXTO TÉCNICO E DE PROJETO (PARA ANÁLISE POR IA)
+  Versão do Documento: 2.0 | Atualizado em: outubro/2026
+===============================================================================
+
+[1] PROPÓSITO DESTE DOCUMENTO
+-------------------------------------------------------------------------------
+Este arquivo foi elaborado para servir como fonte única da verdade para qualquer
+Inteligência Artificial (ou desenvolvedor) que assumir ou analisar o projeto
+"LoL Codex". Ele detalha a visão geral, a arquitetura, as integrações de APIs, os
+dados autorais locais, o estado atual da implementação e todo o roadmap de ideias
+e melhorias pendentes (derivadas e detalhadas a partir de `todo.txt`).
+
+
+[2] VISÃO GERAL DO PROJETO E IDENTIDADE
+-------------------------------------------------------------------------------
+- Nome: LoL Codex
+- Tipo: Aplicação Web Front-End (SPA - Single Page Application)
+- Universo/Tema: League of Legends (Riot Games) — Estética Hextech
+- Idioma nativo: Português do Brasil (pt-BR), com suporte adaptativo de idioma
+  (pt_BR, es_ES, en_US) detectado automaticamente pelo navegador.
+- Desenvolvedor: Davi.
+- Repositório local: C:\Users\Davi\Documents\GitHub\lol-codex
+- Aviso Legal: Projeto não afiliado à Riot Games. League of Legends é marca
+  registrada da Riot Games, Inc.
+
+
+[3] INTUITO DO DESENVOLVEDOR E FILOSOFIA DE DESIGN
+-------------------------------------------------------------------------------
+1. Ferramenta de Estudo & Consulta Rápida:
+   Diferente de wikis genéricas pesadas e poluídas, o LoL Codex visa ser um
+   compêndio ágil, estético e intuitivo para consulta de campeões, habilidades,
+   vídeos de skills, itens, receitas e runas de Summoner's Rift.
+
+2. Resumos Autorais Didáticos vs. Texto Oficial da Riot:
+   O jogo possui descrições de habilidades e itens com cálculos complexos e textos
+   longos. O intuito principal do Davi é disponibilizar um botão/chave switch
+   ("Detalhado / Resumido") onde o usuário pode ler tanto a fórmula oficial da Riot
+   quanto um resumo autoral direto ao ponto (usando termos como CC, Dash, AA, etc.,
+   integrados a tooltips dinâmicos de glossário).
+
+3. Fidelidade Visual Hextech:
+   A interface replica o clima do cliente oficial do LoL:
+   - Fundo escuro profundo (#091428);
+   - Acentos dourados (#f0b232, #ffd23f, #c89b3c);
+   - Acentos cianos/azuis Hextech (#0ac8b9, #00a3ff);
+   - Tipografia solene (Cinzel para títulos e Plus Jakarta Sans para corpo);
+   - Dinamismo cromático: o site "reage" ao campeão ou item selecionado, extraindo
+     a cor do ícone em tempo real para iluminar bordas, avatares e efeitos glow.
+
+4. Arquitetura Leve e Sem Overhead:
+   - 100% Vanilla (HTML5, CSS3, JavaScript ES6+ puro).
+   - Sem frameworks pesados (React/Vue/Angular), sem bundlers obrigatórios,
+     sem backend dedicado e sem banco de dados SQL/NoSQL.
+   - Os dados do jogo são consumidos em tempo real do Data Dragon oficial.
+
+
+[4] ESTRUTURA DO PROJETO
+-------------------------------------------------------------------------------
+lol-codex/
+├── html/
+│   └── index.html          → Estrutura única do site (SPA com seções chaveáveis).
+├── css/
+│   └── style.css           → Estilos centralizados (~2300 linhas): variáveis, grids,
+│                             modais, filtros, animações e tema Hextech.
+├── js/
+│   └── script.js           → Lógica central da aplicação (~1970 linhas): consumo da API,
+│                             algoritmo de cores, modais, filtros e renderização.
+├── data/
+│   ├── glossary.json       → Dicionário gamer/LoL (AD, AP, CC, Stun, Knock up, etc.)
+│                             usado para gerar tooltips inline no texto.
+│   ├── item-resum.json     → Banco de resumos autorais de itens (chave = ID do item).
+│   ├── rune-resum.json     → Banco de resumos autorais de runas (chave = nome da runa).
+│   └── skill-resum.json    → Banco de resumos autorais das skills dos campeões (P, Q, W, E, R).
+├── img/
+│   ├── icon/               → Logotipos e favicons em múltiplas resoluções
+│   │                         (16, 19, 32, 48, 128, 512, 1024px, header-logo, full-logo).
+│   └── stats/              → Ícones oficiais PNG de atributos do LoL (AD, AP, Armor,
+│                             Penetração, Tenacidade, Vampirismo, etc.).
+├── scripts/
+│   └── resize-icons.js     → Script Node.js auxiliar com biblioteca 'sharp' para
+│                             gerar favicons e ícones redimensionados.
+├── package.json            → Configuração de dependências de desenvolvimento (sharp).
+├── todo.txt                → Bloco de notas de tarefas, bugs e ideias do desenvolvedor.
+└── context.txt             → Este arquivo de contexto detalhado.
+
+
+[5] STACK TECNOLÓGICA E SERVIÇOS EXTERNOS
+-------------------------------------------------------------------------------
+1. Fontes & Ícones:
+   - Google Fonts (Cinzel + Plus Jakarta Sans).
+   - FontAwesome 6.4.0 (versão Free via CDN).
+2. Dados do Jogo (Riot Games Data Dragon API):
+   - Versões: `https://ddragon.leagueoflegends.com/api/versions.json`
+   - Campeões: `.../cdn/{versao}/data/{idioma}/champion.json`
+   - Detalhe Campeão: `.../cdn/{versao}/data/{idioma}/champion/{champId}.json`
+   - Itens: `.../cdn/{versao}/data/{idioma}/item.json`
+   - Runas: `.../cdn/{versao}/data/{idioma}/runesReforged.json`
+   - Splash Arts & Imagens de Habilidades/Itens/Runas fornecidas pelos endpoints DDragon.
+3. CommunityDragon (Raw Assets da Riot):
+   - Ícones de rotas (Top, Jungle, Mid, ADC, Suporte).
+   - Ícones das classes (Fighter, Tank, Mage, Assassin, Marksman, Support).
+   - Ícones dos Stat Shards de runas terciárias.
+4. CDN de Vídeos Oficiais (CloudFront / Catalyst Riot):
+   - Base: `https://d28xe8vt774jo5.cloudfront.net/champion-abilities/{champKeyPad}/ability_{champKeyPad}_{slot}1.mp4`
+
+
+[6] FUNCIONAMENTO TÉCNICO INTERNO
+-------------------------------------------------------------------------------
+- Inicialização (DOMContentLoaded):
+  1. Detecta o idioma do usuário via `navigator.language` (padroniza em `pt_BR`, `es_ES` ou `en_US`).
+  2. Consulta a versão mais recente da API Data Dragon (ex: 14.24.1).
+  3. Dispara em paralelo `Promise.all` para carregar:
+     - Campeões (`champion.json`)
+     - Itens (`item.json`)
+     - Runas (`runesReforged.json`)
+     - JSONs autorais locais de `data/` (`skill-resum.json`, `item-resum.json`, `rune-resum.json`, `glossary.json`).
+  4. Configura navegação SPA, filtros, listeners de modais e tecla Escape.
+
+- Algoritmo de Extração de Cores Dinâmicas (HSL Cluster Voting):
+  Para que a interface sintonize com a arte de cada campeão/item:
+  - Desenha o ícone em um Canvas off-screen (48x48px).
+  - Mapeia pixels válidos em 36 baldes de matiz (Hue de 0° a 360°).
+  - Pondera por saturação e luminosidade balanceada (ignora cinzas e extremos pretos/brancos).
+  - Aplica janela de suavização entre baldes adjacentes e extrai a cor primária.
+  - Guarda em cache no `localStorage` (versão atual do cache: `lol_codex_cores_v4`).
+  - Suporta overrides manuais no código (`CORES_CUSTOMIZADAS_CAMPEAO`) para campeões com
+    identidades clássicas específicas (ex: Akali, Zac, Singed, Vladimir).
+
+- Mapeamento de Perfis de Dano (`PERFIS_CAMPEAO`):
+  Dicionário manual com classificação de dano e utilidade para cada campeão do jogo:
+  AD, AP, Heal, Shield, Tank, CC, Dash, Stealth, Summon, True, Global, Execute, Zone.
+  Exibe até 3 badges compactos no card e lista completa no modal.
+
+- Glossário e Substituição de Termos (`formatarDescricaoComGlossario`):
+  Varre o texto das habilidades buscando termos-chave do `glossary.json` e os encapsula
+  em `<span class="lol-glossary-term" data-tooltip="...">` preservando tags HTML da Riot.
+
+
+[7] ANÁLISE COMPLETA DO TODO.TXT & REQUISITOS FUTUROS
+-------------------------------------------------------------------------------
+Abaixo estão detalhadas todas as ideias, necessidades e funcionalidades planejadas
+pelo Davi no `todo.txt`, com a respectiva regra de negócio e comportamento esperado:
+
+1. Campeões em Destaque Inteligentes (Histórico Recente via LocalStorage):
+   - Cenário Atual: A Home exibe de forma estática os primeiros 4 campeões alfabéticos do DDragon.
+   - Requisito Desejado: Exibir os últimos 4 campeões que o usuário abriu no modal.
+   - Regra de Negócio:
+     * Toda vez que `abrirModalCampeao(champId)` for disparado, registrar esse campeão
+       em uma lista persistida no `localStorage` (mantendo os últimos 4 sem duplicatas).
+     * Caso o usuário nunca tenha clicado em nenhum campeão (primeiro acesso / histórico vazio),
+       o grid deve exibir um card/banner convidativo (Call-to-Action) com link/redirecionamento
+       para a aba de Campeões para ele selecionar seus primeiros campeões favoritos.
+
+2. Busca Global com Live Autocomplete / Sugestões em Tempo Real:
+   - Cenário Atual: O input de busca da Home depende do usuário teclar 'Enter' para abrir
+     o primeiro resultado exato.
+   - Requisito Desejado: Ao digitar (ex: letra "t" ou "tri"), abrir imediatamente uma listagem
+     suspensa (dropdown preview) com itens, runas e campeões correspondentes (ex: Força da
+     Trindade, Tristana, Tryndamere).
+   - Regra de Teclado: Ao pressionar 'Enter' enquanto digita, navegar ou abrir direto
+     o primeiro item da lista de prévia.
+
+3. Navegação Alfabética na Lista de Campeões (Estilo Lista Telefônica / Scroll Spy A-Z):
+   - Cenário Atual: A grade de campeões é contínua e ordenada por nome.
+   - Requisito Desejado: Uma experiência de lista telefônica. Conforme o usuário rola
+     a página, exibir um indicador/balão flutuante na tela mostrando a letra inicial
+     correspondente (A a Z) dos campeões visíveis naquele ponto da rolagem.
+
+4. Favicons e Qualidade dos Ícones:
+   - [STATUS: CONCLUÍDO]: Ícone embaçado foi corrigido com múltiplas resoluções
+     (16px a 1024px) e arredondamento estético via script Sharp e favicons no index.html.
+
+5. Arquitetura do Código JS e Modularização:
+   - Cenário Atual: `script.js` possui ~1970 linhas centralizadas em um único arquivo.
+   - Requisito Desejado: Planejar a divisão em módulos menores (ES6 modules nativos
+     `<script type="module">`), por exemplo:
+     * `modules/state.js` (estado global, versões, idioma);
+     * `modules/api.js` (comunicação com Data Dragon e carregamento de JSONs locais);
+     * `modules/colorExtractor.js` (lógica de Canvas, HSL, cache de cores);
+     * `modules/champions.js` (renderização, modal de campeões, habilidades e vídeos);
+     * `modules/items.js` (renderização, filtros de atributos, modal de itens e receitas);
+     * `modules/runes.js` (renderização de árvores, sub-runas e fragmentos de atributos);
+     * `modules/search.js` (busca global e live search autocomplete);
+     * `modules/storage.js` (gerenciamento de campeões recentes no localStorage).
+
+6. Correção e Calibração de Cores das Bordas dos Campeões:
+   - Cenário Atual: Alguns campeões acabam recebendo cores estranhas pelo algoritmo HSL
+     devido a fundos ou bordas cinzentas no ícone oficial do DDragon.
+   - Requisito Desejado: Refinar a detecção ou ampliar o objeto `CORES_CUSTOMIZADAS_CAMPEAO`
+     para campeões em que a cor calculada destoe da identidade do campeão.
+
+7. Tooltips Tematizados Hextech (Substituição de `title` e `alt` padrão do navegador):
+   - Cenário Atual: Elementos como os ícones de rota (Top, Mid, etc.) e tags usam o atributo
+     nativo `title`, gerando um balão preto atrasado e sem graça do navegador.
+   - Requisito Desejado: Criar tooltips personalizados via CSS/JS (ou data-attributes),
+     com animação suave, fundo azul-marinho profundo (#091428), borda dourada Hextech e tipografia
+     coerente com o restante do site.
+
+8. Bloqueio de Scroll de Fundo ao Abrir Modais (Body Scroll Lock):
+   - Cenário Atual: Ao abrir o modal de um campeão ou item, o scroll do mouse às vezes rola
+     a página principal por trás do modal.
+   - Requisito Desejado: Ao abrir qualquer modal (`champion-modal`, `item-modal`, etc.),
+     travar a rolagem da página de fundo (`document.body.style.overflow = 'hidden'`) e
+     destravar ao fechar (`document.body.style.overflow = ''`), permitindo rolagem apenas
+     dentro do container do modal.
+
+9. Resolução dos Ícones das Categorias de Runas:
+   - Cenário Atual: Os ícones principais das 5 categorias/árvores de runas estão embaçados
+     em telas de alta densidade.
+   - Requisito Desejado: Mapear e baixar/apontar para versões em alta definição (PNGs oficiais
+     sem compressão/embaçamento, similar ao tratamento feito com os ícones de stats).
+
+10. Estrutura e Cores das Runas Reforjadas (Fidelidade ao Jogo):
+    - Cenário Atual: As sub-runas estão dispostas em colunas horizontais lado a lado, e as
+      bordas não refletem vividamente a identidade de cada árvore.
+    - Requisitos Desejados:
+      * Borda de cada runa/árvore correspondente à sua cor oficial:
+        - Precisão: Dourado / Amarelo (#c8aa6e / #f0b232)
+        - Dominação: Vermelho (#dc2626 / #ef4444)
+        - Feitiçaria: Azul / Roxo Mágico (#3b82f6 / #8b5cf6)
+        - Determinação: Verde (#22c55e / #10b981)
+        - Inspiração: Azul Claro / Turquesa / Teal (#06b6d4 / #0ac8b9)
+      * Disposição Fiel ao LoL: Keystones destacadas no topo, seguidas pelas 3 linhas
+        de sub-runas empilhadas verticalmente (uma linha em cima da outra), replicando
+        a experiência visual da tela de runas do client do jogo.
+
+
+[8] REGRAS E BOAS PRÁTICAS PARA NOVAS IMPLEMENTAÇÕES
+-------------------------------------------------------------------------------
+Se você for uma IA adicionando ou modificando código neste projeto, respeite:
+1. NÃO adicione frameworks (React, Vue, etc.) a menos que expressamente solicitado
+   pelo desenvolvedor. O projeto tem orgulho de ser Vanilla JS.
+2. Mantenha os caminhos relativos corretos: `../css/`, `../js/`, `../data/`, `../img/`.
+3. Preservar o suporte ao switch "Detalhado / Resumido" tanto nos itens quanto
+   nos campeões e nas runas.
+4. Preservar a integração com os vídeos do CDN oficial do Catalyst/Riot.
+5. Sempre respeitar o design system Hextech existente no `style.css` (reutilizar
+   as variáveis `:root` como `--gold-primary`, `--bg-dark`, `--border-gold`, etc.).
+6. As descrições autorais devem priorizar brevidade e clareza didática.
+7. O código deve continuar funcionando com abertura direta do `html/index.html`
+   no navegador ou via Live Server local.
+
+===============================================================================

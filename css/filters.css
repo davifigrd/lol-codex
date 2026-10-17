@@ -1,0 +1,396 @@
+/* ==========================================================================
+   ITEM CONTROL BAR (SEARCH, FILTERS BUTTON AND INFO BUTTON)
+   ========================================================================== */
+.item-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.item-search-box {
+  flex: 1;
+  min-width: 250px;
+  max-width: 440px;
+  position: relative;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+.clear-search-btn:hover {
+  color: var(--gold-bright);
+}
+
+.item-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.champ-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.champ-search-box {
+  min-width: 250px;
+  max-width: 320px;
+  flex: 1 1 220px;
+}
+
+.filter-trigger-btn,
+.item-info-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-body);
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.filter-trigger-btn:hover,
+.item-info-toggle-btn:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-bright);
+  background: rgba(200, 155, 60, 0.08);
+}
+
+.filter-trigger-btn.active,
+.item-info-toggle-btn.active {
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+  background: rgba(200, 155, 60, 0.15);
+  box-shadow: 0 0 10px rgba(240, 178, 50, 0.2);
+}
+
+/* Info button lit (on) — "switch on" effect */
+.item-info-toggle-btn.active {
+  color: #ffe9a8;
+  border-color: var(--gold-bright);
+  background: linear-gradient(135deg, rgba(200, 155, 60, 0.35), rgba(240, 178, 50, 0.18));
+  box-shadow: 0 0 14px rgba(240, 178, 50, 0.55), inset 0 0 10px rgba(240, 178, 50, 0.25);
+  text-shadow: 0 0 8px rgba(240, 178, 50, 0.6);
+}
+
+.item-info-toggle-btn.active i {
+  color: var(--gold-bright);
+  filter: drop-shadow(0 0 6px rgba(240, 178, 50, 0.8));
+}
+
+.filter-counter-badge {
+  background: var(--gold-bright);
+  color: #000;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  margin-left: 2px;
+}
+
+/* Active Filter Chips */
+.active-filters-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(20, 26, 36, 0.9);
+  border: 1px solid rgba(200, 155, 60, 0.5);
+  color: var(--gold-light);
+  padding: 0.22rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.filter-chip-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0;
+  margin-left: 3px;
+  line-height: 1;
+}
+.filter-chip-remove:hover {
+  color: #ef4444;
+}
+
+.filter-chip-clear-all {
+  background: transparent;
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+  padding: 0.22rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.filter-chip-clear-all:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* Item card descriptions — visible by default, hidden via a smooth toggle */
+.item-stats {
+  overflow: hidden;
+  max-height: 120px;
+  opacity: 1;
+  transition: max-height 0.3s ease, opacity 0.25s ease, margin 0.3s ease;
+  margin-top: 0;
+}
+
+.hide-item-desc .item-stats {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  margin-top: 0 !important;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   ATTRIBUTE FILTER MINI WINDOW
+   ========================================================================== */
+/* Invisible overlay that catches outside clicks (the mini window is anchored to the button) */
+.filter-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 1050;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.filter-modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mini window (popover) anchored to the filters button — position set via JS */
+.filter-popup-card {
+  position: fixed;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(200, 155, 60, 0.15);
+  width: 100%;
+  max-width: 580px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(12px) scale(0.97);
+  transform-origin: top right;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.filter-modal-backdrop.active .filter-popup-card {
+  transform: translateY(0) scale(1);
+}
+
+.filter-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-panel);
+}
+
+.filter-popup-title {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-clear-link {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.2s ease;
+}
+.filter-clear-link:hover {
+  color: var(--gold-bright);
+}
+
+.filter-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+.filter-close-btn:hover {
+  color: #fff;
+}
+
+.filter-popup-body {
+  padding: 1.2rem 1.4rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.filter-section-title {
+  font-size: 0.76rem;
+  font-family: var(--font-title);
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Small muted note inside a filter section title (e.g. multi-lane hint) */
+.filter-section-hint {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--font-body, inherit);
+}
+
+.filter-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.45rem;
+}
+
+.filter-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(18, 28, 44, 0.7);
+  border: 1px solid var(--border-color);
+  color: var(--text-body);
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.filter-pill-btn:hover {
+  background: rgba(200, 155, 60, 0.1);
+  border-color: rgba(200, 155, 60, 0.4);
+  color: var(--gold-light);
+}
+
+.filter-pill-btn.active {
+  background: rgba(200, 155, 60, 0.2);
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+  font-weight: 600;
+}
+
+.filter-pill-btn img,
+.filter-pill-btn i {
+  flex-shrink: 0;
+}
+
+.filter-pill-btn .tag-class-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.filter-popup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.4rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-panel);
+}
+
+.filter-preview-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.filter-apply-btn {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
+  color: #000;
+  border: none;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.filter-apply-btn:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+/* Smooth transitions for the Detailed / Summary mode switches */
+#items-grid,
+#runes-container,
+.skills-grid,
+.item-ddragon-desc {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+

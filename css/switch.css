@@ -1,0 +1,81 @@
+/* ==========================================================================
+   HEXTECH SWITCH TOGGLE COMPONENT
+   ========================================================================== */
+.switch-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  user-select: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+.switch-wrapper:hover {
+  border-color: var(--gold-primary);
+}
+
+.switch-label-active {
+  color: var(--modal-accent-color, var(--gold-bright)) !important;
+  text-shadow: 0 0 10px var(--modal-accent-glow, rgba(240, 178, 50, 0.5));
+}
+
+.hextech-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 22px;
+}
+
+.hextech-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-wrapper span {
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1), text-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hextech-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #121c2c;
+  border: 1px solid var(--hextech-blue);
+  transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 22px;
+}
+
+.hextech-slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--text-muted);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+}
+
+.hextech-toggle input:checked + .hextech-slider {
+  background-color: var(--hextech-navy);
+  border-color: var(--modal-accent-color, var(--gold-bright));
+  box-shadow: 0 0 12px var(--modal-accent-glow, var(--gold-glow));
+}
+
+.hextech-toggle input:checked + .hextech-slider:before {
+  transform: translateX(22px);
+  background-color: var(--modal-accent-color, var(--gold-bright));
+  box-shadow: 0 0 8px var(--modal-accent-glow, var(--gold-glow));
+}
+

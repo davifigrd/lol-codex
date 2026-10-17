@@ -1,31 +1,48 @@
-[X] mudar os ícone de atributos dos itens (AD, AP, ARMOR e etc) para ícones oficiais do lol
+==================================== OUTROS/ PÓS RESUMO.JSON
+ARRUMAR MOBILE
+- Corrigir a responsividade do mobile
 
-- mudar barra de scroll do site e das janelas
+QUIZ
+Aba separada só pra quiz do site (NAV)
+- quiz com coisas para aprender ou aprimorar no jogo, como por exemplo: buff dos dragões, tempo de nascimento, tempo que pega nível 6, tempo que o arauto larva e Baron nascem e etc
+- quiz sobre skills de campeões e itens tambem. Aparece o campeão e o usuário tem que acertar como é a skill daquele campeão de cabeça, depois, é revelado o que a skill realmente faz. Faça o mesmo para itens.
 
-[X] mudar ícones de campeoes itens runas para original do jogo
+DESTAQUE/ FAVORITO/ MAIS ACESSO
+1. campeões em destaque aparece os ultimos 4 campeoes acessados pelo usuario, se não tiver clicado em nenhum ainda, faça um link chamando para algum campeão, para que assim ele possa selecionar a um da lista e entrar nos campeões de destaque (guarde no local storage ou coisa do tipo).
+2. esquema de favoritos, onde é possivel favoritar um campeão para ele aparecer 
+3. ou os campeões destaque são os mais acessados do site
 
-- campeões em destaque aparece os ultimos 4 campeoes acessados pelo usuario, se não tiver clicado em nenhum ainda, faça um link chamando para algum campeão, para que assim ele possa selecionar a um da lista e entrar nos campeões de destaque (guarde no local storage ou coisa do tipo)
+ESPECIFICAÇÕES (XP, GHOST)
+- tem que explicar que XP é experiencia ao passar o mouse (como na passiva do bardo tem). Faça o mesmo para GHOST (por exemplo na bell veth). HOOK e silence (blitz)
 
-- ao escrever algo na busca de pesquisa, ja deve aparecer algum resultado, ou seja, ao escrever a letra t deve aparecer itens, runas e campeões com T, se escrever tri deve aparecer, trindade, tristana e trindamere e etc. Isso foi um exemplo pra você entender. Quando o usuário apertar enter, vai ir para o primeiro item dessa lista prévia de pesquisa.
+CAMPEÃO E ITEM FAVORITO
+- quero que tenha um coração do lado contrário do que aparece a rota do campeão, ou seja, no canto superior esquerdo do card, de modo que o usuario consiga filtrar por favoritos também. Faça isso para itens também.
 
-- na aba de campeões faça com que a lista seja como uma lista telefonica, que ao descer, mostra um balão com a letra respectiva de A a Z
+====================================
+ARRUMAR RUNAS
+- quero melhorar página de runas, gostei desse esquema de interação que parece que está dentro do jogo, pode manter isso, mas quero que seja só pra um tipo de runa, por exemplo, só precisão, depois só determinação e etc, não é pra ficar literalmente igual o do jogo.mantenha esse estilo de interação parecido com o jogo só como base. Mas quero todas as informações na tela, falando a respeito das runas (pta, conquistador e etc), assim como as sub-runas (até a morte e etc). Quando o usuário quiser ver outra categoria de runa, ele tem que clicar pra trocar a categoria, feitiçaria e etc. Tire tambem o botão de salvar, o + de adicionar uma nova runa e o nome da runa e editar o nome da runa (BLITZ YASUO MEIO). essa parte não é necessária. O importante é explicar o que cada runa faz. Tire isso (Clique na runa para selecioná-la na sua página de runas). a imagem de runa do fundo está desfocada/ embaçada/ com resolução baixa, corrija isso tambem. Não quero essa runa secundária aparecendo, só a primaria mesmo para ensinar sobre a runa selecionada pelo usuario, uma por vez. Tire isso -> Runas Reforjadas & Fragmentos de Atributos e esse emoji de mágica ai.
 
-[X] parece que o ícone no título do site ficou embaçado, tente colocar um tamanho maior de imagem, elas estão classificadas com o nome = a resolução. Ou seja, 1024.png = uma imagem da logo que tem 1024 x 1024 de resolução, e assim respectivamente. Coloque os tamanhos corretos nos lugares corretos. Arredonde a imagem em tudo tambem, para ficar mais bonito, ela quadrada assim deixa muito feio.
+UI DANO FISICO + STUN + SHIELD
+- nessas descrições que tem por exemplo, dano fisico, dano mágico, stun, shield, coloque das cores respectivas desses tipos de atributos, pegue de outras partes do projeto como referencia e até do próprio lol para saber as cores.
 
-- nao acha que meu código ta muito grandee? nao seria melhor dividir em partes menores?? 1500+ linhas
+PASTA SCRIPT
+- coloque o resize-icons.js na pasta js, não precisa dessa pasta script, apague ela depois de mover o arquivo.
 
-- alguns campeões estão com a cor errada na borda deles
+TIRAR TÍTULOS
+- remova completamente esses títulos (emoji) ITENS e (emoji) CAMPEÕES
 
-- mudar balão de descrição alt (quando passa o mouse em cima de algo). Por exeplo o simbolo do top, quando passar o mouse não quero que apareça um balão no mouse preto simples e sem graça, tem que estar minimamente tematizado ou principalmente fazendo senetido com as cores do site
+TIRAR E-MAIL DO FOOTER
+- na verdade é pra usar o email para contato/ suporte/ feedback no footer. não quero esse embemed escrito email e o simbolo do gmail. Só faça alguma forma do usuario entrar em contato mas que seja discreto. Talvez com um símbolo de interregogação ou coisa do tipo no canto inferior direito do footer.
 
-- quando abrir a janela dos campeões impossibilitar de dar scroll na tela de fundo, somente na janela aberta atual do champeon
+RESUMO ITENS
+- na verdade o resumo do item não é uma parte a mais, quando selecionado o switch do resumido, ele vai trocar o texto descritivo do item para o que está no resumo, assim como faz para as skills do campeão.
 
-- imagem da categoria de runa embaçada (pegar png oficial do jogo, igual fez com os stats em img)
+ITENS ATT
+quando o usuario clicar em info nos itens, quero que apareça a descrição mais resumida possível no card do item. Mais resumido ainda do que a versão Resumido do json (contrário de detalhado). Pode ser tópicos com palavras chaves que indicam o que o item faz. Talvez bolinhas amarelas combinando com a estética do site ou coisa do tipo, simples.
 
-- borda das runas respectivas as suas cores, e fazer parecido de como há no jogo, primeiro as runas principais, depois as sub runas, uma em cima da outra, nao do lado da outra como está
+==================================== NEXT
 
-- badges dos campeões errados
 
-- rotas faltando e duas ou mais rotas (jungle/mid)
 
-- logo header não pode ser selecionada
+==================================== DOING
+

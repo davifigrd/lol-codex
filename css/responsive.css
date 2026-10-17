@@ -1,0 +1,33 @@
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.1rem;
+  }
+  .header-content {
+    gap: 0.5rem;
+  }
+  .header-search {
+    max-width: none;
+    margin: 0 0.4rem;
+  }
+  .header-search-input {
+    font-size: 0.85rem;
+  }
+  .nav-menu {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: var(--bg-dark);
+    flex-direction: column;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: none;
+  }
+  .nav-menu.mobile-open {
+    display: flex;
+  }
+  .mobile-toggle {
+    display: block;
+  }
+}

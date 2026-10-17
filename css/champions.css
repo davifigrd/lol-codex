@@ -1,0 +1,320 @@
+/* Champions Grid & Cards */
+.champ-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.5rem;
+}
+
+.champ-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.champ-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--card-glow-color, var(--gold-primary));
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.65),
+    0 0 22px var(--card-glow-rgba, var(--gold-glow));
+}
+
+.champ-banner {
+  height: 160px;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  position: relative;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 92%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 92%);
+}
+
+.champ-banner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  background: linear-gradient(
+    180deg,
+    transparent 15%,
+    rgba(10, 20, 40, 0.5) 45%,
+    var(--bg-card) 85%,
+    var(--bg-card) 100%
+  );
+  pointer-events: none;
+}
+
+.champ-badge-role {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(36, 39, 53, 0.92);
+  border: 1px solid var(--border-blue);
+  padding: 0.25rem 0.65rem;
+  border-radius: 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  z-index: 2;
+}
+
+.champ-badge-lane {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(4, 9, 20, 0.92);
+  border: 1.5px solid var(--gold-primary);
+  min-width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  z-index: 3;
+  box-shadow: 0 0 12px var(--gold-glow);
+  padding: 5px 7px;
+  transition: var(--transition);
+}
+
+/* When a champion plays more than one lane, the icons sit side by side */
+.champ-badge-lane.multi-lane {
+  gap: 3px;
+  padding: 5px 8px;
+}
+
+.champ-card:hover .champ-badge-lane {
+  transform: scale(1.1);
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+.champ-badge-lane img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 3px rgba(240, 178, 50, 0.6));
+}
+
+.champ-badge-lane.multi-lane img {
+  width: 19px;
+  height: 19px;
+}
+
+.champ-info {
+  padding: 1.5rem 1.2rem 1.2rem;
+  margin-top: -8px;
+  position: relative;
+  z-index: 2;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Name and class icons share one row — class sits to the right of the name */
+.champ-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+
+.champ-name {
+  font-size: 1.35rem;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.champ-title {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+.champ-tags {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.tag {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.73rem;
+  color: var(--gold-light);
+}
+
+/* Official LoL class icon (replaces text on the card and modal) */
+.tag-icon-class {
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: default;
+}
+
+.tag-class-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: brightness(0.9) saturate(1.2);
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.tag-icon-class:hover .tag-class-icon {
+  transform: scale(1.2);
+  filter: brightness(1.15) saturate(1.5)
+    drop-shadow(0 0 5px var(--card-glow-color, var(--gold-glow)));
+}
+
+/* Class icon on the champion modal header */
+.modal-class-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: brightness(0.9) saturate(1.1);
+  transition: transform 0.2s ease;
+}
+
+.modal-class-icon:hover {
+  transform: scale(1.15);
+  filter: brightness(1.1) saturate(1.4);
+}
+
+/* Lane symbols on the champion modal header */
+.modal-lane-divider {
+  width: 1px;
+  height: 22px;
+  margin: 0 0.35rem;
+  background: linear-gradient(180deg, transparent, var(--border-gold), transparent);
+  opacity: 0.7;
+}
+
+.modal-lane-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.modal-lane-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: brightness(0.9) saturate(1.1)
+    drop-shadow(0 0 3px rgba(240, 178, 50, 0.4));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.modal-lane-icon:hover {
+  transform: scale(1.15);
+  filter: brightness(1.1) saturate(1.4)
+    drop-shadow(0 0 6px var(--gold-glow));
+}
+
+.champ-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(200, 155, 60, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Champion damage and special badges on the card */
+.champ-damage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.42rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.champ-damage-badge img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+}
+
+.champ-card:hover .champ-damage-badge {
+  border-color: var(--card-glow-color, var(--gold-primary));
+  background: rgba(9, 20, 40, 0.9);
+}
+
+/* Filter Bar */
+.filter-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter-group {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-body);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.83rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: rgba(68, 95, 165, 0.25);
+  border-color: var(--hextech-blue);
+  color: var(--gold-light);
+}
+
+.filter-btn.active {
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+  background: rgba(199, 155, 59, 0.15);
+}
+

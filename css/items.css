@@ -1,0 +1,78 @@
+/* Item Grid & Cards */
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.item-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  transition: var(--transition);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-card:hover {
+  border-color: var(--card-glow-color, var(--gold-primary));
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.55),
+    0 0 16px var(--card-glow-rgba, var(--gold-glow));
+}
+
+.item-header {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.item-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--gold-primary);
+  object-fit: cover;
+  background: #000;
+}
+
+.item-title-wrap h4 {
+  font-size: 1.05rem;
+  color: var(--gold-light);
+}
+
+.item-cost {
+  font-size: 0.82rem;
+  color: var(--gold-primary);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Attribute badges below the item name (e.g. Trinity Force > AD HP AS) */
+.item-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.item-stats {
+  font-size: 0.8rem;
+  color: var(--text-body);
+  margin-bottom: 0.75rem;
+}
+
+.item-passive {
+  font-size: 0.78rem;
+  color: var(--text-body);
+  background: var(--bg-panel);
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--hextech-navy);
+  margin-top: auto;
+}
+

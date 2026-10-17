@@ -1,0 +1,368 @@
+/* Runes Grid */
+.runes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.rune-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.rune-card:hover {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 20px var(--gold-glow);
+}
+
+.rune-icon-box {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1rem auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  background: var(--bg-panel);
+  border: 2px solid var(--border-color);
+}
+
+/* Concepts Grid */
+.concepts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.concept-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+
+.concept-card:hover {
+  border-color: var(--gold-primary);
+  box-shadow: 0 8px 24px rgba(199, 155, 59, 0.15);
+}
+
+.concept-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.6rem;
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.concept-card h3 i {
+  color: var(--hextech-blue-bright);
+}
+
+.concept-card p {
+  font-size: 0.88rem;
+  margin-bottom: 1rem;
+  color: var(--text-body);
+}
+
+.concept-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.concept-list li {
+  font-size: 0.83rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--text-body);
+}
+
+.concept-list li i {
+  color: var(--gold-primary);
+  margin-top: 3px;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 27, 37, 0.88);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Data Dragon Skill & Rune Styles */
+.skills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+  animation: skillsGridFade 0.35s ease;
+}
+
+.skills-grid.animating {
+  animation: skillsGridFade 0.35s ease;
+}
+
+@keyframes skillsGridFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth transition on the ability description text when toggling the switch.
+   overflow-wrap: long unbroken tokens (values, tags) wrap instead of forcing
+   a horizontal scrollbar inside the champion modal. */
+.skill-desc {
+  overflow-wrap: break-word;
+  transition:
+    opacity 0.25s ease,
+    color 0.3s ease;
+}
+
+.skill-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.15rem;
+  display: flex;
+  gap: 1.15rem;
+  align-items: flex-start;
+  transition: var(--transition);
+}
+
+.skill-card:hover {
+  border-color: var(--modal-accent-color, var(--gold-primary));
+  box-shadow: 0 4px 18px var(--modal-accent-glow, var(--gold-glow));
+  background: rgba(36, 39, 53, 0.95);
+}
+
+.skill-img-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.skill-img-wrap:hover .skill-img-play-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.skill-img-play-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 20, 40, 0.78);
+  backdrop-filter: blur(2px);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--modal-accent-color, var(--gold-bright));
+  font-size: 1.25rem;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 0 14px var(--modal-accent-glow, var(--gold-glow));
+  border: 1.5px solid var(--modal-accent-color, var(--gold-bright));
+  pointer-events: none;
+  z-index: 2;
+}
+
+.skill-img-play-overlay i {
+  filter: drop-shadow(0 0 8px var(--modal-accent-glow, var(--gold-glow)));
+  transition: transform 0.2s ease;
+}
+
+.skill-img-wrap:hover .skill-img-play-overlay i {
+  transform: scale(1.15);
+}
+
+.skill-img {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--modal-accent-color, var(--gold-primary));
+  object-fit: cover;
+  background: #000;
+  display: block;
+}
+
+.skill-key-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: #091428;
+  border: 1.5px solid var(--modal-accent-color, var(--gold-primary));
+  color: var(--modal-accent-color, var(--gold-primary));
+  font-size: 0.68rem;
+  font-weight: 800;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.85),
+    0 0 8px var(--modal-accent-glow, var(--gold-glow));
+  z-index: 5;
+}
+
+.skill-info {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.skill-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.skill-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.skill-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin: 0;
+}
+
+.skill-meta-tags {
+  font-size: 0.75rem;
+  color: var(--gold-primary);
+  font-weight: 500;
+}
+
+.skill-video-btn {
+  background: rgba(200, 170, 110, 0.08);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-light);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition);
+}
+
+.skill-video-btn:hover {
+  background: var(--gold-primary);
+  color: #091428;
+  box-shadow: 0 0 12px var(--gold-glow);
+  transform: translateY(-1px);
+}
+
+.skill-desc {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.55;
+  margin-top: 0.35rem;
+  white-space: pre-line;
+}
+
+/* Ability Term Glossary (hover tooltip handled by js/tooltip.js via the
+   title attribute — a CSS ::after tooltip here used to overflow the modal
+   container and force a horizontal scrollbar while reading abilities) */
+.lol-glossary-term {
+  color: var(--gold-bright);
+  font-weight: 700;
+  text-decoration: underline dotted var(--hextech-cyan-accent);
+  text-underline-offset: 3px;
+  cursor: help;
+  transition: var(--transition);
+  display: inline;
+}
+
+.lol-glossary-term:hover {
+  color: var(--hextech-cyan-accent);
+  text-shadow: 0 0 8px rgba(0, 209, 255, 0.6);
+}
+
+/* ==========================================================================
+   THEMED TOOLTIP (js/tooltip.js)
+   Replaces the browser's native black balloon with a balloon in the site's
+   colors — same visual language as the glossary tooltip above.
+   ========================================================================== */
+.hextech-tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  max-width: 280px;
+  padding: 0.45rem 0.8rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-title);
+  background: var(--bg-dark);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.9),
+    0 0 14px var(--gold-glow);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.hextech-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Golden hairline on top (the site's Hextech signature) */
+.hextech-tooltip::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+}
+
