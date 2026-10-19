@@ -14,6 +14,29 @@ const FEEDBACK_ENDPOINT = ''; // e.g. 'https://formspree.io/f/xxxxxxxx'
 const FEEDBACK_STORAGE_KEY = 'lol_codex_feedback_envios';
 const FEEDBACK_MAX_SENDS_PER_DAY = 3;
 const FEEDBACK_DAY_MS = 24 * 60 * 60 * 1000;
+const FEEDBACK_TEXTAREA_MIN_HEIGHT = 88;
+
+// ---------- Message field auto-grow ----------
+// The textarea cannot be resized by the user (resize: none). It grows on its
+// own as the text is typed, stepping up in whole content "blocks" (two text
+// lines each) instead of growing strictly line-by-line.
+function autoGrowFeedbackMessage() {
+    const field = document.getElementById('feedbackMessage');
+    if (!field) return;
+
+    field.style.height = 'auto';
+    const styles = window.getComputedStyle(field);
+    const lineHeight = parseFloat(styles.lineHeight) || 20;
+    const padding = (parseFloat(styles.paddingTop) || 0) + (parseFloat(styles.paddingBottom) || 0);
+    const borders = (parseFloat(styles.borderTopWidth) || 0) + (parseFloat(styles.borderBottomWidth) || 0);
+
+    const block = lineHeight * 2;
+    const contentHeight = Math.max(field.scrollHeight - padding, lineHeight * 2);
+    const blocks = Math.max(2, Math.ceil(contentHeight / block));
+    const target = padding + borders + blocks * block;
+
+    field.style.height = `${Math.max(FEEDBACK_TEXTAREA_MIN_HEIGHT, target)}px`;
+}
 
 // ---------- Anti-spam (internal only, max 3 sends/day) ----------
 function readFeedbackSends() {
@@ -56,6 +79,8 @@ function openFeedbackWidget() {
     widget.setAttribute('aria-hidden', 'false');
     const openBtn = document.getElementById('feedbackOpenBtn');
     if (openBtn) openBtn.classList.add('active');
+    // Recalculate the message field height for the now-visible widget
+    autoGrowFeedbackMessage();
     // Small delay so the focus lands after the opening animation
     setTimeout(() => {
         const nameField = document.getElementById('feedbackName');
@@ -192,6 +217,13 @@ function setupFeedbackWidget() {
         });
     });
 
+    // Auto-grows the message field as the user types (blocks, not line-by-line)
+    const messageField = document.getElementById('feedbackMessage');
+    if (messageField) {
+        messageField.addEventListener('input', autoGrowFeedbackMessage);
+        autoGrowFeedbackMessage();
+    }
+
     form.addEventListener('submit', (event) => {
         event.preventDefault();
 
@@ -219,6 +251,7 @@ function setupFeedbackWidget() {
             .then(() => {
                 registerFeedbackSend();
                 form.reset();
+                autoGrowFeedbackMessage();
                 clearFeedbackErrors();
                 closeFeedbackWidget();
                 showFeedbackToast('Mensagem enviada com sucesso!');

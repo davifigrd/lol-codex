@@ -143,7 +143,12 @@ const RUNE_STAT_SHARDS = [
 
 // Rune Page state in the LoL client style
 let activeRuneTree = 8000;         // Active tree (8000 = Precision)
-let runeViewMode = 'client';    // 'client' (visual LoL workbench) or 'lista' (one-by-one explanation)
+// View mode: 'client' = compact 2x2 grid (icons + hover/click balloon),
+// 'lista' = expanded list (titles + descriptions visible inline).
+// Defaults: Desktop = grid, Mobile = expanded list.
+let runeViewMode = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 768px)').matches)
+    ? 'lista'
+    : 'client';
 
 // Saved rune selections per tree
 let runeSelection = {
@@ -517,7 +522,7 @@ function renderRunes() {
                 <div class="lol-shard-badge ${isSelected ? 'selected' : ''}"
                      onclick="selectStatShard(${lIdx}, ${oIdx})"
                      onmouseenter="inspectShardHover(${lIdx}, ${oIdx})"
-                     title="${op.labelName} — ${op.desc}">
+                     title="${op.labelName}">
                     <img src="${op.icon}" alt="${op.labelName}" class="lol-shard-img">
                 </div>
             `;
@@ -525,7 +530,10 @@ function renderRunes() {
 
         return `
             <div class="lol-shard-tier-row">
-                <span class="lol-shard-row-label" title="${tier.labelName}"><i class="${tier.runeIconUrl}"></i></span>
+                <span class="lol-shard-row-label" title="Linha ${tier.rowEntry} — ${tier.labelName}">
+                    <i class="${tier.runeIconUrl}"></i>
+                    <em>Linha ${tier.rowEntry} · ${tier.labelName}</em>
+                </span>
                 <div class="lol-shard-badges-group">
                     ${optionsHtml}
                 </div>
@@ -617,12 +625,12 @@ function renderRunes() {
                     <div class="lol-footer-left">
                         <div class="lol-view-toggles">
                             <button type="button" class="lol-view-btn ${runeViewMode === 'client' ? 'active' : ''}"
-                                    onclick="toggleRuneViewMode('client')" title="Interface do Cliente LoL (Interativa)">
+                                    onclick="toggleRuneViewMode('client')" title="Grade 2x2 (Compacto) — Ícones das runas; passe o mouse para ver a explicação">
                                 <i class="fa-solid fa-table-cells-large"></i>
                             </button>
                             <button type="button" class="lol-view-btn ${runeViewMode === 'lista' ? 'active' : ''}"
-                                    onclick="toggleRuneViewMode('lista')" title="Guia Explicativo (Runas explicadas uma a uma)">
-                                <i class="fa-solid fa-list-ul"></i>
+                                    onclick="toggleRuneViewMode('lista')" title="Lista 3 pontos + 3 linhas (Expandido) — Títulos e descrições visíveis">
+                                <i class="fa-solid fa-list"></i>
                             </button>
                         </div>
 
@@ -675,9 +683,6 @@ function updateInspectorCard() {
             </div>
             <div class="lol-inspector-body">
                 <p class="lol-rune-p">${shard.desc}</p>
-            </div>
-            <div class="lol-inspector-footer">
-                <span class="lol-inspector-tip"><i class="fa-solid fa-circle-info"></i> Fragmentos personalizam atributos defensivos e ofensivos da sua rota.</span>
             </div>
         `;
         return;

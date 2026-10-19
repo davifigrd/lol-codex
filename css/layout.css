@@ -184,14 +184,24 @@ body.scroll-locked {
 
 /* ==========================================================================
    FEEDBACK WIDGET (js/feedback.js)
-   Discreet floating icon at the bottom right of the footer that opens a
-   small Hextech-style contact window (Nome / E-mail / Mensagem).
+   The question-mark button is anchored INSIDE the footer (no floating
+   fixed position over the whole page). The small Hextech-style window
+   opens just above the button, still inside the footer area.
    ========================================================================== */
+.footer-feedback-area {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  margin: 1.25rem auto 0;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .footer-feedback-btn {
-  position: fixed;
-  right: 1.1rem;
-  bottom: 1.1rem;
-  z-index: 1500;
+  position: static;
+  right: auto;
+  bottom: auto;
   width: 44px;
   height: 44px;
   display: flex;
@@ -216,9 +226,9 @@ body.scroll-locked {
 }
 
 .feedback-widget {
-  position: fixed;
-  right: 1.1rem;
-  bottom: 4.4rem;
+  position: absolute;
+  right: 1.5rem;
+  bottom: calc(100% + 0.6rem);
   z-index: 1501;
   width: min(330px, calc(100vw - 2rem));
   padding: 1rem 1.1rem 1.15rem;
@@ -260,9 +270,12 @@ body.scroll-locked {
 .feedback-widget-close {
   width: 26px;
   height: 26px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  line-height: 1;
   font-size: 0.85rem;
   color: var(--text-muted);
   background: transparent;
@@ -272,10 +285,21 @@ body.scroll-locked {
   transition: var(--transition);
 }
 
+/* Perfectly centers the X glyph inside the square container */
+.feedback-widget-close i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  line-height: 1;
+  margin: 0;
+}
+
 .feedback-widget-close:hover,
 .feedback-widget-close:focus-visible {
-  color: #ef4444;
-  border-color: #ef4444;
+  color: var(--gold-bright);
+  border-color: var(--gold-primary);
 }
 
 .feedback-field {
@@ -302,8 +326,16 @@ body.scroll-locked {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  resize: vertical;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Message field: user cannot resize it manually; it grows on its own
+   as the text is typed (handled in js/feedback.js) */
+.feedback-field textarea {
+  resize: none;
+  overflow: hidden;
+  line-height: 1.45;
+  min-height: 88px;
 }
 
 .feedback-field input:focus,

@@ -13,25 +13,38 @@
 .item-search-box {
   flex: 1;
   min-width: 250px;
-  max-width: 440px;
+  max-width: 520px;
   position: relative;
+}
+
+/* Leaves room on the right so the typed text never collides with the X */
+.item-search-box input {
+  padding-right: 2.9rem;
 }
 
 .clear-search-btn {
   position: absolute;
-  right: 12px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
   background: transparent;
   border: none;
+  border-radius: 50%;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 4px;
   font-size: 0.9rem;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 .clear-search-btn:hover {
   color: var(--gold-bright);
+  background: rgba(200, 155, 60, 0.12);
 }
 
 .item-actions-group {
@@ -49,12 +62,16 @@
 
 .champ-search-box {
   min-width: 250px;
-  max-width: 320px;
-  flex: 1 1 220px;
+  max-width: 420px;
+  flex: 1 1 260px;
 }
 
-.filter-trigger-btn,
-.item-info-toggle-btn {
+/* Leaves room on the right so the typed text never collides with the X */
+.champ-search-box input {
+  padding-right: 2.9rem;
+}
+
+.filter-trigger-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -71,33 +88,17 @@
   position: relative;
 }
 
-.filter-trigger-btn:hover,
-.item-info-toggle-btn:hover {
+.filter-trigger-btn:hover {
   border-color: var(--gold-primary);
   color: var(--gold-bright);
   background: rgba(200, 155, 60, 0.08);
 }
 
-.filter-trigger-btn.active,
-.item-info-toggle-btn.active {
+.filter-trigger-btn.active {
   border-color: var(--gold-bright);
   color: var(--gold-bright);
   background: rgba(200, 155, 60, 0.15);
   box-shadow: 0 0 10px rgba(240, 178, 50, 0.2);
-}
-
-/* Info button lit (on) — "switch on" effect */
-.item-info-toggle-btn.active {
-  color: #ffe9a8;
-  border-color: var(--gold-bright);
-  background: linear-gradient(135deg, rgba(200, 155, 60, 0.35), rgba(240, 178, 50, 0.18));
-  box-shadow: 0 0 14px rgba(240, 178, 50, 0.55), inset 0 0 10px rgba(240, 178, 50, 0.25);
-  text-shadow: 0 0 8px rgba(240, 178, 50, 0.6);
-}
-
-.item-info-toggle-btn.active i {
-  color: var(--gold-bright);
-  filter: drop-shadow(0 0 6px rgba(240, 178, 50, 0.8));
 }
 
 .filter-counter-badge {
@@ -161,20 +162,12 @@
   color: #ef4444;
 }
 
-/* Item card descriptions — visible by default, hidden via a smooth toggle */
+/* Item card descriptions (only for items without attribute topics) */
 .item-stats {
   overflow: hidden;
   max-height: 120px;
   opacity: 1;
-  transition: max-height 0.3s ease, opacity 0.25s ease, margin 0.3s ease;
   margin-top: 0;
-}
-
-.hide-item-desc .item-stats {
-  max-height: 0 !important;
-  opacity: 0 !important;
-  margin-top: 0 !important;
-  pointer-events: none;
 }
 
 /* ==========================================================================

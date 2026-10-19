@@ -124,24 +124,23 @@ function renderFeaturedChampions() {
         return;
     }
 
-    // Empty history: Hextech call-to-action banner
+    // Empty history: Hextech call-to-action banner (fully clickable)
     featuredGrid.innerHTML = `
-        <div class="featured-recent-cta">
-            <div class="featured-recent-cta-icon">
+        <button type="button" class="featured-recent-cta" onclick="switchTab('champions')" title="Ir para Campeões">
+            <span class="featured-recent-cta-icon">
                 <i class="fa-solid fa-clock-rotate-left"></i>
-            </div>
-            <div class="featured-recent-cta-content">
-                <h3 class="featured-recent-cta-title">Seus últimos campeões aparecem aqui</h3>
-                <p class="featured-recent-cta-text">
+            </span>
+            <span class="featured-recent-cta-content">
+                <span class="featured-recent-cta-title">Seus últimos campeões aparecem aqui</span>
+                <span class="featured-recent-cta-text">
                     Abra a ficha de qualquer campeão e ele ficará salvo neste navegador.
                     Os <strong>4 últimos acessos</strong> são exibidos nesta vitrine.
-                </p>
-                <button type="button" class="filter-btn featured-recent-cta-btn" onclick="switchTab('champions')">
-                    <i class="fa-solid fa-shield-halved"></i> Explorar campeões
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
+                </span>
+                <span class="featured-recent-cta-hint">
+                    Explorar campeões <i class="fa-solid fa-arrow-right"></i>
+                </span>
+            </span>
+        </button>
     `;
 }
 

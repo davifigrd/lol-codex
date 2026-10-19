@@ -163,9 +163,12 @@
   color: var(--gold-light);
   line-height: 1.25;
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Full name always visible: no ellipsis / text clipping */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .item-cost {
@@ -173,14 +176,6 @@
   color: var(--gold-primary);
   font-weight: 700;
   white-space: nowrap;
-}
-
-/* Attribute badges below the item name */
-.item-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.35rem;
 }
 
 /* Normal Description */
@@ -195,30 +190,8 @@
   overflow: hidden;
 }
 
-/* Card Info Button (Direct toggle on the card) */
-.item-card-info-btn {
-  background: transparent;
-  border: none;
-  color: var(--gold-primary);
-  font-size: 0.85rem;
-  cursor: pointer;
-  padding: 0.2rem;
-  border-radius: 50%;
-  line-height: 1;
-  transition: transform 0.2s ease, color 0.2s ease;
-  opacity: 0.7;
-}
-
-.item-card-info-btn:hover,
-.item-card-info-btn.active {
-  opacity: 1;
-  color: var(--gold-bright);
-  transform: scale(1.15);
-}
-
 /* --------------------------------------------------------------------------
-   HEX-TECH ULTRA-SUMMARIZED BULLETS CARD (Info Mode)
-   Yellow topics with keywords matching Hextech aesthetic
+   ATTRIBUTE TOPICS CARD (each line = stat icon + attribute value)
    -------------------------------------------------------------------------- */
 .item-quick-bullets {
   margin-top: 0.65rem;
@@ -226,60 +199,35 @@
   background: rgba(10, 20, 40, 0.85);
   border: 1px solid rgba(240, 178, 50, 0.25);
   border-radius: var(--radius-sm);
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 0.35rem;
   font-size: 0.78rem;
   color: var(--text-body);
-  transition: opacity 0.2s ease, max-height 0.3s ease;
 }
 
 .quick-bullet-item {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.45rem;
   line-height: 1.4;
 }
 
-.hextech-bullet {
-  color: var(--gold-bright);
-  font-size: 0.75rem;
-  text-shadow: 0 0 6px var(--gold-glow);
+/* Attribute icon shown inline next to each stat topic */
+.quick-bullet-item .stat-img-icon {
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
 }
 
-.bullet-keyword {
-  color: var(--gold-bright);
-  font-weight: 700;
-  margin-right: 0.2rem;
-}
-
-.bullet-stat-val {
+.quick-bullet-item .quick-bullet-text {
   color: #4ade80;
   font-weight: 700;
 }
 
-/* Visibility toggling via global button or card */
-.hide-item-desc .item-stats {
-  display: none;
-}
-
-.hide-item-desc .item-quick-bullets {
-  display: flex;
-}
-
-/* Per-card Info: the summary replaces that card's description */
-.item-card.info-open .item-stats {
-  display: none;
-}
-
-/* When Info toggle is off, bullets can still show if card was specifically toggled */
-.item-quick-bullets.collapsed {
-  display: none !important;
-}
-
-.item-quick-bullets.expanded {
-  display: flex !important;
+.quick-bullet-item.text-only .quick-bullet-text {
+  color: var(--text-body);
+  font-weight: 500;
 }
 
 /* --------------------------------------------------------------------------

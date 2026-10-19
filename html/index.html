@@ -22,15 +22,15 @@
     <!-- External CSS in the ../css/ folder -->
     <!-- Modular CSS (ordered: order = cascade) -->
     <link rel="stylesheet" href="../css/style.css?v=5" />
-    <link rel="stylesheet" href="../css/layout.css?v=6" />
-    <link rel="stylesheet" href="../css/champions.css?v=5" />
-    <link rel="stylesheet" href="../css/items.css?v=7" />
+    <link rel="stylesheet" href="../css/layout.css?v=8" />
+    <link rel="stylesheet" href="../css/champions.css?v=6" />
+    <link rel="stylesheet" href="../css/items.css?v=9" />
     <link rel="stylesheet" href="../css/components.css?v=6" />
-    <link rel="stylesheet" href="../css/modals.css?v=4" />
+    <link rel="stylesheet" href="../css/modals.css?v=5" />
     <link rel="stylesheet" href="../css/switch.css?v=4" />
-    <link rel="stylesheet" href="../css/runes.css?v=5" />
-    <link rel="stylesheet" href="../css/badges.css?v=6" />
-    <link rel="stylesheet" href="../css/filters.css?v=4" />
+    <link rel="stylesheet" href="../css/runes.css?v=6" />
+    <link rel="stylesheet" href="../css/badges.css?v=7" />
+    <link rel="stylesheet" href="../css/filters.css?v=6" />
     <link rel="stylesheet" href="../css/responsive.css?v=4" />
 
     <!-- Site favicons / icons with their respective sizes -->
@@ -132,7 +132,7 @@
           </li>
           <li>
             <a href="quiz.html" class="nav-link"
-              ><i class="fa-solid fa-circle-question"></i> Quiz</a
+              ><i class="fa-solid fa-brain"></i> Quiz</a
             >
           </li>
         </ul>
@@ -193,7 +193,7 @@
                 </p>
               </div>
               <a class="category-card" href="quiz.html">
-                <div class="icon"><i class="fa-solid fa-circle-question"></i></div>
+                <div class="icon"><i class="fa-solid fa-brain"></i></div>
                 <h3>
                   Quiz <span class="badge-count">3 Categorias</span>
                 </h3>
@@ -205,10 +205,10 @@
             </div>
 
             <!-- Featured Champions Section -->
-            <div class="section-header" style="margin-top: 2rem">
-              <div class="section-title">
-                <i class="fa-solid fa-clock-rotate-left"></i> Campeões Recentes
-              </div>
+            <div
+              class="section-header"
+              style="margin-top: 2rem; justify-content: flex-end"
+            >
               <button class="filter-btn" onclick="switchTab('champions')">
                 Ver Todos <i class="fa-solid fa-arrow-right"></i>
               </button>
@@ -227,12 +227,6 @@
       <!-- CHAMPIONS SECTION -->
       <section id="champions" class="page-section">
         <div class="container">
-          <div class="section-header">
-            <div class="section-title" aria-label="Campeões">
-              <i class="fa-solid fa-shield-halved"></i>
-            </div>
-          </div>
-
           <div class="filter-bar">
             <div class="filter-group" id="roleFilterGroup">
               <button class="filter-btn active" data-role="all">
@@ -289,6 +283,15 @@
                   oninput="filterChampions()"
                   autocomplete="off"
                 />
+                <button
+                  id="clearChampSearchBtn"
+                  class="clear-search-btn"
+                  onclick="clearChampionSearch()"
+                  style="display: none"
+                  title="Limpar busca"
+                >
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
               </div>
               <!-- Filter button: opens the mini window (lane + class + attribute) -->
               <button
@@ -330,13 +333,7 @@
       <!-- ITEMS SECTION -->
       <section id="items" class="page-section">
         <div class="container">
-          <div class="section-header">
-            <div class="section-title" aria-label="Itens">
-              <i class="fa-solid fa-ring"></i>
-            </div>
-          </div>
-
-          <!-- New item control bar: name search + filter button (mini window) + info button (i) -->
+          <!-- New item control bar: name search + filter button (mini window) -->
           <div class="item-controls-bar">
             <div class="search-input-box item-search-box">
               <i class="fa-solid fa-magnifying-glass"></i>
@@ -374,18 +371,6 @@
                 <span id="itemSummaryLabel">Resumido</span>
               </div>
 
-              <!-- Info (i) button: replaces card descriptions with the ultra-summary -->
-              <button
-                type="button"
-                id="itemInfoToggleBtn"
-                class="item-info-toggle-btn"
-                onclick="toggleItemDescription()"
-                title="Ativar/desativar o resumo em tópicos nos cards de itens"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <span class="info-btn-text">Info</span>
-              </button>
-
               <!-- Dashes button that opens the mini filtering window -->
               <button
                 type="button"
@@ -413,7 +398,7 @@
             style="display: none"
           ></div>
 
-          <!-- Main Summoner's Rift items grid (description shown; Info reveals the summary) -->
+          <!-- Main Summoner's Rift items grid (cards show only the attribute topics) -->
           <div class="item-grid" id="items-grid">
             <div class="loading-box">
               <div class="loading-spinner"></div>
@@ -901,128 +886,81 @@
               de jogo
             </div>
             <div class="filter-pills-grid">
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="AD"
-                onclick="toggleChampionAttributeFilter('AD')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="AD" onclick="toggleChampionAttributeFilter('AD')">
                 <span class="stat-img-icon stat-img-ad"></span>
                 <span>Dano Físico (AD)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="AP"
-                onclick="toggleChampionAttributeFilter('AP')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="AP" onclick="toggleChampionAttributeFilter('AP')">
                 <span class="stat-img-icon stat-img-ap"></span>
                 <span>Poder de Habilidade (AP)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="Tank"
-                onclick="toggleChampionAttributeFilter('Tank')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="TANK" onclick="toggleChampionAttributeFilter('TANK')">
                 <span class="stat-img-icon stat-img-armor"></span>
-                <span>Tanque / Resistente</span>
+                <span>Tanque (TANK)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="Heal"
-                onclick="toggleChampionAttributeFilter('Heal')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="HEAL" onclick="toggleChampionAttributeFilter('HEAL')">
                 <span class="stat-img-icon stat-img-health"></span>
-                <span>Cura / Sustentação</span>
+                <span>Cura (HEAL)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="Shield"
-                onclick="toggleChampionAttributeFilter('Shield')"
-              >
-                <span class="stat-img-icon stat-img-mr"></span>
-                <span>Escudo</span>
+              <button type="button" class="filter-pill-btn" data-attr="SHIELD" onclick="toggleChampionAttributeFilter('SHIELD')">
+                <i class="fa-solid fa-shield" style="color: #22d3ee"></i>
+                <span>Escudo (SHIELD)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="CC"
-                onclick="toggleChampionAttributeFilter('CC')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="CC" onclick="toggleChampionAttributeFilter('CC')">
                 <span class="stat-img-icon stat-img-tenacity"></span>
                 <span>Controle de Grupo (CC)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="Dash"
-                onclick="toggleChampionAttributeFilter('Dash')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="DASH" onclick="toggleChampionAttributeFilter('DASH')">
                 <span class="stat-img-icon stat-img-mov"></span>
-                <span>Mobilidade / Dash</span>
+                <span>Mobilidade (DASH)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="Stealth"
-                onclick="toggleChampionAttributeFilter('Stealth')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="STEALTH" onclick="toggleChampionAttributeFilter('STEALTH')">
                 <i class="fa-solid fa-eye-slash" style="color: #94a3b8"></i>
-                <span>Furtividade</span>
+                <span>Furtividade (STEALTH)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="Summon"
-                onclick="toggleChampionAttributeFilter('Summon')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="PETS" onclick="toggleChampionAttributeFilter('PETS')">
                 <i class="fa-solid fa-dragon" style="color: #f59e0b"></i>
-                <span>Invocações</span>
+                <span>Invocações (PETS)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="True"
-                onclick="toggleChampionAttributeFilter('True')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="TD" onclick="toggleChampionAttributeFilter('TD')">
                 <span class="stat-img-icon stat-img-pen"></span>
-                <span>Dano Verdadeiro</span>
+                <span>Dano Verdadeiro (TD)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="Global"
-                onclick="toggleChampionAttributeFilter('Global')"
-              >
-                <i
-                  class="fa-solid fa-earth-americas"
-                  style="color: #06b6d4"
-                ></i>
-                <span>Presença Global</span>
+              <button type="button" class="filter-pill-btn" data-attr="GLOBAL" onclick="toggleChampionAttributeFilter('GLOBAL')">
+                <i class="fa-solid fa-earth-americas" style="color: #06b6d4"></i>
+                <span>Global (GLOBAL)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="Execute"
-                onclick="toggleChampionAttributeFilter('Execute')"
-              >
-                <i class="fa-solid fa-skull" style="color: #ef4444"></i>
-                <span>Execução</span>
+              <button type="button" class="filter-pill-btn" data-attr="BURST" onclick="toggleChampionAttributeFilter('BURST')">
+                <i class="fa-solid fa-burst" style="color: #ef4444"></i>
+                <span>Explosão de dano (BURST)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="Zone"
-                onclick="toggleChampionAttributeFilter('Zone')"
-              >
-                <i
-                  class="fa-solid fa-circle-radiation"
-                  style="color: #fb923c"
-                ></i>
-                <span>Controle de Zona</span>
+              <button type="button" class="filter-pill-btn" data-attr="ZONE" onclick="toggleChampionAttributeFilter('ZONE')">
+                <i class="fa-solid fa-circle-radiation" style="color: #fb923c"></i>
+                <span>Controle de Zona (ZONE)</span>
+              </button>
+              <button type="button" class="filter-pill-btn" data-attr="ENGAGE" onclick="toggleChampionAttributeFilter('ENGAGE')">
+                <i class="fa-solid fa-bolt" style="color: #facc15"></i>
+                <span>Iniciação (ENGAGE)</span>
+              </button>
+              <button type="button" class="filter-pill-btn" data-attr="PEEL" onclick="toggleChampionAttributeFilter('PEEL')">
+                <i class="fa-solid fa-hand-holding-heart" style="color: #34d399"></i>
+                <span>Proteção (PEEL)</span>
+              </button>
+              <button type="button" class="filter-pill-btn" data-attr="POKE" onclick="toggleChampionAttributeFilter('POKE')">
+                <i class="fa-solid fa-crosshairs" style="color: #38bdf8"></i>
+                <span>Alcance (POKE)</span>
+              </button>
+              <button type="button" class="filter-pill-btn" data-attr="SPLIT" onclick="toggleChampionAttributeFilter('SPLIT')">
+                <i class="fa-solid fa-code-branch" style="color: #a78bfa"></i>
+                <span>Pressão Lateral (SPLIT)</span>
+              </button>
+              <button type="button" class="filter-pill-btn" data-attr="DPS" onclick="toggleChampionAttributeFilter('DPS')">
+                <i class="fa-solid fa-infinity" style="color: #fb7185"></i>
+                <span>Dano Contínuo (DPS)</span>
+              </button>
+              <button type="button" class="filter-pill-btn" data-attr="TF" onclick="toggleChampionAttributeFilter('TF')">
+                <i class="fa-solid fa-people-group" style="color: #60a5fa"></i>
+                <span>Luta em Equipe (TF)</span>
               </button>
             </div>
           </div>
@@ -1069,95 +1007,101 @@
         </p>
       </div>
 
-      <!-- Discreet floating feedback button (bottom-right) -->
-      <button
-        type="button"
-        class="footer-feedback-btn"
-        id="feedbackOpenBtn"
-        onclick="toggleFeedbackWidget()"
-        aria-label="Enviar feedback ou mensagem para o desenvolvedor"
-        title="Feedback / Contato"
-      >
-        <i class="fa-solid fa-circle-question"></i>
-      </button>
+      <!-- Support / feedback area: the button lives exclusively inside the footer -->
+      <div class="footer-feedback-area">
+        <button
+          type="button"
+          class="footer-feedback-btn"
+          id="feedbackOpenBtn"
+          onclick="toggleFeedbackWidget()"
+          aria-label="Enviar feedback ou mensagem para o desenvolvedor"
+          title="Feedback / Contato"
+        >
+          <i class="fa-solid fa-circle-question"></i>
+        </button>
 
-      <!-- Feedback widget (small window, Hextech style) -->
-      <div
-        class="feedback-widget"
-        id="feedbackWidget"
-        role="dialog"
-        aria-modal="false"
-        aria-labelledby="feedbackWidgetTitle"
-      >
-        <div class="feedback-widget-header">
-          <span id="feedbackWidgetTitle"
-            ><i class="fa-solid fa-envelope"></i> Fale com o dev</span
-          >
-          <button
-            type="button"
-            class="feedback-widget-close"
-            id="feedbackCloseBtn"
-            onclick="closeFeedbackWidget()"
-            aria-label="Fechar janela de feedback"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+        <!-- Feedback widget (small window, Hextech style) -->
+        <div
+          class="feedback-widget"
+          id="feedbackWidget"
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="feedbackWidgetTitle"
+        >
+          <div class="feedback-widget-header">
+            <span id="feedbackWidgetTitle"
+              ><i class="fa-solid fa-envelope"></i> Suporte / Feedback</span
+            >
+            <button
+              type="button"
+              class="feedback-widget-close"
+              id="feedbackCloseBtn"
+              onclick="closeFeedbackWidget()"
+              aria-label="Fechar janela de feedback"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <form id="feedbackForm" novalidate>
+            <div class="feedback-field">
+              <label for="feedbackName">Nome</label>
+              <input
+                type="text"
+                id="feedbackName"
+                name="name"
+                placeholder="Seu nome"
+                autocomplete="name"
+              />
+              <span class="feedback-field-error" id="feedbackNameError"></span>
+            </div>
+            <div class="feedback-field">
+              <label for="feedbackEmail">E-mail</label>
+              <input
+                type="email"
+                id="feedbackEmail"
+                name="email"
+                placeholder="seu@email.com"
+                autocomplete="email"
+              />
+              <span class="feedback-field-error" id="feedbackEmailError"></span>
+            </div>
+            <div class="feedback-field">
+              <label for="feedbackMessage">Mensagem</label>
+              <textarea
+                id="feedbackMessage"
+                name="message"
+                rows="4"
+                placeholder="Escreva sua mensagem aqui..."
+              ></textarea>
+              <span class="feedback-field-error" id="feedbackMessageError"></span>
+            </div>
+            <button
+              type="submit"
+              class="feedback-submit-btn"
+              id="feedbackSubmitBtn"
+            >
+              <i class="fa-solid fa-paper-plane"></i> Enviar
+            </button>
+          </form>
         </div>
-        <form id="feedbackForm" novalidate>
-          <div class="feedback-field">
-            <label for="feedbackName">Nome</label>
-            <input
-              type="text"
-              id="feedbackName"
-              name="name"
-              placeholder="Seu nome"
-              autocomplete="name"
-            />
-            <span class="feedback-field-error" id="feedbackNameError"></span>
-          </div>
-          <div class="feedback-field">
-            <label for="feedbackEmail">E-mail</label>
-            <input
-              type="email"
-              id="feedbackEmail"
-              name="email"
-              placeholder="seu@email.com"
-              autocomplete="email"
-            />
-            <span class="feedback-field-error" id="feedbackEmailError"></span>
-          </div>
-          <div class="feedback-field">
-            <label for="feedbackMessage">Mensagem</label>
-            <textarea
-              id="feedbackMessage"
-              name="message"
-              rows="4"
-              placeholder="Escreva sua mensagem aqui..."
-            ></textarea>
-            <span class="feedback-field-error" id="feedbackMessageError"></span>
-          </div>
-          <button type="submit" class="feedback-submit-btn" id="feedbackSubmitBtn">
-            <i class="fa-solid fa-paper-plane"></i> Enviar
-          </button>
-        </form>
       </div>
     </footer>
 
     <!-- Modular JavaScript (classic files loaded in order) -->
-    <script src="../js/state.js?v=5"></script>
+    <script src="../js/state.js?v=7"></script>
     <script src="../js/utils.js?v=6"></script>
-    <script src="../js/champion-data.js?v=4"></script>
+    <script src="../js/champion-data.js?v=5"></script>
     <script src="../js/colors.js?v=6"></script>
     <script src="../js/ddragon.js?v=6"></script>
-    <script src="../js/champions.js?v=7"></script>
+    <script src="../js/champions.js?v=8"></script>
     <script src="../js/champion-modal.js?v=5"></script>
-    <script src="../js/items.js?v=8"></script>
-    <script src="../js/runes.js?v=6"></script>
-    <script src="../js/filters.js?v=7"></script>
+    <script src="../js/items.js?v=10"></script>
+    <script src="../js/runes.js?v=7"></script>
+    <script src="../js/filters.js?v=9"></script>
     <script src="../js/search.js?v=4"></script>
     <script src="../js/tooltip.js?v=4"></script>
-    <script src="../js/feedback.js?v=1"></script>
+    <script src="../js/feedback.js?v=2"></script>
     <script src="../js/interface.js?v=5"></script>
-    <script src="../js/app.js?v=6"></script>
+    <script src="../js/app.js?v=8"></script>
   </body>
 </html>

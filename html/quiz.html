@@ -21,10 +21,10 @@
 
     <!-- External CSS in the ../css/ folder -->
     <link rel="stylesheet" href="../css/style.css?v=5" />
-    <link rel="stylesheet" href="../css/layout.css?v=6" />
+    <link rel="stylesheet" href="../css/layout.css?v=8" />
     <link rel="stylesheet" href="../css/components.css?v=6" />
-    <link rel="stylesheet" href="../css/modals.css?v=4" />
-    <link rel="stylesheet" href="../css/quiz.css?v=2" />
+    <link rel="stylesheet" href="../css/modals.css?v=5" />
+    <link rel="stylesheet" href="../css/quiz.css?v=3" />
     <link rel="stylesheet" href="../css/responsive.css?v=4" />
 
     <!-- Site favicons / icons with their respective sizes -->
@@ -81,7 +81,7 @@
           </li>
           <li>
             <a href="quiz.html" class="nav-link active"
-              ><i class="fa-solid fa-circle-question"></i> Quiz</a
+              ><i class="fa-solid fa-brain"></i> Quiz</a
             >
           </li>
         </ul>
@@ -91,9 +91,6 @@
     <main class="quiz-page">
       <section class="quiz-hero">
         <div class="container">
-          <span class="quiz-kicker">
-            <i class="fa-solid fa-circle-question"></i> Quiz Hextech
-          </span>
           <h1 class="hero-title">Teste seu conhecimento</h1>
           <p class="hero-subtitle">
             Escolha uma categoria e responda perguntas sobre mapa, objetivos,
@@ -141,81 +138,83 @@
         </p>
       </div>
 
-      <!-- Discreet floating feedback button (bottom-right) -->
-      <button
-        type="button"
-        class="footer-feedback-btn"
-        id="feedbackOpenBtn"
-        onclick="toggleFeedbackWidget()"
-        aria-label="Enviar feedback ou mensagem para o desenvolvedor"
-        title="Feedback / Contato"
-      >
-        <i class="fa-solid fa-circle-question"></i>
-      </button>
+      <!-- Support / feedback area: the button lives exclusively inside the footer -->
+      <div class="footer-feedback-area">
+        <button
+          type="button"
+          class="footer-feedback-btn"
+          id="feedbackOpenBtn"
+          onclick="toggleFeedbackWidget()"
+          aria-label="Enviar feedback ou mensagem para o desenvolvedor"
+          title="Feedback / Contato"
+        >
+          <i class="fa-solid fa-circle-question"></i>
+        </button>
 
-      <!-- Feedback widget (small window, Hextech style) -->
-      <div
-        class="feedback-widget"
-        id="feedbackWidget"
-        role="dialog"
-        aria-modal="false"
-        aria-labelledby="feedbackWidgetTitle"
-      >
-        <div class="feedback-widget-header">
-          <span id="feedbackWidgetTitle"
-            ><i class="fa-solid fa-envelope"></i> Fale com o dev</span
-          >
-          <button
-            type="button"
-            class="feedback-widget-close"
-            id="feedbackCloseBtn"
-            onclick="closeFeedbackWidget()"
-            aria-label="Fechar janela de feedback"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+        <!-- Feedback widget (small window, Hextech style) -->
+        <div
+          class="feedback-widget"
+          id="feedbackWidget"
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="feedbackWidgetTitle"
+        >
+          <div class="feedback-widget-header">
+            <span id="feedbackWidgetTitle"
+              ><i class="fa-solid fa-envelope"></i> Suporte / Feedback</span
+            >
+            <button
+              type="button"
+              class="feedback-widget-close"
+              id="feedbackCloseBtn"
+              onclick="closeFeedbackWidget()"
+              aria-label="Fechar janela de feedback"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <form id="feedbackForm" novalidate>
+            <div class="feedback-field">
+              <label for="feedbackName">Nome</label>
+              <input
+                type="text"
+                id="feedbackName"
+                name="name"
+                placeholder="Seu nome"
+                autocomplete="name"
+              />
+              <span class="feedback-field-error" id="feedbackNameError"></span>
+            </div>
+            <div class="feedback-field">
+              <label for="feedbackEmail">E-mail</label>
+              <input
+                type="email"
+                id="feedbackEmail"
+                name="email"
+                placeholder="seu@email.com"
+                autocomplete="email"
+              />
+              <span class="feedback-field-error" id="feedbackEmailError"></span>
+            </div>
+            <div class="feedback-field">
+              <label for="feedbackMessage">Mensagem</label>
+              <textarea
+                id="feedbackMessage"
+                name="message"
+                rows="4"
+                placeholder="Escreva sua mensagem aqui..."
+              ></textarea>
+              <span class="feedback-field-error" id="feedbackMessageError"></span>
+            </div>
+            <button type="submit" class="feedback-submit-btn" id="feedbackSubmitBtn">
+              <i class="fa-solid fa-paper-plane"></i> Enviar
+            </button>
+          </form>
         </div>
-        <form id="feedbackForm" novalidate>
-          <div class="feedback-field">
-            <label for="feedbackName">Nome</label>
-            <input
-              type="text"
-              id="feedbackName"
-              name="name"
-              placeholder="Seu nome"
-              autocomplete="name"
-            />
-            <span class="feedback-field-error" id="feedbackNameError"></span>
-          </div>
-          <div class="feedback-field">
-            <label for="feedbackEmail">E-mail</label>
-            <input
-              type="email"
-              id="feedbackEmail"
-              name="email"
-              placeholder="seu@email.com"
-              autocomplete="email"
-            />
-            <span class="feedback-field-error" id="feedbackEmailError"></span>
-          </div>
-          <div class="feedback-field">
-            <label for="feedbackMessage">Mensagem</label>
-            <textarea
-              id="feedbackMessage"
-              name="message"
-              rows="4"
-              placeholder="Escreva sua mensagem aqui..."
-            ></textarea>
-            <span class="feedback-field-error" id="feedbackMessageError"></span>
-          </div>
-          <button type="submit" class="feedback-submit-btn" id="feedbackSubmitBtn">
-            <i class="fa-solid fa-paper-plane"></i> Enviar
-          </button>
-        </form>
       </div>
     </footer>
 
-    <script src="../js/feedback.js?v=1"></script>
+    <script src="../js/feedback.js?v=2"></script>
     <script src="../data/quiz-fallback.js?v=1"></script>
     <script src="../js/quiz.js?v=3"></script>
   </body>

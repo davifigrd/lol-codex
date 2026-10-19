@@ -6,6 +6,10 @@ function filterChampions() {
     const searchInput = document.getElementById('champSearch');
     const query = normalizeSearchText(searchInput ? searchInput.value : '');
 
+    // Shows/hides the clear "X" according to the typed text
+    const clearBtn = document.getElementById('clearChampSearchBtn');
+    if (clearBtn) clearBtn.style.display = searchInput && searchInput.value.length > 0 ? 'flex' : 'none';
+
     const filteredEntries = allChampions.filter(champ => {
         const champRoles = getChampionRoles(champ);
 
@@ -13,9 +17,9 @@ function filterChampions() {
         const matchRole = activeRoleFilters.size === 0 ||
             [...activeRoleFilters].every(r => champRoles.includes(r));
 
-        // Class (multi-selection — shows champions with ANY checked class)
+        // Class (multi-selection — a champion must have ALL checked classes)
         const matchClass = activeClassFilters.size === 0 ||
-            [...activeClassFilters].some(c => championHasClass(champ, c));
+            [...activeClassFilters].every(c => championHasClass(champ, c));
 
         // Attribute / playstyle (multi-selection — must have ALL checked attributes,
         // just like the item filter, to really "funnel" the search)
@@ -188,7 +192,7 @@ function filterItems() {
 
     // Show/hide the clear-search button
     const clearBtn = document.getElementById('clearItemSearchBtn');
-    if (clearBtn) clearBtn.style.display = (searchInput && searchInput.value.length > 0) ? 'block' : 'none';
+    if (clearBtn) clearBtn.style.display = (searchInput && searchInput.value.length > 0) ? 'flex' : 'none';
 
     const filteredEntries = validSRItems.filter(item => {
         // Searches ONLY by item name (no description, no tags)
@@ -318,12 +322,13 @@ function clearItemSearch() {
     filterItems();
 }
 
-function toggleItemDescription() {
-    itemCardsInfoMode = !itemCardsInfoMode;
-    const grid = document.getElementById('items-grid');
-    const btn = document.getElementById('itemInfoToggleBtn');
-    if (grid) grid.classList.toggle('hide-item-desc', itemCardsInfoMode);
-    if (btn) btn.classList.toggle('active', itemCardsInfoMode);
+function clearChampionSearch() {
+    const searchInput = document.getElementById('champSearch');
+    if (searchInput) {
+        searchInput.value = '';
+        searchInput.focus();
+    }
+    filterChampions();
 }
 
 // Readable labels for the filter chips

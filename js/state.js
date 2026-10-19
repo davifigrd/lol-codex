@@ -29,8 +29,6 @@ let activeItemCategory = 'all';
 
 // New attribute filter system (multi-selection via mini window)
 let activeAttributeFilters = new Set();
-// Global "Info" mode: replaces card descriptions with the ultra-summary bullets
-let itemCardsInfoMode = false;
 
 // Champion filters (mini window): classes and attributes/playstyles
 let activeClassFilters = new Set();

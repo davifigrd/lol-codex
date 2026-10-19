@@ -223,6 +223,12 @@ img.stat-img-icon {
   background: rgba(6, 182, 212, 0.08) !important;
   box-shadow: none !important;
 }
+.stat-badge-shield {
+  border-color: rgba(34, 211, 238, 0.35) !important;
+  color: #22d3ee !important;
+  background: rgba(34, 211, 238, 0.08) !important;
+  box-shadow: none !important;
+}
 .stat-badge-as {
   border-color: rgba(245, 158, 11, 0.35) !important;
   color: #fbbf24 !important;

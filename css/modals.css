@@ -477,6 +477,7 @@
 
 /* Footer */
 footer {
+  position: relative;
   margin-top: auto;
   background: var(--bg-panel);
   border-top: 1px solid var(--border-color);

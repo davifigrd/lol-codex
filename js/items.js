@@ -44,6 +44,41 @@ const EXCLUDED_ITEM_IDS = new Set([
     '1105', // Duplicata interna de Broto de Esmagamusgo
     '1106', // Duplicata interna de Cria de Andabrisas
     '1107', // Duplicata interna de Filhote de Garrabrasa
+    // Guardian / ARAM-only items that still pass the Summoner's Rift map check
+    '2051', // Berrante do Guardião
+    '3112', // Orbe do Guardião
+    '3177', // Lâmina do Guardião
+    '3184', // Martelo do Guardião
+]);
+
+// Defensive name-based blocklist: alternate-mode / disabled items that must
+// never appear in the 5v5 list (normalized, accent-insensitive comparison).
+const EXCLUDED_ITEM_NAMES = new Set([
+    'berrante do guardiao',
+    'orbe do guardiao',
+    'lamina do guardiao',
+    'martelo do guardiao',
+    'diadema de cancoes',
+]);
+
+// All Summoner's Rift boots, including the newer tier-3 boots whose DDragon
+// entry no longer carries the "Boots" tag (e.g. 3172 Grevas Bélicas).
+const BOOTS_ITEM_IDS = new Set([
+    '1001', // Botas
+    '3006', // Grevas do Berserker
+    '3009', // Botas da Rapidez
+    '3010', // Solas Simbióticas
+    '3020', // Sapatos do Feiticeiro
+    '3047', // Botas Galvanizadas de Aço
+    '3111', // Passos de Mercúrio
+    '3158', // Botas Ionianas da Lucidez
+    '3168', // Caminho Imortal
+    '3170', // Marcha Célere
+    '3171', // Lucidez Escarlate
+    '3172', // Grevas Bélicas
+    '3173', // Esmagadores Acorrentados
+    '3174', // Mobilização Blindada
+    '3175', // Sapatos Enfeitiçados
 ]);
 
 // Known starters and consumables
@@ -80,7 +115,7 @@ function getItemRarity(item) {
     const gold = item.gold?.total || 0;
 
     // 1. Boots
-    if (tags.includes('Boots') || ['1001', '3006', '3009', '3010', '3020', '3047', '3111', '3158'].includes(item.id)) {
+    if (tags.includes('Boots') || BOOTS_ITEM_IDS.has(item.id)) {
         return 'BOOTS';
     }
 
@@ -125,9 +160,11 @@ async function loadItemsFromDataDragon() {
         allItems = data.data || {};
 
         // Filters strictly to valid, active Summoner's Rift items
+        const seenItemNames = new Set();
         validSRItems = Object.entries(allItems)
             .filter(([id, item]) => {
                 if (EXCLUDED_ITEM_IDS.has(id)) return false;
+                if (EXCLUDED_ITEM_NAMES.has(normalizeSearchText(item.name))) return false;
                 // Arena / alternate-mode copies reuse 6-digit IDs (32xxxx / 66xxxx)
                 // and would otherwise duplicate the real 5v5 item names.
                 if (id.length > 4) return false;
@@ -136,6 +173,13 @@ async function loadItemsFromDataDragon() {
                 const availableInStore = item.inStore !== false;
                 const notSpecialChamp = !item.requiredChampion;
                 return inSummonersRift && canPurchase && availableInStore && notSpecialChamp;
+            })
+            // Defensive de-duplication: never show two cards with the same name
+            .filter(([, item]) => {
+                const nameKey = normalizeSearchText(item.name);
+                if (seenItemNames.has(nameKey)) return false;
+                seenItemNames.add(nameKey);
+                return true;
             })
             .map(([id, item]) => ({ id, ...item }))
             .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
@@ -297,17 +341,15 @@ function renderItems(itemList) {
 /**
  * Builds the card HTML for an item with:
  * - Direct colored border on the image icon based on rarity
- * - Info button on the card for quick ultra-summarized bullets
- * - Resumido mode replacing official text with author text
+ * - Attribute topic lines (each stat the item grants); items without stat
+ *   topics (consumables/starters) fall back to the description text.
+ * - Resumido mode affecting that fallback description
  */
 function buildItemCardHTML(item, rarityKey) {
     const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${item.id}.png`;
     const priceValue = item.gold && item.gold.total ? item.gold.total : 0;
     const rarityInfo = ITEM_RARITY[rarityKey] || ITEM_RARITY.BASIC;
     const rarityColor = rarityInfo.color;
-
-    // Visual attribute badges below item name
-    const attributeIcons = buildItemAttributeIcons(item);
 
     // Summary vs detailed mode:
     // Resumido = author text from data/item-resum.json / item-summary.json
@@ -320,8 +362,13 @@ function buildItemCardHTML(item, rarityKey) {
         displayText = item.plaintext || stripHtmlTags(item.description || '') || 'Item de Summoner\'s Rift.';
     }
 
-    // Ultra-summarized bullets card
-    const infoCardHtml = buildItemInfoCard(item);
+    // Attribute topics: the cards show ONLY the item's stat topics. Items
+    // without stat topics (consumables/starters) fall back to the description.
+    const infoTopics = getItemStatTopics(item);
+    const hasInfoTopics = infoTopics.length > 0;
+    const bodyHtml = hasInfoTopics
+        ? buildItemInfoCard(item, infoTopics)
+        : `<p class="item-stats">${displayText}</p>`;
 
     return `
         <div class="item-card" data-item-id="${item.id}" onclick="openItemModal('${item.id}')" onmouseenter="applyCardHoverColor(this, '${iconUrl}')">
@@ -332,139 +379,89 @@ function buildItemCardHTML(item, rarityKey) {
                 <div class="item-title-wrap">
                     <div class="item-name-row" style="display:flex; align-items:center; justify-content:space-between; gap:0.4rem;">
                         <h4 title="${item.name}">${item.name}</h4>
-                        <div style="display:flex; align-items:center; gap:0.45rem;">
-                            <span class="item-cost"><i class="fa-solid fa-coins" style="color:var(--gold-bright);"></i> ${priceValue}</span>
-                            <button type="button" class="item-card-info-btn" onclick="toggleCardQuickInfo(event, '${item.id}')" title="Ver resumo em tópicos">
-                                <i class="fa-solid fa-circle-info"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- Attribute badges below the item name -->
-                    <div class="item-badges">
-                        ${attributeIcons}
+                        <span class="item-cost"><i class="fa-solid fa-coins" style="color:var(--gold-bright);"></i> ${priceValue}</span>
                     </div>
                 </div>
             </div>
-            <p class="item-stats">${displayText}</p>
-            ${infoCardHtml}
+            ${bodyHtml}
         </div>
     `;
 }
 
-/**
- * Toggles quick ultra-summarized bullets on an individual card
- */
-function toggleCardQuickInfo(event, itemId) {
-    if (event) event.stopPropagation();
-    const bulletsEl = document.getElementById(`quick-bullets-${itemId}`);
-    const btn = event?.currentTarget;
-    if (!bulletsEl) return;
+// Icon mapping for the attribute topic lines (label -> masked stat icon)
+const ITEM_TOPIC_ICON_RULES = [
+    { test: /dano de ataque/i,                icon: `<span class="stat-img-icon stat-img-ad" aria-hidden="true"></span>` },
+    { test: /poder de habilidade/i,           icon: `<span class="stat-img-icon stat-img-ap" aria-hidden="true"></span>` },
+    { test: /velocidade de ataque/i,          icon: `<span class="stat-img-icon stat-img-as" aria-hidden="true"></span>` },
+    { test: /dano de acerto cr[ií]tico/i,     icon: `<span class="stat-img-icon stat-img-crit" aria-hidden="true"></span>` },
+    { test: /acerto cr[ií]tico/i,             icon: `<span class="stat-img-icon stat-img-crit" aria-hidden="true"></span>` },
+    { test: /roubo de vida/i,                 icon: `<span class="stat-img-icon stat-img-ls" aria-hidden="true"></span>` },
+    { test: /vampirismo/i,                    icon: `<span class="stat-img-icon stat-img-vamp" aria-hidden="true"></span>` },
+    { test: /letalidade/i,                    icon: `<span class="stat-img-icon stat-img-let" aria-hidden="true"></span>` },
+    { test: /penetra[çc][aã]o m[aá]gica/i,    icon: `<span class="stat-img-icon stat-img-magicpen" aria-hidden="true"></span>` },
+    { test: /penetra[çc][aã]o de armadura/i,  icon: `<span class="stat-img-icon stat-img-pen" aria-hidden="true"></span>` },
+    { test: /cura e resist[êe]ncia do escudo/i, icon: `<i class="fa-solid fa-heart-pulse" style="color:#34d399;font-size:13px;"></i>` },
+    { test: /tenacidade/i,                    icon: `<span class="stat-img-icon stat-img-tenacity" aria-hidden="true"></span>` },
+    { test: /resist[êe]ncia m[aá]gica/i,      icon: `<span class="stat-img-icon stat-img-mr" aria-hidden="true"></span>` },
+    { test: /acelera[çc][aã]o de habilidade/i, icon: `<span class="stat-img-icon stat-img-cdr" aria-hidden="true"></span>` },
+    { test: /redu[çc][aã]o do tempo de recarga/i, icon: `<span class="stat-img-icon stat-img-cdr" aria-hidden="true"></span>` },
+    { test: /velocidade de movimento/i,       icon: `<span class="stat-img-icon stat-img-mov" aria-hidden="true"></span>` },
+    { test: /regenera[çc][aã]o de vida/i,     icon: `<span class="stat-img-icon stat-img-hpregen" aria-hidden="true"></span>` },
+    { test: /regenera[çc][aã]o de mana/i,     icon: `<span class="stat-img-icon stat-img-manaregen" aria-hidden="true"></span>` },
+    { test: /armadura/i,                      icon: `<span class="stat-img-icon stat-img-armor" aria-hidden="true"></span>` },
+    { test: /for[çc]a adaptativa/i,           icon: `<span class="stat-img-icon stat-img-ap" aria-hidden="true"></span>` },
+    { test: /ouro/i,                          icon: `<i class="fa-solid fa-coins" style="color:var(--gold-bright);font-size:12px;"></i>` },
+    { test: /vida/i,                          icon: `<span class="stat-img-icon stat-img-health" aria-hidden="true"></span>` },
+    { test: /\bmana\b/i,                      icon: `<span class="stat-img-icon stat-img-mana" aria-hidden="true"></span>` },
+];
 
-    const isExpanded = bulletsEl.classList.contains('expanded');
-    bulletsEl.classList.toggle('expanded', !isExpanded);
-    bulletsEl.classList.toggle('collapsed', isExpanded);
-    if (btn) btn.classList.toggle('active', !isExpanded);
-    // The summary replaces the description on this specific card
-    const card = bulletsEl.closest('.item-card');
-    if (card) card.classList.toggle('info-open', !isExpanded);
+function pickTopicIcon(label) {
+    for (const rule of ITEM_TOPIC_ICON_RULES) {
+        if (rule.test.test(label)) return rule.icon;
+    }
+    return `<i class="fa-solid fa-gem" style="color:var(--gold-bright);font-size:12px;"></i>`;
 }
 
 /**
- * Builds the ultra-summarized info card (shown on Info toggle).
- * Uses yellow bullets (◆) with keywords matching Hextech aesthetic.
+ * Extracts the attribute topics from an item, reading the clean <stats>
+ * block of the DDragon description (e.g. "<attention>30</attention> de Dano
+ * de Ataque"). Returns [{ icon, text }] with only stat lines.
  */
-function buildItemInfoCard(item) {
-    const summaryData = itemSummaries[item.id];
-    const bullets = [];
-
-    // 1. Key numerical stats
-    const stats = item.stats || {};
-    const statMap = [
-        ['FlatPhysicalDamageMod',   v => `+${Math.round(v)} Dano de Ataque`],
-        ['FlatMagicDamageMod',      v => `+${Math.round(v)} Poder de Habilidade`],
-        ['FlatArmorMod',            v => `+${Math.round(v)} Armadura`],
-        ['FlatSpellBlockMod',       v => `+${Math.round(v)} Resistência Mágica`],
-        ['FlatHPPoolMod',           v => `+${Math.round(v)} Vida`],
-        ['FlatMPPoolMod',           v => `+${Math.round(v)} Mana`],
-        ['FlatCritChanceMod',       v => `+${Math.round(v*100)}% Acerto Crítico`],
-        ['PercentAttackSpeedMod',   v => `+${Math.round(v*100)}% Vel. de Ataque`],
-        ['PercentLifeStealMod',     v => `+${Math.round(v*100)}% Roubo de Vida`],
-        ['FlatMovementSpeedMod',    v => `+${Math.round(v)} Vel. de Movimento`],
-        ['FlatHPRegenMod',         v => `+${Math.round(v)} Regen. de Vida`],
-    ];
-
-    statMap.forEach(([key, fmt]) => {
-        if (stats[key] && stats[key] !== 0) {
-            bullets.push(`<span class="bullet-stat-val">${fmt(stats[key])}</span>`);
-        }
-    });
-
-    // 2. Extract keywords / passives from description if available
+function getItemStatTopics(item) {
+    const topics = [];
     const desc = item.description || '';
-    const cleanDesc = stripHtmlTags(desc);
+    const statsBlock = desc.match(/<stats>([\s\S]*?)<\/stats>/i);
+    if (!statsBlock) return topics;
 
-    // Check lethality
-    if (desc.toLowerCase().includes('letalidade')) {
-        const letMatch = desc.match(/(\d+)\s*letalidade/i) || cleanDesc.match(/letalidade/i);
-        if (letMatch && letMatch[1]) {
-            bullets.push(`<span class="bullet-keyword">Letalidade:</span> +${letMatch[1]}`);
-        } else {
-            bullets.push(`<span class="bullet-keyword">Letalidade</span>`);
-        }
-    }
+    statsBlock[1].split(/<br\s*\/?>/i).forEach(rawLine => {
+        const plain = rawLine.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        if (!plain) return;
 
-    // Check armor pen
-    if (desc.toLowerCase().includes('penetra') && desc.toLowerCase().includes('armadura') && !desc.toLowerCase().includes('letalidade')) {
-        const penMatch = desc.match(/(\d+)%\s*de penetra/i);
-        if (penMatch) {
-            bullets.push(`<span class="bullet-keyword">Pen. Armadura:</span> +${penMatch[1]}%`);
-        } else {
-            bullets.push(`<span class="bullet-keyword">Penetração de Armadura %</span>`);
-        }
-    }
+        const match = plain.match(/^([\d.,]+%?)\s+(?:de\s+)?(.+)$/i);
+        if (!match) return;
 
-    // Check magic pen
-    if (desc.toLowerCase().includes('penetra') && (desc.toLowerCase().includes('mágica') || desc.toLowerCase().includes('magica'))) {
-        bullets.push(`<span class="bullet-keyword">Penetração Mágica</span>`);
-    }
+        const value = match[1];
+        const label = match[2].trim();
+        if (!label) return;
+        if (/^0+([.,]0+)?%?$/.test(value)) return; // skip zero-value stats
 
-    // Check ability haste / CDR
-    if (item.tags?.includes('AbilityHaste') || desc.toLowerCase().includes('aceleração de habilidade')) {
-        const ahMatch = desc.match(/(\d+)\s*acelera/i);
-        if (ahMatch) {
-            bullets.push(`<span class="bullet-keyword">Acel. de Habilidade:</span> +${ahMatch[1]}`);
-        } else {
-            bullets.push(`<span class="bullet-keyword">Aceleração de Habilidade</span>`);
-        }
-    }
-
-    // Check named passives
-    const passiveNames = [];
-    const passiveRegex = /<passive>([^<]+)<\/passive>|<unique>([^<]+)<\/unique>/gi;
-    let pMatch;
-    while ((pMatch = passiveRegex.exec(desc)) !== null) {
-        const pName = (pMatch[1] || pMatch[2] || '').trim();
-        if (pName && !passiveNames.includes(pName) && pName.length < 35) {
-            passiveNames.push(pName);
-        }
-    }
-    passiveNames.slice(0, 2).forEach(pName => {
-        bullets.push(`<span class="bullet-keyword">${pName}</span>`);
+        topics.push({ icon: pickTopicIcon(label), text: `+${value} ${label}` });
     });
 
-    // Author keywords if present
-    if (summaryData?.keywords && Array.isArray(summaryData.keywords)) {
-        summaryData.keywords.slice(0, 2).forEach(kw => {
-            bullets.push(`<span class="bullet-keyword">${kw}</span>`);
-        });
-    }
+    return topics;
+}
 
-    if (bullets.length === 0) {
-        bullets.push(`<span class="bullet-keyword">Item de Utilidade</span>`);
-    }
+/**
+ * Builds the attribute topic list shown on every item card.
+ * Each line = attribute icon + stat line (e.g. "+30 Dano de Ataque").
+ * Explanatory/passive wording is intentionally NOT included.
+ */
+function buildItemInfoCard(item, topics) {
+    const list = topics || getItemStatTopics(item);
+    if (list.length === 0) return '';
 
-    const bulletHtml = bullets.slice(0, 4).map(b =>
-        `<div class="quick-bullet-item"><span class="hextech-bullet">◆</span> ${b}</div>`
+    const bulletHtml = list.map(t =>
+        `<div class="quick-bullet-item">${t.icon}<span class="quick-bullet-text">${t.text}</span></div>`
     ).join('');
 
     return `

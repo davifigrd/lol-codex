@@ -62,7 +62,12 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
 }
 
 .lol-tree-tab {
@@ -80,6 +85,8 @@
   letter-spacing: 0.05em;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .lol-tree-tab img {
@@ -391,13 +398,25 @@
 }
 
 .lol-shard-row-label {
-  width: 18px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.4rem;
+  color: #c8aa6e;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  min-width: 104px;
+}
+
+.lol-shard-row-label em {
+  font-style: normal;
+}
+
+.lol-shard-row-label i {
   color: #7e879b;
   font-size: 0.72rem;
-  flex-shrink: 0;
 }
 
 .lol-shard-badges-group {
@@ -678,10 +697,45 @@
 }
 
 .lol-compare-checkbox-label input[type="checkbox"] {
-  accent-color: #c89b3c;
-  width: 15px;
-  height: 15px;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
   cursor: pointer;
+  background: #060e1e;
+  border: 1.5px solid #5b5a56;
+  border-radius: 3px;
+  position: relative;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.lol-compare-checkbox-label input[type="checkbox"]:hover {
+  border-color: #c89b3c;
+  box-shadow: 0 0 8px rgba(200, 155, 60, 0.35);
+}
+
+.lol-compare-checkbox-label input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, rgba(200, 155, 60, 0.35), rgba(240, 178, 50, 0.15));
+  border-color: #c8aa6e;
+  box-shadow: 0 0 10px rgba(240, 178, 50, 0.45);
+}
+
+.lol-compare-checkbox-label input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid #f0e6d2;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s ease;
+}
+
+.lol-compare-checkbox-label input[type="checkbox"]:checked::after {
+  transform: rotate(45deg) scale(1);
 }
 
 /* FULL EXPLANATORY GUIDE SECTION (Runes explained one by one) */
