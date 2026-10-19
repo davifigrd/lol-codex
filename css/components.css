@@ -366,3 +366,37 @@
   background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
 }
 
+/* ==========================================================================
+   EFFECT COLORS (js/colors.js — colorizeEffectTags / colorizeEffectTerms)
+   Thematic tints for damage types, crowd control (stun) and shields.
+   ========================================================================== */
+.fx-dano-fisico {
+  color: #f26d6d;
+  font-weight: 600;
+}
+
+.fx-dano-magico {
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+.fx-dano-verdadeiro {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.fx-stun {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.fx-shield {
+  color: #34d399;
+  font-weight: 600;
+}
+
+.fx-cura {
+  color: #86efac;
+  font-weight: 600;
+}
+

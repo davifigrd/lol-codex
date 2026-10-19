@@ -319,39 +319,35 @@ function clearItemSearch() {
 }
 
 function toggleItemDescription() {
-    showItemCardDescriptions = !showItemCardDescriptions;
+    itemCardsInfoMode = !itemCardsInfoMode;
     const grid = document.getElementById('items-grid');
     const btn = document.getElementById('itemInfoToggleBtn');
-    if (grid) {
-        if (showItemCardDescriptions) {
-            grid.classList.remove('hide-item-desc');
-        } else {
-            grid.classList.add('hide-item-desc');
-        }
-    }
-    if (btn) btn.classList.toggle('active', showItemCardDescriptions);
+    if (grid) grid.classList.toggle('hide-item-desc', itemCardsInfoMode);
+    if (btn) btn.classList.toggle('active', itemCardsInfoMode);
 }
 
 // Readable labels for the filter chips
 const ATTRIBUTE_LABELS = {
-    AD: 'Dano de Ataque (AD)',
-    AP: 'Poder de Habilidade (AP)',
-    AS: 'Velocidade de Ataque (AS)',
-    CRIT: 'Acerto Crítico (CRIT)',
-    LS: 'Roubo de Vida (LS)',
-    VAMP: 'Onivampirismo',
-    ARMOR_PEN: 'Letalidade / Pen. Armadura',
-    MAGIC_PEN: 'Penetração Mágica',
-    HP: 'Vida / Saúde (LP)',
-    ARMOR: 'Armadura (ARMOR)',
-    MR: 'Resistência Mágica (MR)',
-    HP_REGEN: 'Regeneração de Vida',
-    TENACITY: 'Tenacidade / Resist. Lentidão',
-    CDR: 'Aceleração de Habilidade (CDR)',
-    MANA: 'Mana',
-    MANA_REGEN: 'Regeneração de Mana',
-    MOV: 'Velocidade de Movimento / Botas',
-    HEAL_SHIELD: 'Cura e Resistência do Escudo'
+    AD:         'Dano de Ataque (AD)',
+    AP:         'Poder de Habilidade (AP)',
+    AS:         'Velocidade de Ataque (AS)',
+    CRIT:       'Acerto Crítico (CRIT)',
+    LS:         'Roubo de Vida (LS)',
+    VAMP:       'Vampirismo (VAMP)',
+    LET:        'Letalidade (LET)',
+    ARMOR_PEN:  'Penetração de Armadura (A. PEN)',
+    MAGIC_PEN:  'Penetração Mágica (M. PEN)',
+    HP:         'Vida (HP)',
+    ARMOR:      'Armadura (ARMOR)',
+    MR:         'Resistência Mágica (MR)',
+    HP_REGEN:   'Regeneração de Vida (HP5)',
+    TENACITY:   'Tenacidade (TEN)',
+    SR:         'Resist. Lentidão (SR)',
+    CDR:        'Aceleração de Habilidade (CDR)',
+    MANA:       'Mana (MANA)',
+    MANA_REGEN: 'Regeneração de Mana (MANA REG.)',
+    MOV:        'Velocidade de Movimento (MS)',
+    HEAL_SHIELD:'Cura e Resist. do Escudo (E&S)'
 };
 
 function updateItemFilterUI() {
@@ -418,13 +414,24 @@ function itemHasAttribute(item, attr) {
         case 'CRIT':
             return tags.includes('CriticalStrike') || Boolean(stats.FlatCritChanceMod);
         case 'LS':
+            // Strictly life steal (not omnivamp)
             return tags.includes('LifeSteal') || Boolean(stats.PercentLifeStealMod);
         case 'VAMP':
-            return tags.includes('SpellVamp') || tags.includes('Omnivamp') || desc.includes('onivampirismo') || desc.includes('omnivamp');
+            // Omnivamp / spell vamp (separate from LS)
+            return tags.includes('SpellVamp') || tags.includes('Omnivamp')
+                || desc.includes('onivampirismo') || desc.includes('omnivamp');
+        case 'LET':
+            // Flat lethality
+            return tags.includes('ArmorPenetration')
+                && (desc.includes('letalidade') || !desc.includes('%'));
         case 'ARMOR_PEN':
-            return tags.includes('ArmorPenetration') || desc.includes('letalidade') || desc.includes('penetra') && desc.includes('armadura');
+            // % armor penetration (A. PEN), separate from flat lethality
+            return (tags.includes('ArmorPenetration') && desc.includes('%') && desc.includes('armadura'))
+                || (desc.includes('penetra') && desc.includes('armadura') && !desc.includes('letalidade'));
         case 'MAGIC_PEN':
-            return tags.includes('MagicPenetration') || desc.includes('penetra') && desc.includes('mágica');
+            // Magic penetration — correct icon (not armor)
+            return tags.includes('MagicPenetration')
+                || (desc.includes('penetra') && (desc.includes('mágica') || desc.includes('magica')));
         case 'HP':
             return tags.includes('Health') || Boolean(stats.FlatHPPoolMod);
         case 'ARMOR':
@@ -434,7 +441,11 @@ function itemHasAttribute(item, attr) {
         case 'HP_REGEN':
             return tags.includes('HealthRegen') || Boolean(stats.FlatHPRegenMod) || Boolean(stats.PercentHPRegenMod);
         case 'TENACITY':
-            return tags.includes('Tenacity') || desc.includes('tenacidade') || desc.includes('resist') && desc.includes('lentidão');
+            // Strictly tenacity — NOT slow resistance
+            return tags.includes('Tenacity') || desc.includes('tenacidade');
+        case 'SR':
+            // Slow resistance — separate from tenacity
+            return desc.includes('resist') && desc.includes('lentidão');
         case 'CDR':
             return tags.includes('CooldownReduction') || tags.includes('AbilityHaste');
         case 'MANA':
@@ -442,9 +453,11 @@ function itemHasAttribute(item, attr) {
         case 'MANA_REGEN':
             return tags.includes('ManaRegen') || Boolean(stats.FlatMPRegenMod) || Boolean(stats.PercentMPRegenMod);
         case 'MOV':
-            return tags.includes('Boots') || tags.includes('NonbootsMovement') || Boolean(stats.FlatMovementSpeedMod) || Boolean(stats.PercentMovementSpeedMod);
+            return tags.includes('Boots') || tags.includes('NonbootsMovement')
+                || Boolean(stats.FlatMovementSpeedMod) || Boolean(stats.PercentMovementSpeedMod);
         case 'HEAL_SHIELD':
-            return tags.includes('HealAndShieldPower') || desc.includes('cura e') || desc.includes('escudo') && desc.includes('poder');
+            return tags.includes('HealAndShieldPower')
+                || (desc.includes('cura') && desc.includes('escudo'));
         default:
             return false;
     }

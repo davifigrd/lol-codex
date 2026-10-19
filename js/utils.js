@@ -120,6 +120,7 @@ function translateTag(tag) {
    ========================================================================== */
 let pageScrollLocked = false;
 let pageScrollSavedPadding = '';
+let pageScrollSavedOverflow = '';
 
 function lockPageScroll() {
     if (pageScrollLocked) return;
@@ -129,15 +130,15 @@ function lockPageScroll() {
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     pageScrollSavedPadding = document.body.style.paddingRight;
     if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`;
-    document.body.classList.add('scroll-locked');
-    document.documentElement.classList.add('scroll-locked');
+    // Locks the page scroll through the inline style, as required by the spec.
+    pageScrollSavedOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 }
 
 function unlockPageScroll() {
     if (!pageScrollLocked) return;
     pageScrollLocked = false;
-    document.body.classList.remove('scroll-locked');
-    document.documentElement.classList.remove('scroll-locked');
+    document.body.style.overflow = pageScrollSavedOverflow;
     document.body.style.paddingRight = pageScrollSavedPadding;
 }
 

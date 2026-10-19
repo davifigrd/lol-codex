@@ -280,6 +280,69 @@ function colorizeSkillKeywords(textValue) {
     }).join('');
 }
 
+/* ==========================================================================
+   4.2.1. EFFECT COLORS — Physical/Magic damage, stun and shield
+   Official Data Dragon tags (<physicalDamage>, <magicDamage>, <status>,
+   <shield>...) and plain PT-BR terms are wrapped in themed spans so the
+   player instantly reads the nature of the effect.
+   ========================================================================== */
+const EFFECT_TAG_CLASS_MAP = {
+    physicaldamage: 'fx-dano-fisico',   // Physical damage — red
+    magicdamage: 'fx-dano-magico',      // Magic damage — blue/purple
+    truedamage: 'fx-dano-verdadeiro',   // True damage — white/gray
+    status: 'fx-stun',                  // Crowd control / stun — yellow
+    stun: 'fx-stun',
+    root: 'fx-stun',
+    taunt: 'fx-stun',
+    charm: 'fx-stun',
+    fear: 'fx-stun',
+    silence: 'fx-stun',
+    shield: 'fx-shield',                // Shield — green
+    healing: 'fx-cura'                  // Healing — light green
+};
+
+// Converts official DDragon effect tags into themed spans
+function colorizeEffectTags(textValue) {
+    if (!textValue) return textValue || '';
+    return String(textValue).replace(
+        /<(physicalDamage|magicDamage|trueDamage|status|stun|root|taunt|charm|fear|silence|shield|healing)>(.*?)<\/\1>/gi,
+        (match, tag, inner) => {
+            const cssClass = EFFECT_TAG_CLASS_MAP[tag.toLowerCase()];
+            return cssClass ? `<span class="${cssClass}">${inner}</span>` : match;
+        }
+    );
+}
+
+// Plain PT-BR/EN effect terms (used on text that carries no official tag)
+const EFFECT_TERM_PATTERNS = [
+    { regex: /\b(dano f[íi]sico)\b/gi, cssClass: 'fx-dano-fisico' },
+    { regex: /\b(dano m[áa]gico)\b/gi, cssClass: 'fx-dano-magico' },
+    { regex: /\b(dano verdadeiro)\b/gi, cssClass: 'fx-dano-verdadeiro' },
+    { regex: /\b(atordoa(?:d[oa]|mento)|stun|sil[êe]ncio|medo|amedrontado|encantado)\b/gi, cssClass: 'fx-stun' },
+    { regex: /\b(escudo|shield)\b/gi, cssClass: 'fx-shield' },
+    { regex: /\b(cura|curar|regenera\w*)\b/gi, cssClass: 'fx-cura' }
+];
+
+// Wraps plain-text effect terms without touching existing tags or attributes
+function colorizeEffectTerms(textValue) {
+    if (!textValue) return textValue || '';
+    const parts = String(textValue).split(/(<[^>]+>)/g);
+    return parts.map(partItem => {
+        if (partItem.startsWith('<') && partItem.endsWith('>')) return partItem;
+        let out = partItem;
+        EFFECT_TERM_PATTERNS.forEach(({ regex, cssClass }) => {
+            out = out.replace(regex, (match) => `<span class="${cssClass}">${match}</span>`);
+        });
+        return out;
+    }).join('');
+}
+
+// Combines both passes: official effect tags + plain-text terms.
+// Used by item and rune descriptions, which do not go through the champion modal.
+function colorizeEffectDescriptions(textValue) {
+    return colorizeEffectTerms(colorizeEffectTags(textValue));
+}
+
 const APHELIOS_WEAPON_CLASSES = {
     Calibrum: 'aw-calibrum',     // Sniper rifle — moon green
     Severum: 'aw-severum',       // Scythe-pistol — crimson red
@@ -303,10 +366,13 @@ function colorizeApheliosWeapons(textValue) {
     }).join('');
 }
 
-/* Single entry point used by the champion modal: glossary tooltips first,
-   then keyword tinting, then (only for Aphelios) weapon name hues. */
+/* Single entry point used by the champion modal: official effect tags are
+   converted to themed colors first, then glossary tooltips, keyword tinting
+   and (only for Aphelios) weapon name hues. */
 function formatSkillDescriptionForModal(textValue, championId) {
-    let html = formatDescriptionWithGlossary(textValue);
+    let html = colorizeEffectTags(textValue);
+    html = formatDescriptionWithGlossary(html);
+    html = colorizeEffectTerms(html);
     html = colorizeSkillKeywords(html);
     if (championId === 'Aphelios') {
         html = colorizeApheliosWeapons(html);

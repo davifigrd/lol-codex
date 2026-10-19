@@ -2,6 +2,118 @@
 /* ==========================================================================
    3. ITEMS VIA DATA DRAGON (ATTRIBUTE SYMBOLS, NO GOLD WORD)
    ========================================================================== */
+
+// ============================================================
+// RARITY SYSTEM
+// Border colors:
+// * Itens Iniciais: Borda cinza/branca (#a0a0a0)
+// * Itens Básicos: Borda verde (#22c55e)
+// * Itens Épicos: Borda roxa (#a855f7)
+// * Itens Lendários: Borda dourada (#eab308)
+// * Botas: Borda azul (#3b82f6)
+// ============================================================
+const ITEM_RARITY = {
+    STARTER: {
+        color: '#a0a0a0',
+        label: 'Iniciais'
+    },
+    BASIC: {
+        color: '#22c55e',
+        label: 'Básicos'
+    },
+    EPIC: {
+        color: '#a855f7',
+        label: 'Épicos'
+    },
+    LEGENDARY: {
+        color: '#eab308',
+        label: 'Lendários'
+    },
+    BOOTS: {
+        color: '#3b82f6',
+        label: 'Botas'
+    }
+};
+
+// Display order for categories: Botas, Iniciais, Básicos, Épicos, Lendários
+const RARITY_ORDER = ['BOOTS', 'STARTER', 'BASIC', 'EPIC', 'LEGENDARY'];
+
+// Items removed or internal duplicates that should never show in 5v5 normal shop
+const EXCLUDED_ITEM_IDS = new Set([
+    '2421', // Armaguarda Despedaçada (item quebrado pós-zhonya)
+    '1105', // Duplicata interna de Broto de Esmagamusgo
+    '1106', // Duplicata interna de Cria de Andabrisas
+    '1107', // Duplicata interna de Filhote de Garrabrasa
+]);
+
+// Known starters and consumables
+const STARTER_ITEM_IDS = new Set([
+    '1054', // Escudo de Doran
+    '1055', // Lâmina de Doran
+    '1056', // Anel de Doran
+    '1082', // Lacre Sombrio
+    '1083', // Abatedora
+    '1101', // Filhote de Garrabrasa
+    '1102', // Cria de Andabrisas
+    '1103', // Broto de Esmagamusgo
+    '2003', // Poção de Vida
+    '2031', // Poção com Refil
+    '2033', // Poção Corrupta (se houver)
+    '2055', // Sentinela de Controle
+    '2138', // Elixir de Ferro
+    '2139', // Elixir da Feitiçaria
+    '2140', // Elixir da Ira
+    '3865', // Atlas Mundial
+    '3340', // Sentinela Invisível
+    '3363', // Alteração Vidente
+    '3364', // Lente do Oráculo
+]);
+
+/**
+ * Classifies an item into one of the 5 official rarity tiers:
+ * BOOTS > STARTER > LEGENDARY > EPIC > BASIC
+ */
+function getItemRarity(item) {
+    const tags = item.tags || [];
+    const from = item.from || [];
+    const into = item.into || [];
+    const gold = item.gold?.total || 0;
+
+    // 1. Boots
+    if (tags.includes('Boots') || ['1001', '3006', '3009', '3010', '3020', '3047', '3111', '3158'].includes(item.id)) {
+        return 'BOOTS';
+    }
+
+    // 2. Starter items / Consumables
+    if (STARTER_ITEM_IDS.has(item.id)) {
+        return 'STARTER';
+    }
+    const isStarterByTag = tags.includes('Lane') || tags.includes('Jungle') || tags.includes('Consumable') || tags.includes('Trinket');
+    if (isStarterByTag && from.length === 0 && into.length === 0) {
+        return 'STARTER';
+    }
+
+    // 3. Legendary: completed final items (no upgrades, or high cost quest items)
+    // Support quest upgrades (3869, 3870, 3871, 3876, 3877) and Mejai (3041)
+    if (into.length === 0 && (from.length > 0 || gold >= 2200)) {
+        return 'LEGENDARY';
+    }
+    if (gold >= 2600 && into.length === 0) {
+        return 'LEGENDARY';
+    }
+
+    // 4. Epic: intermediate components that have components AND build into other items
+    if (from.length > 0 && into.length > 0) {
+        return 'EPIC';
+    }
+    if (into.length > 0 && (item.depth || 1) >= 2) {
+        return 'EPIC';
+    }
+
+    // 5. Basic: base tier-1 components that build into something (Long sword, Ruby crystal, etc.)
+    return 'BASIC';
+}
+
 async function loadItemsFromDataDragon() {
     const grid = document.getElementById('items-grid');
     try {
@@ -12,16 +124,21 @@ async function loadItemsFromDataDragon() {
         const data = await res.json();
         allItems = data.data || {};
 
-        // Filters to valid Summoner's Rift items only
+        // Filters strictly to valid, active Summoner's Rift items
         validSRItems = Object.entries(allItems)
             .filter(([id, item]) => {
+                if (EXCLUDED_ITEM_IDS.has(id)) return false;
+                // Arena / alternate-mode copies reuse 6-digit IDs (32xxxx / 66xxxx)
+                // and would otherwise duplicate the real 5v5 item names.
+                if (id.length > 4) return false;
                 const inSummonersRift = item.maps && item.maps['11'] === true;
                 const canPurchase = item.gold && item.gold.purchasable !== false && item.gold.total > 0;
                 const availableInStore = item.inStore !== false;
-                return inSummonersRift && canPurchase && availableInStore;
+                const notSpecialChamp = !item.requiredChampion;
+                return inSummonersRift && canPurchase && availableInStore && notSpecialChamp;
             })
             .map(([id, item]) => ({ id, ...item }))
-            .sort((a, b) => b.gold.total - a.gold.total);
+            .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
 
         const counter = document.getElementById('countItems');
         if (counter) counter.textContent = `${validSRItems.length} Itens`;
@@ -95,6 +212,37 @@ function toggleItemSummary(enabled) {
     }
 }
 
+/**
+ * Groups and sorts items by rarity category, alphabetically within each group.
+ */
+function groupItemsByRarity(itemList) {
+    const groups = {};
+    RARITY_ORDER.forEach(r => { groups[r] = []; });
+
+    itemList.forEach(item => {
+        const rarity = getItemRarity(item);
+        if (groups[rarity]) {
+            groups[rarity].push(item);
+        } else {
+            groups['BASIC'].push(item);
+        }
+    });
+
+    // Sort alphabetically within each category
+    Object.keys(groups).forEach(key => {
+        groups[key].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+    });
+
+    return groups;
+}
+
+function isItemFilterActive() {
+    const searchInput = document.getElementById('itemSearch');
+    const hasQuery = Boolean(searchInput && searchInput.value.trim().length > 0);
+    const hasAttrFilters = typeof activeAttributeFilters !== 'undefined' && activeAttributeFilters.size > 0;
+    return hasQuery || hasAttrFilters;
+}
+
 function renderItems(itemList) {
     const grid = document.getElementById('items-grid');
     if (!grid) return;
@@ -109,111 +257,335 @@ function renderItems(itemList) {
         return;
     }
 
-    grid.innerHTML = itemList.map(item => buildItemCardHTML(item)).join('');
+    const isFiltered = isItemFilterActive();
+
+    // Quando o usuário filtra (busca ou atributos), renderiza direto em grade sem separação de categorias
+    if (isFiltered) {
+        grid.classList.add('is-filtered');
+        const sorted = [...itemList].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+        grid.innerHTML = sorted.map(item => buildItemCardHTML(item, getItemRarity(item))).join('');
+        return;
+    }
+
+    // Sem nenhum filtro ativo: separa nas 5 categorias (Botas, Iniciais, Básicos, Épicos, Lendários)
+    grid.classList.remove('is-filtered');
+    const groups = groupItemsByRarity(itemList);
+    let html = '';
+
+    RARITY_ORDER.forEach(rarityKey => {
+        const items = groups[rarityKey];
+        if (!items || items.length === 0) return;
+
+        const rarityInfo = ITEM_RARITY[rarityKey];
+        html += `
+            <div class="item-rarity-section" data-rarity="${rarityKey}" data-rarity-label="${rarityInfo.label}">
+                <div class="item-rarity-header" style="--rarity-color: ${rarityInfo.color};">
+                    <span class="item-rarity-dot" style="background:${rarityInfo.color};"></span>
+                    <span class="item-rarity-title">${rarityInfo.label}</span>
+                    <span class="item-rarity-count">${items.length} itens</span>
+                </div>
+                <div class="item-rarity-grid">
+                    ${items.map(item => buildItemCardHTML(item, rarityKey)).join('')}
+                </div>
+            </div>
+        `;
+    });
+
+    grid.innerHTML = html;
 }
 
-function buildItemCardHTML(item) {
+/**
+ * Builds the card HTML for an item with:
+ * - Direct colored border on the image icon based on rarity
+ * - Info button on the card for quick ultra-summarized bullets
+ * - Resumido mode replacing official text with author text
+ */
+function buildItemCardHTML(item, rarityKey) {
     const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${item.id}.png`;
     const priceValue = item.gold && item.gold.total ? item.gold.total : 0;
+    const rarityInfo = ITEM_RARITY[rarityKey] || ITEM_RARITY.BASIC;
+    const rarityColor = rarityInfo.color;
 
-    // Visual attribute icons instead of written text (passing the full item to analyze tags and stats)
+    // Visual attribute badges below item name
     const attributeIcons = buildItemAttributeIcons(item);
 
-    // Summary vs detailed mode: Summary = author text from the JSON; Detailed = clean DDragon plaintext
+    // Summary vs detailed mode:
+    // Resumido = author text from data/item-resum.json / item-summary.json
+    // Detalhado = clean DDragon text
     const itemSummaryData = itemSummaries[item.id];
-    let displayText;
+    let displayText = '';
     if (itemSummaryMode && itemSummaryData && itemSummaryData.resumo && !itemSummaryData.resumo.startsWith('TODO:')) {
         displayText = itemSummaryData.resumo;
     } else {
         displayText = item.plaintext || stripHtmlTags(item.description || '') || 'Item de Summoner\'s Rift.';
     }
 
+    // Ultra-summarized bullets card
+    const infoCardHtml = buildItemInfoCard(item);
+
     return `
-        <div class="item-card" onclick="openItemModal('${item.id}')" onmouseenter="applyCardHoverColor(this, '${iconUrl}')">
+        <div class="item-card" data-item-id="${item.id}" onclick="openItemModal('${item.id}')" onmouseenter="applyCardHoverColor(this, '${iconUrl}')">
             <div class="item-header">
-                <img src="${iconUrl}" class="item-icon" alt="${item.name}" loading="lazy">
+                <div class="item-icon-wrap" style="--rarity-border-color: ${rarityColor};">
+                    <img src="${iconUrl}" class="item-icon rarity-${rarityKey.toLowerCase()}" style="border-color: ${rarityColor} !important;" alt="${item.name}" loading="lazy">
+                </div>
                 <div class="item-title-wrap">
-                    <div class="item-name-row" style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem;">
-                        <h4>${item.name}</h4>
-                        <!-- Only the coin and the value, without the word gold -->
-                        <span class="item-cost"><i class="fa-solid fa-coins" style="color:var(--gold-bright);"></i> ${priceValue}</span>
+                    <div class="item-name-row" style="display:flex; align-items:center; justify-content:space-between; gap:0.4rem;">
+                        <h4 title="${item.name}">${item.name}</h4>
+                        <div style="display:flex; align-items:center; gap:0.45rem;">
+                            <span class="item-cost"><i class="fa-solid fa-coins" style="color:var(--gold-bright);"></i> ${priceValue}</span>
+                            <button type="button" class="item-card-info-btn" onclick="toggleCardQuickInfo(event, '${item.id}')" title="Ver resumo em tópicos">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                        </div>
                     </div>
-                    <!-- Attribute badges below the item name (e.g. Trinity Force > AD LP AS) -->
-                    <div class="item-badges" style="display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.35rem;">
+                    <!-- Attribute badges below the item name -->
+                    <div class="item-badges">
                         ${attributeIcons}
                     </div>
                 </div>
             </div>
-            <p class="item-stats" style="font-size:0.8rem; color:var(--text-body); line-height:1.4;">${displayText}</p>
+            <p class="item-stats">${displayText}</p>
+            ${infoCardHtml}
         </div>
     `;
 }
 
+/**
+ * Toggles quick ultra-summarized bullets on an individual card
+ */
+function toggleCardQuickInfo(event, itemId) {
+    if (event) event.stopPropagation();
+    const bulletsEl = document.getElementById(`quick-bullets-${itemId}`);
+    const btn = event?.currentTarget;
+    if (!bulletsEl) return;
+
+    const isExpanded = bulletsEl.classList.contains('expanded');
+    bulletsEl.classList.toggle('expanded', !isExpanded);
+    bulletsEl.classList.toggle('collapsed', isExpanded);
+    if (btn) btn.classList.toggle('active', !isExpanded);
+    // The summary replaces the description on this specific card
+    const card = bulletsEl.closest('.item-card');
+    if (card) card.classList.toggle('info-open', !isExpanded);
+}
+
+/**
+ * Builds the ultra-summarized info card (shown on Info toggle).
+ * Uses yellow bullets (◆) with keywords matching Hextech aesthetic.
+ */
+function buildItemInfoCard(item) {
+    const summaryData = itemSummaries[item.id];
+    const bullets = [];
+
+    // 1. Key numerical stats
+    const stats = item.stats || {};
+    const statMap = [
+        ['FlatPhysicalDamageMod',   v => `+${Math.round(v)} Dano de Ataque`],
+        ['FlatMagicDamageMod',      v => `+${Math.round(v)} Poder de Habilidade`],
+        ['FlatArmorMod',            v => `+${Math.round(v)} Armadura`],
+        ['FlatSpellBlockMod',       v => `+${Math.round(v)} Resistência Mágica`],
+        ['FlatHPPoolMod',           v => `+${Math.round(v)} Vida`],
+        ['FlatMPPoolMod',           v => `+${Math.round(v)} Mana`],
+        ['FlatCritChanceMod',       v => `+${Math.round(v*100)}% Acerto Crítico`],
+        ['PercentAttackSpeedMod',   v => `+${Math.round(v*100)}% Vel. de Ataque`],
+        ['PercentLifeStealMod',     v => `+${Math.round(v*100)}% Roubo de Vida`],
+        ['FlatMovementSpeedMod',    v => `+${Math.round(v)} Vel. de Movimento`],
+        ['FlatHPRegenMod',         v => `+${Math.round(v)} Regen. de Vida`],
+    ];
+
+    statMap.forEach(([key, fmt]) => {
+        if (stats[key] && stats[key] !== 0) {
+            bullets.push(`<span class="bullet-stat-val">${fmt(stats[key])}</span>`);
+        }
+    });
+
+    // 2. Extract keywords / passives from description if available
+    const desc = item.description || '';
+    const cleanDesc = stripHtmlTags(desc);
+
+    // Check lethality
+    if (desc.toLowerCase().includes('letalidade')) {
+        const letMatch = desc.match(/(\d+)\s*letalidade/i) || cleanDesc.match(/letalidade/i);
+        if (letMatch && letMatch[1]) {
+            bullets.push(`<span class="bullet-keyword">Letalidade:</span> +${letMatch[1]}`);
+        } else {
+            bullets.push(`<span class="bullet-keyword">Letalidade</span>`);
+        }
+    }
+
+    // Check armor pen
+    if (desc.toLowerCase().includes('penetra') && desc.toLowerCase().includes('armadura') && !desc.toLowerCase().includes('letalidade')) {
+        const penMatch = desc.match(/(\d+)%\s*de penetra/i);
+        if (penMatch) {
+            bullets.push(`<span class="bullet-keyword">Pen. Armadura:</span> +${penMatch[1]}%`);
+        } else {
+            bullets.push(`<span class="bullet-keyword">Penetração de Armadura %</span>`);
+        }
+    }
+
+    // Check magic pen
+    if (desc.toLowerCase().includes('penetra') && (desc.toLowerCase().includes('mágica') || desc.toLowerCase().includes('magica'))) {
+        bullets.push(`<span class="bullet-keyword">Penetração Mágica</span>`);
+    }
+
+    // Check ability haste / CDR
+    if (item.tags?.includes('AbilityHaste') || desc.toLowerCase().includes('aceleração de habilidade')) {
+        const ahMatch = desc.match(/(\d+)\s*acelera/i);
+        if (ahMatch) {
+            bullets.push(`<span class="bullet-keyword">Acel. de Habilidade:</span> +${ahMatch[1]}`);
+        } else {
+            bullets.push(`<span class="bullet-keyword">Aceleração de Habilidade</span>`);
+        }
+    }
+
+    // Check named passives
+    const passiveNames = [];
+    const passiveRegex = /<passive>([^<]+)<\/passive>|<unique>([^<]+)<\/unique>/gi;
+    let pMatch;
+    while ((pMatch = passiveRegex.exec(desc)) !== null) {
+        const pName = (pMatch[1] || pMatch[2] || '').trim();
+        if (pName && !passiveNames.includes(pName) && pName.length < 35) {
+            passiveNames.push(pName);
+        }
+    }
+    passiveNames.slice(0, 2).forEach(pName => {
+        bullets.push(`<span class="bullet-keyword">${pName}</span>`);
+    });
+
+    // Author keywords if present
+    if (summaryData?.keywords && Array.isArray(summaryData.keywords)) {
+        summaryData.keywords.slice(0, 2).forEach(kw => {
+            bullets.push(`<span class="bullet-keyword">${kw}</span>`);
+        });
+    }
+
+    if (bullets.length === 0) {
+        bullets.push(`<span class="bullet-keyword">Item de Utilidade</span>`);
+    }
+
+    const bulletHtml = bullets.slice(0, 4).map(b =>
+        `<div class="quick-bullet-item"><span class="hextech-bullet">◆</span> ${b}</div>`
+    ).join('');
+
+    return `
+        <div class="item-quick-bullets" id="quick-bullets-${item.id}">
+            ${bulletHtml}
+        </div>
+    `;
+}
+
+/**
+ * Builds the visual attribute badges below the item name
+ * Standardized with official Portuguese names and siglas in parentheses:
+ * AD, AP, AS, CRIT, LS, VAMP, LET, A. PEN, M. PEN, HP, ARMOR, MR, HP5, TEN, SR, CDR, MANA, MANA REG., MS, E&S
+ */
 function buildItemAttributeIcons(itemOrTags) {
     const item = (typeof itemOrTags === 'object' && !Array.isArray(itemOrTags)) ? itemOrTags : null;
     const tags = Array.isArray(itemOrTags) ? itemOrTags : (item?.tags || []);
     const stats = item?.stats || {};
+    const desc = (item?.description || '').toLowerCase();
 
     let badges = [];
 
-    // Physical Damage (AD)
+    // 1. Dano de Ataque (AD)
     if (tags.includes('Damage') || Boolean(stats.FlatPhysicalDamageMod)) {
-        badges.push(`<span class="stat-icon-badge stat-badge-ad" title="Dano Físico (AD)"><span class="stat-img-icon stat-img-ad" aria-hidden="true"></span> AD</span>`);
+        badges.push(`<span class="stat-icon-badge stat-badge-ad" title="Dano de Ataque (AD)"><span class="stat-img-icon stat-img-ad" aria-hidden="true"></span> AD</span>`);
     }
 
-    // Ability Power (AP)
+    // 2. Poder de Habilidade (AP)
     if (tags.includes('SpellDamage') || Boolean(stats.FlatMagicDamageMod)) {
         badges.push(`<span class="stat-icon-badge stat-badge-ap" title="Poder de Habilidade (AP)"><span class="stat-img-icon stat-img-ap" aria-hidden="true"></span> AP</span>`);
     }
 
-    // Armor (ARMOR) - STRICTLY items that grant armor, NEVER just health!
-    if (tags.includes('Armor') || Boolean(stats.FlatArmorMod)) {
-        badges.push(`<span class="stat-icon-badge stat-badge-armor" title="Armadura (ARMOR)"><span class="stat-img-icon stat-img-armor" aria-hidden="true"></span> ARMOR</span>`);
-    }
-
-    // Health (HP) - Items that grant health
-    if (tags.includes('Health') || Boolean(stats.FlatHPPoolMod)) {
-        badges.push(`<span class="stat-icon-badge stat-badge-health" title="Vida (LP)"><span class="stat-img-icon stat-img-health" aria-hidden="true"></span> LP</span>`);
-    }
-
-    // Attack Speed (AS)
+    // 3. Velocidade de Ataque (AS)
     if (tags.includes('AttackSpeed') || Boolean(stats.PercentAttackSpeedMod)) {
         badges.push(`<span class="stat-icon-badge stat-badge-as" title="Velocidade de Ataque (AS)"><span class="stat-img-icon stat-img-as" aria-hidden="true"></span> AS</span>`);
     }
 
-    // Ability Haste (CDR)
-    if (tags.includes('CooldownReduction') || tags.includes('AbilityHaste')) {
-        badges.push(`<span class="stat-icon-badge stat-badge-cdr" title="Aceleração de Habilidade (CDR)"><span class="stat-img-icon stat-img-cdr" aria-hidden="true"></span> CDR</span>`);
-    }
-
-    // Critical Strike (CRIT)
+    // 4. Acerto Crítico (CRIT)
     if (tags.includes('CriticalStrike') || Boolean(stats.FlatCritChanceMod)) {
         badges.push(`<span class="stat-icon-badge stat-badge-crit" title="Acerto Crítico (CRIT)"><span class="stat-img-icon stat-img-crit" aria-hidden="true"></span> CRIT</span>`);
     }
 
-    // Life Steal (LS)
-    if (tags.includes('LifeSteal') || tags.includes('SpellVamp') || tags.includes('Omnivamp') || Boolean(stats.PercentLifeStealMod)) {
+    // 5. Roubo de Vida (LS) — strictly life steal
+    if (tags.includes('LifeSteal') || Boolean(stats.PercentLifeStealMod)) {
         badges.push(`<span class="stat-icon-badge stat-badge-ls" title="Roubo de Vida (LS)"><span class="stat-img-icon stat-img-ls" aria-hidden="true"></span> LS</span>`);
     }
 
-    // Magic Resist (MR)
+    // 6. Vampirismo (VAMP) — omnivamp / spell vamp
+    if (tags.includes('SpellVamp') || tags.includes('Omnivamp') || desc.includes('onivampirismo') || desc.includes('vampirismo') || desc.includes('omnivamp')) {
+        badges.push(`<span class="stat-icon-badge stat-badge-vamp" title="Vampirismo (VAMP)"><span class="stat-img-icon stat-img-vamp" aria-hidden="true"></span> VAMP</span>`);
+    }
+
+    // 7. Letalidade (LET)
+    if (desc.includes('letalidade')) {
+        badges.push(`<span class="stat-icon-badge stat-badge-let" title="Letalidade (LET)"><span class="stat-img-icon stat-img-let" aria-hidden="true"></span> LET</span>`);
+    }
+
+    // 8. Penetração de Armadura (A. PEN) — % armor penetration separated from lethality
+    const hasArmorPen = (desc.includes('penetra') && desc.includes('armadura')) || desc.includes('reduz a armadura') || desc.includes('reduzir a armadura') || (tags.includes('ArmorPenetration') && !desc.includes('letalidade'));
+    if (hasArmorPen && !desc.includes('letalidade')) {
+        badges.push(`<span class="stat-icon-badge stat-badge-armorpen" title="Penetração de Armadura (A. PEN)"><span class="stat-img-icon stat-img-pen" aria-hidden="true"></span> A. PEN</span>`);
+    }
+
+    // 9. Penetração Mágica (M. PEN) — with the magic penetration icon
+    if (tags.includes('MagicPenetration') || (desc.includes('penetra') && (desc.includes('mágica') || desc.includes('magica')))) {
+        badges.push(`<span class="stat-icon-badge stat-badge-magicpen" title="Penetração Mágica (M. PEN)"><span class="stat-img-icon stat-img-magicpen" aria-hidden="true"></span> M. PEN</span>`);
+    }
+
+    // 10. Vida (HP)
+    if (tags.includes('Health') || Boolean(stats.FlatHPPoolMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-health" title="Vida (HP)"><span class="stat-img-icon stat-img-health" aria-hidden="true"></span> HP</span>`);
+    }
+
+    // 11. Armadura (ARMOR)
+    if (tags.includes('Armor') || Boolean(stats.FlatArmorMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-armor" title="Armadura (ARMOR)"><span class="stat-img-icon stat-img-armor" aria-hidden="true"></span> ARMOR</span>`);
+    }
+
+    // 12. Resistência Mágica (MR)
     if (tags.includes('SpellBlock') || tags.includes('MagicResist') || Boolean(stats.FlatSpellBlockMod)) {
         badges.push(`<span class="stat-icon-badge stat-badge-mr" title="Resistência Mágica (MR)"><span class="stat-img-icon stat-img-mr" aria-hidden="true"></span> MR</span>`);
     }
 
-    // Penetration (PEN)
-    if (tags.includes('ArmorPenetration') || tags.includes('MagicPenetration')) {
-        badges.push(`<span class="stat-icon-badge stat-badge-pen" title="Penetração (PEN)"><span class="stat-img-icon stat-img-pen" aria-hidden="true"></span> PEN</span>`);
+    // 13. Regeneração de Vida (HP5)
+    if (tags.includes('HealthRegen') || Boolean(stats.FlatHPRegenMod) || Boolean(stats.PercentHPRegenMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-hpregen" title="Regeneração de Vida (HP5)"><span class="stat-img-icon stat-img-hpregen" aria-hidden="true"></span> HP5</span>`);
     }
 
-    // Mana (MANA)
-    if (tags.includes('Mana') || tags.includes('ManaRegen') || Boolean(stats.FlatMPPoolMod)) {
+    // 14. Tenacidade (TEN) — strictly tenacity
+    if (tags.includes('Tenacity') || desc.includes('tenacidade')) {
+        badges.push(`<span class="stat-icon-badge stat-badge-tenacity" title="Tenacidade (TEN)"><span class="stat-img-icon stat-img-tenacity" aria-hidden="true"></span> TEN</span>`);
+    }
+
+    // 15. Resist. Lentidão (SR) — slow resistance
+    if (desc.includes('lentidão') && (desc.includes('resist') || desc.includes('reduz a eficácia'))) {
+        badges.push(`<span class="stat-icon-badge stat-badge-sr" title="Resist. Lentidão (SR)"><span class="stat-img-icon stat-img-tenacity" aria-hidden="true" style="filter:hue-rotate(120deg);"></span> SR</span>`);
+    }
+
+    // 16. Aceleração de Habilidade (CDR)
+    if (tags.includes('CooldownReduction') || tags.includes('AbilityHaste') || desc.includes('aceleração de habilidade')) {
+        badges.push(`<span class="stat-icon-badge stat-badge-cdr" title="Aceleração de Habilidade (CDR)"><span class="stat-img-icon stat-img-cdr" aria-hidden="true"></span> CDR</span>`);
+    }
+
+    // 17. Mana (MANA)
+    if (tags.includes('Mana') || Boolean(stats.FlatMPPoolMod)) {
         badges.push(`<span class="stat-icon-badge stat-badge-mana" title="Mana (MANA)"><span class="stat-img-icon stat-img-mana" aria-hidden="true"></span> MANA</span>`);
     }
 
-    // Boots / Movement Speed (MS)
+    // 18. Regeneração de Mana (MANA REG.)
+    if (tags.includes('ManaRegen') || Boolean(stats.FlatMPRegenMod) || Boolean(stats.PercentMPRegenMod)) {
+        badges.push(`<span class="stat-icon-badge stat-badge-manaregen" title="Regeneração de Mana (MANA REG.)"><span class="stat-img-icon stat-img-mana" aria-hidden="true" style="filter:brightness(1.4) hue-rotate(15deg);"></span> MANA REG.</span>`);
+    }
+
+    // 19. Velocidade de Movimento (MS)
     if (tags.includes('Boots') || tags.includes('NonbootsMovement') || Boolean(stats.FlatMovementSpeedMod) || Boolean(stats.PercentMovementSpeedMod)) {
-        badges.push(`<span class="stat-icon-badge stat-badge-mov" title="Botas / Movimento (MOV)"><span class="stat-img-icon stat-img-mov" aria-hidden="true"></span> MOV</span>`);
+        badges.push(`<span class="stat-icon-badge stat-badge-mov" title="Velocidade de Movimento (MS)"><span class="stat-img-icon stat-img-mov" aria-hidden="true"></span> MS</span>`);
+    }
+
+    // 20. Cura e Resistência do Escudo (E&S)
+    if (tags.includes('HealAndShieldPower') || (desc.includes('cura') && desc.includes('escudo'))) {
+        badges.push(`<span class="stat-icon-badge stat-badge-healshield" title="Cura e Resist. do Escudo (E&S)"><i class="fa-solid fa-heart-pulse" style="color:#34d399; font-size:11px;"></i> E&S</span>`);
     }
 
     if (badges.length === 0) {
@@ -223,9 +595,8 @@ function buildItemAttributeIcons(itemOrTags) {
     return badges.join('');
 }
 
-
 /* ==========================================================================
-   5. DETAILED ITEM MODAL (RECIPES AND PRICE WITHOUT THE GOLD WORD)
+   5. DETAILED ITEM MODAL (RECIPES, PRICE & STAT LINES WITH VISUAL ICONS)
    ========================================================================== */
 function openItemModal(itemId) {
     const modal = document.getElementById('item-modal');
@@ -235,12 +606,16 @@ function openItemModal(itemId) {
     const item = allItems[itemId];
     if (!item) return;
 
-    currentOpenItemModal = itemId; // Tracks the open item to re-render on switch toggle
+    currentOpenItemModal = itemId;
+
+    const rarityKey = getItemRarity({ ...item, id: itemId });
+    const rarityInfo = ITEM_RARITY[rarityKey] || ITEM_RARITY.BASIC;
+    const rarityColor = rarityInfo.color;
 
     const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${itemId}.png`;
     const totalPrice = item.gold && item.gold.total ? item.gold.total : 0;
 
-    // Applies the item's predominant color to the modal border and glow
+    // Dominant color accent
     getDominantColor(iconUrl).then(colorHex => {
         const modalContainer = document.querySelector('#item-modal .modal-container');
         if (modalContainer) {
@@ -249,8 +624,8 @@ function openItemModal(itemId) {
         }
         const itemAvatar = document.getElementById('item-modal-avatar');
         if (itemAvatar) {
-            itemAvatar.style.borderColor = colorHex.rgb;
-            itemAvatar.style.boxShadow = `0 0 20px ${colorHex.rgba}`;
+            itemAvatar.style.borderColor = rarityColor;
+            itemAvatar.style.boxShadow = `0 0 20px ${rarityColor}88`;
         }
     });
 
@@ -284,12 +659,41 @@ function openItemModal(itemId) {
         }).join('')
         : '';
 
+    // Rarity badge
+    const rarityBadgeHtml = `
+        <span style="font-size:0.75rem; font-weight:700; padding:0.18rem 0.65rem; border-radius:4px; background:${rarityColor}22; border:1px solid ${rarityColor}66; color:${rarityColor}; margin-left:0.5rem; text-transform:uppercase; letter-spacing:0.05em;">
+            ${rarityInfo.label}
+        </span>
+    `;
+
+    // Attribute lines with visual icons
+    const statLinesHtml = buildModalStatLines(item);
+
+    // Description: in "Resumido" mode, strictly replaces the official Riot description with author text
+    const descriptionHtml = (() => {
+        const itemModalSummary = itemSummaries[itemId];
+        if (itemSummaryMode) {
+            const resumoText = (itemModalSummary && itemModalSummary.resumo && !itemModalSummary.resumo.startsWith('TODO:'))
+                ? itemModalSummary.resumo
+                : null;
+            return resumoText
+                ? `<div style="padding:0.25rem 0;"><p style="color:var(--text-body); margin:0; line-height:1.7; font-size:0.95rem;">${resumoText}</p></div>`
+                : `<em style="color:var(--text-muted); font-size:0.9rem;">Resumo autoral ainda não escrito.</em>`;
+        }
+        return typeof colorizeEffectDescriptions === 'function'
+            ? colorizeEffectDescriptions(item.description)
+            : (item.description || '<p>Sem descrição adicional.</p>');
+    })();
+
     modalContent.innerHTML = `
         <div style="display:flex; gap:1.25rem; align-items:center; margin-bottom:1.5rem; border-bottom:1px solid var(--border-color); padding-bottom:1.25rem;">
-            <img id="item-modal-avatar" src="${iconUrl}" style="width:75px; height:75px; border-radius:var(--radius-md); border:2px solid var(--gold-bright); box-shadow:0 0 15px var(--gold-glow); object-fit:cover; background:#000; transition:border-color 0.3s ease, box-shadow 0.3s ease;">
+            <img id="item-modal-avatar" src="${iconUrl}" style="width:75px; height:75px; border-radius:var(--radius-md); border:2px solid ${rarityColor}; box-shadow:0 0 15px ${rarityColor}88; object-fit:cover; background:#000; transition:border-color 0.3s ease, box-shadow 0.3s ease;">
             <div style="flex-grow:1;">
-                <h2 style="font-size:1.85rem; font-family:var(--font-title); color:var(--gold-light); line-height:1.2;">${item.name}</h2>
-                <!-- Attribute badges below the item name (e.g. Trinity Force > AD LP AS) -->
+                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:0.35rem;">
+                    <h2 style="font-size:1.85rem; font-family:var(--font-title); color:var(--gold-light); line-height:1.2;">${item.name}</h2>
+                    ${rarityBadgeHtml}
+                </div>
+                <!-- Attribute badges below the item name -->
                 <div style="display:flex; gap:0.4rem; margin-top:0.35rem; flex-wrap:wrap;">
                     ${buildItemAttributeIcons(item)}
                 </div>
@@ -314,27 +718,14 @@ function openItemModal(itemId) {
                     <span id="itemModalSwitchLabelRes" class="${itemSummaryMode ? 'switch-label-active' : ''}">Resumido</span>
                 </div>
             </div>
-            <div class="item-ddragon-desc" style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:1rem;">
-                ${(() => {
-            const itemModalSummary = itemSummaries[itemId];
-            const baseDesc = item.description || '<p>Sem descrição adicional.</p>';
-            if (itemSummaryMode) {
-                const resumoText = (itemModalSummary && itemModalSummary.resumo && !itemModalSummary.resumo.startsWith('TODO:')) ? itemModalSummary.resumo : null;
-                return `
-                    ${baseDesc}
-                    <div style="margin-top:1rem; padding:0.8rem; background:rgba(200,155,60,0.08); border:1px solid rgba(200,155,60,0.25); border-radius:var(--radius-sm);">
-                        <div style="color:var(--gold-light); font-weight:700; font-size:0.88rem; margin-bottom:0.35rem; display:flex; align-items:center; gap:0.4rem;">
-                            <i class="fa-solid fa-file-lines"></i> Resumo
-                        </div>
-                        <p style="color:var(--text-body); margin:0; line-height:1.6;">${resumoText ? resumoText : '<em style="color:var(--text-muted);">Resumo autoral ainda não escrito.</em>'}</p>
-                    </div>
-                `;
-            }
-            return baseDesc;
-        })()}
+
+            <!-- Visual Attribute lines with icons -->
+            ${statLinesHtml}
+
+            <div class="item-ddragon-desc" style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:1rem; margin-top:0.75rem;">
+                ${descriptionHtml}
             </div>
         </div>
-
 
         <div class="recipe-section">
             <div class="recipe-header"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--gold-bright);"></i> Construído a partir de (Componentes):</div>
@@ -354,6 +745,84 @@ function openItemModal(itemId) {
     `;
 
     modal.classList.add('active');
+}
+
+/**
+ * Builds stat lines with visual icons for the item modal
+ * (e.g. [Icon AD] +70 Dano de Ataque, [Icon AP] +130 Poder de Habilidade)
+ */
+function buildModalStatLines(item) {
+    const stats = item.stats || {};
+    const desc = (item.description || '').toLowerCase();
+    const lines = [];
+
+    const statDefs = [
+        { key: 'FlatPhysicalDamageMod',  label: 'Dano de Ataque (AD)',            icon: 'ad',          fmt: v => `+${Math.round(v)}` },
+        { key: 'FlatMagicDamageMod',     label: 'Poder de Habilidade (AP)',       icon: 'ap',          fmt: v => `+${Math.round(v)}` },
+        { key: 'FlatArmorMod',           label: 'Armadura (ARMOR)',               icon: 'armor',       fmt: v => `+${Math.round(v)}` },
+        { key: 'FlatSpellBlockMod',      label: 'Resistência Mágica (MR)',        icon: 'mr',          fmt: v => `+${Math.round(v)}` },
+        { key: 'FlatHPPoolMod',          label: 'Vida (HP)',                      icon: 'health',      fmt: v => `+${Math.round(v)}` },
+        { key: 'FlatMPPoolMod',          label: 'Mana (MANA)',                    icon: 'mana',        fmt: v => `+${Math.round(v)}` },
+        { key: 'FlatCritChanceMod',      label: 'Acerto Crítico (CRIT)',          icon: 'crit',        fmt: v => `+${Math.round(v*100)}%` },
+        { key: 'PercentAttackSpeedMod',  label: 'Velocidade de Ataque (AS)',      icon: 'as',          fmt: v => `+${Math.round(v*100)}%` },
+        { key: 'PercentLifeStealMod',    label: 'Roubo de Vida (LS)',             icon: 'ls',          fmt: v => `+${Math.round(v*100)}%` },
+        { key: 'FlatMovementSpeedMod',   label: 'Velocidade de Movimento (MS)',   icon: 'mov',         fmt: v => `+${Math.round(v)}` },
+        { key: 'FlatHPRegenMod',         label: 'Regeneração de Vida (HP5)',      icon: 'hpregen',     fmt: v => `+${Math.round(v)}` },
+        { key: 'FlatMPRegenMod',         label: 'Regeneração de Mana (MANA REG.)',icon: 'manaregen',   fmt: v => `+${Math.round(v)}` },
+    ];
+
+    statDefs.forEach(({ key, label, icon, fmt }) => {
+        if (stats[key] && stats[key] !== 0) {
+            lines.push(`
+                <div class="modal-stat-line">
+                    <span class="stat-img-icon stat-img-${icon}" style="width:18px;height:18px;" aria-hidden="true"></span>
+                    <span class="modal-stat-value">${fmt(stats[key])}</span>
+                    <span class="modal-stat-label">${label}</span>
+                </div>
+            `);
+        }
+    });
+
+    // Special stats from description (Letalidade, Penetração Mágica, Tenacidade, etc.)
+    if (desc.includes('letalidade')) {
+        const match = desc.match(/(\d+)\s*letalidade/i);
+        const val = match ? `+${match[1]}` : '';
+        lines.push(`
+            <div class="modal-stat-line">
+                <span class="stat-img-icon stat-img-let" style="width:18px;height:18px;" aria-hidden="true"></span>
+                <span class="modal-stat-value">${val}</span>
+                <span class="modal-stat-label">Letalidade (LET)</span>
+            </div>
+        `);
+    }
+
+    if (item.tags?.includes('MagicPenetration') || (desc.includes('penetra') && (desc.includes('mágica') || desc.includes('magica')))) {
+        lines.push(`
+            <div class="modal-stat-line">
+                <span class="stat-img-icon stat-img-magicpen" style="width:18px;height:18px;" aria-hidden="true"></span>
+                <span class="modal-stat-value"></span>
+                <span class="modal-stat-label">Penetração Mágica (M. PEN)</span>
+            </div>
+        `);
+    }
+
+    if (item.tags?.includes('Tenacity') || desc.includes('tenacidade')) {
+        lines.push(`
+            <div class="modal-stat-line">
+                <span class="stat-img-icon stat-img-tenacity" style="width:18px;height:18px;" aria-hidden="true"></span>
+                <span class="modal-stat-value"></span>
+                <span class="modal-stat-label">Tenacidade (TEN)</span>
+            </div>
+        `);
+    }
+
+    if (lines.length === 0) return '';
+
+    return `
+        <div class="modal-stat-grid">
+            ${lines.join('')}
+        </div>
+    `;
 }
 
 function closeItemModal() {

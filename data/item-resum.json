@@ -1,0 +1,63 @@
+{
+  "_comentario": "LoL Codex — Resumos AUTORAIS dos itens. Chave = ID numérico do item como STRING (ex: '3078' para Força da Trindade). Encontre o ID na URL da imagem do item no Data Dragon. Campo 'resumo': sua descrição autoral curta e direta. Quando este arquivo não tiver o item, o site mostrará automaticamente a descrição oficial da Riot.",
+  "3078": {
+    "resumo": "TODO: Escrever resumo da Força da Trindade."
+  },
+  "3031": {
+    "resumo": "TODO: Escrever resumo da Lâmina do Infinito."
+  },
+  "3157": {
+    "resumo": "TODO: Escrever resumo do Ampulheta de Zhoya."
+  },
+  "3089": {
+    "resumo": "TODO: Escrever resumo do Chapéu Mortal de Rabadon."
+  },
+  "3068": {
+    "resumo": "TODO: Escrever resumo do Coração de Aço."
+  },
+  "3083": {
+    "resumo": "TODO: Escrever resumo do Manto de Warmog."
+  },
+  "6655": {
+    "resumo": "TODO: Escrever resumo do Companheiro de Luden."
+  },
+  "3142": {
+    "resumo": "TODO: Escrever resumo da Lâmina Fantasma de Youmuu."
+  },
+  "3072": {
+    "resumo": "TODO: Escrever resumo da Espada Ensanguentada."
+  },
+  "3046": {
+    "resumo": "TODO: Escrever resumo da Dança das Fadas."
+  },
+  "3100": {
+    "resumo": "TODO: Escrever resumo do Cetro de Lichbane."
+  },
+  "3504": {
+    "resumo": "TODO: Escrever resumo do Ardor de Ardent Censer."
+  },
+  "3143": {
+    "resumo": "TODO: Escrever resumo do Randuin's Omen."
+  },
+  "3110": {
+    "resumo": "TODO: Escrever resumo do Congelador de Rito."
+  },
+  "3102": {
+    "resumo": "TODO: Escrever resumo do Manto de Banshee."
+  },
+  "3033": {
+    "resumo": "TODO: Escrever resumo da Mortal Reminder."
+  },
+  "6617": {
+    "resumo": "TODO: Escrever resumo do Moonstone Renewer."
+  },
+  "4005": {
+    "resumo": "TODO: Escrever resumo do Imperial Mandate."
+  },
+  "3026": {
+    "resumo": "TODO: Escrever resumo do Guardian Angel."
+  },
+  "3040": {
+    "resumo": "TODO: Escrever resumo da Lágrima de Deusa."
+  }
+}

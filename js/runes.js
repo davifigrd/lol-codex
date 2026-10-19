@@ -13,7 +13,6 @@ const RUNE_TREES_METADATA = {
         colorHex: '#c8aa6e',
         secondaryColorHex: '#f0b232',
         glowColor: 'rgba(200, 170, 110, 0.55)',
-        bgImage: '../img/runes/bg_8000.jpg',
         runeIconUrl: '../img/runes/crest_8000.png',
         slotNames: ['Runas Essenciais', 'Heroísmo', 'Lenda', 'Combate']
     },
@@ -22,10 +21,9 @@ const RUNE_TREES_METADATA = {
         key: 'Domination',
         labelName: 'Dominação',
         subtitleText: 'Cace e elimine presas — Dano explosivo e acesso ao alvo',
-        colorHex: '#dc3545',
-        secondaryColorHex: '#e84057',
-        glowColor: 'rgba(220, 53, 69, 0.55)',
-        bgImage: '../img/runes/bg_8100.jpg',
+        colorHex: '#dc2626',
+        secondaryColorHex: '#ef4444',
+        glowColor: 'rgba(220, 38, 38, 0.55)',
         runeIconUrl: '../img/runes/crest_8100.png',
         slotNames: ['Runas Essenciais', 'Malevolência', 'Rastreamento', 'Caçador']
     },
@@ -34,10 +32,9 @@ const RUNE_TREES_METADATA = {
         key: 'Sorcery',
         labelName: 'Feitiçaria',
         subtitleText: 'Liberte a destruição — Habilidades fortalecidas e manipulação de recursos',
-        colorHex: '#7242f5',
-        secondaryColorHex: '#9fa8da',
-        glowColor: 'rgba(114, 66, 245, 0.55)',
-        bgImage: '../img/runes/bg_8200.jpg',
+        colorHex: '#3b82f6',
+        secondaryColorHex: '#8b5cf6',
+        glowColor: 'rgba(59, 130, 246, 0.55)',
         runeIconUrl: '../img/runes/crest_8200.png',
         slotNames: ['Runas Essenciais', 'Artefato', 'Excelência', 'Poder']
     },
@@ -46,10 +43,9 @@ const RUNE_TREES_METADATA = {
         key: 'Resolve',
         labelName: 'Determinação',
         subtitleText: 'Viva para sempre — Durabilidade e controle de grupo',
-        colorHex: '#5bc8ac',
-        secondaryColorHex: '#28a745',
-        glowColor: 'rgba(91, 200, 172, 0.55)',
-        bgImage: '../img/runes/bg_8400.jpg',
+        colorHex: '#22c55e',
+        secondaryColorHex: '#10b981',
+        glowColor: 'rgba(34, 197, 94, 0.55)',
         runeIconUrl: '../img/runes/crest_8400.png',
         slotNames: ['Runas Essenciais', 'Força', 'Resistência', 'Vitalidade']
     },
@@ -58,10 +54,9 @@ const RUNE_TREES_METADATA = {
         key: 'Inspiration',
         labelName: 'Inspiração',
         subtitleText: 'Dobre as regras — Ferramentas criativas e manipulação das regras',
-        colorHex: '#49adc9',
-        secondaryColorHex: '#00c0ff',
-        glowColor: 'rgba(73, 173, 201, 0.55)',
-        bgImage: '../img/runes/bg_8300.jpg',
+        colorHex: '#06b6d4',
+        secondaryColorHex: '#0ac8b9',
+        glowColor: 'rgba(6, 182, 212, 0.55)',
         runeIconUrl: '../img/runes/crest_8300.png',
         slotNames: ['Runas Essenciais', 'Engenho', 'Amanhã', 'Além']
     }
@@ -147,10 +142,8 @@ const RUNE_STAT_SHARDS = [
 ];
 
 // Rune Page state in the LoL client style
-let activeRuneTree = 8000;         // Active primary tree (8000 = Precision)
-let activeSecondaryTree = 8400;    // Active secondary tree (8400 = Resolve)
-let runeViewMode = 'client';    // 'client' (visual LoL workbench) or 'list' (one-by-one explanation)
-let runePageName = 'Blitz: Yasuo Meio';
+let activeRuneTree = 8000;         // Active tree (8000 = Precision)
+let runeViewMode = 'client';    // 'client' (visual LoL workbench) or 'lista' (one-by-one explanation)
 
 // Saved rune selections per tree
 let runeSelection = {
@@ -159,9 +152,6 @@ let runeSelection = {
     8200: { keystone: 8229, slot1: 8226, slot2: 8210, slot3: 8236 }, // Arcane Comet, Manaflow Band, Transcendence, Gathering Storm
     8400: { keystone: 8437, slot1: 8446, slot2: 8429, slot3: 8451 }, // Grasp of the Undying, Demolish, Conditioning, Overgrowth
     8300: { keystone: 8351, slot1: 8304, slot2: 8345, slot3: 8410 }, // Glacial Augment, Magical Footwear, Biscuit Delivery, Approach Velocity
-    secondaryList: {
-        8400: [8444, 8429] // Example: Wind's Blessing, Conditioning
-    },
     shards: [1, 0, 0] // Indices of the 3 shard rows (Attack Speed, Force, Flat Health)
 };
 
@@ -179,9 +169,6 @@ async function loadRunesFromDataDragon() {
         if (!res.ok) throw new Error(`HTTP error ${res.status}`);
 
         allRunes = await res.json();
-
-        // Restores customizations saved in localStorage, if any
-        restoreSavedRunePage();
 
         renderRunes();
     } catch (errObj) {
@@ -228,12 +215,6 @@ function selectRuneTree(runeTreeId, focusRuneId = null) {
     if (!RUNE_TREES_METADATA[runeTreeId]) return;
     activeRuneTree = Number(runeTreeId);
 
-    // If the secondary tree equals the primary one, swap the secondary
-    if (activeSecondaryTree === activeRuneTree) {
-        const otherEntries = [8000, 8100, 8200, 8400, 8300].filter(id => id !== activeRuneTree);
-        activeSecondaryTree = otherEntries[0];
-    }
-
     if (focusRuneId) {
         const runeObject = findRuneById(focusRuneId);
         if (runeObject) {
@@ -264,25 +245,6 @@ function selectRuneTree(runeTreeId, focusRuneId = null) {
     renderRunes();
 }
 
-function selectSecondaryTree(runeTreeId) {
-    const idNum = Number(runeTreeId);
-    if (idNum === activeRuneTree || !RUNE_TREES_METADATA[idNum]) return;
-    activeSecondaryTree = idNum;
-
-    // Initializes default secondary selections if they do not exist
-    if (!runeSelection.secondaryList[activeSecondaryTree]) {
-        const secondaryTreeRef = allRunes.find(t => t.id === activeSecondaryTree);
-        if (secondaryTreeRef && secondaryTreeRef.slots.length >= 4) {
-            runeSelection.secondaryList[activeSecondaryTree] = [
-                secondaryTreeRef.slots[1].runes[0].id,
-                secondaryTreeRef.slots[2].runes[0].id
-            ];
-        }
-    }
-
-    renderRunes();
-}
-
 function selectPrimaryRune(slotIndex, runeId) {
     if (!runeSelection[activeRuneTree]) {
         runeSelection[activeRuneTree] = {};
@@ -306,39 +268,6 @@ function selectPrimaryRune(slotIndex, runeId) {
     renderRunes();
 }
 
-function selectSecondaryRune(slotIndex, runeId) {
-    if (!runeSelection.secondaryList[activeSecondaryTree]) {
-        runeSelection.secondaryList[activeSecondaryTree] = [];
-    }
-
-    let arr = runeSelection.secondaryList[activeSecondaryTree];
-    const runeTree = allRunes.find(t => t.id === activeSecondaryTree);
-    const slotRunes = runeTree && runeTree.slots[slotIndex] ? runeTree.slots[slotIndex].runes.map(r => r.id) : [];
-
-    // If a rune was already selected on this same row, replace it
-    arr = arr.filter(id => !slotRunes.includes(id));
-    arr.push(runeId);
-
-    // Keeps at most 2 secondary picks
-    if (arr.length > 2) {
-        arr.shift();
-    }
-    runeSelection.secondaryList[activeSecondaryTree] = arr;
-
-    const runeEntry = runeTree && runeTree.slots[slotIndex] ? runeTree.slots[slotIndex].runes.find(r => r.id === runeId) : null;
-    if (runeEntry) {
-        currentInspectedRune = {
-            entryType: 'runa',
-            rawData: runeEntry,
-            runeTree: runeTree,
-            slotIndex: slotIndex,
-            slotName: `Secundária — ${RUNE_TREES_METADATA[activeSecondaryTree].slotNames[slotIndex] || 'Sub-runa'}`
-        };
-    }
-
-    renderRunes();
-}
-
 function selectStatShard(rowIndex, shardIndex) {
     runeSelection.shards[rowIndex] = shardIndex;
     const shard = RUNE_STAT_SHARDS[rowIndex].optionList[shardIndex];
@@ -353,19 +282,18 @@ function selectStatShard(rowIndex, shardIndex) {
     renderRunes();
 }
 
-function inspectRuneHover(runeId, slotIndex, runeTreeId, isSecondary = false) {
+function inspectRuneHover(runeId, slotIndex, runeTreeId) {
     const runeTree = allRunes.find(t => t.id === runeTreeId);
     if (!runeTree || !runeTree.slots[slotIndex]) return;
     const runeEntry = runeTree.slots[slotIndex].runes.find(r => r.id === runeId);
     if (!runeEntry) return;
 
-    const prefixStr = isSecondary ? 'Secundária — ' : '';
     currentInspectedRune = {
         entryType: 'runa',
         rawData: runeEntry,
         runeTree: runeTree,
         slotIndex: slotIndex,
-        slotName: prefixStr + (RUNE_TREES_METADATA[runeTreeId].slotNames[slotIndex] || (slotIndex === 0 ? 'Runa Essencial' : 'Sub-runa'))
+        slotName: RUNE_TREES_METADATA[runeTreeId].slotNames[slotIndex] || (slotIndex === 0 ? 'Runa Essencial' : 'Sub-runa')
     };
     updateInspectorCard();
 }
@@ -411,6 +339,11 @@ function formatRuneDescription(rune, summaryActive = runeSummaryMode) {
         .replace(/<attention>(.*?)<\/attention>/gi, '<span class="lol-rune-attention">$1</span>')
         .replace(/<keywordMajor>(.*?)<\/keywordMajor>/gi, '<span class="lol-rune-keyword">$1</span>');
 
+    // Themed effect colors (physical/magic damage, stun, shield) on plain text
+    if (typeof colorizeEffectTerms === 'function') {
+        formattedValue = colorizeEffectTerms(formattedValue);
+    }
+
     return `<div class="lol-rune-rich-desc">${formattedValue}</div>`;
 }
 
@@ -426,94 +359,62 @@ function findRuneById(runeId) {
 }
 
 /* ==========================================================================
-   SAVE AND PERSISTENCE
-   ========================================================================== */
-function saveRunePage() {
-    const rawData = {
-        labelName: runePageName,
-        primaryTree: activeRuneTree,
-        secondaryTreeChoice: activeSecondaryTree,
-        selectionList: runeSelection
-    };
-    try {
-        localStorage.setItem('lol_codex_rune_page', JSON.stringify(rawData));
-        showRuneToast('Página de Runas salva com sucesso!');
-    } catch (e) {
-        console.error('Erro ao salvar runas:', e);
-    }
-}
-
-function restoreSavedRunePage() {
-    try {
-        const savedValue = localStorage.getItem('lol_codex_rune_page');
-        if (savedValue) {
-            const obj = JSON.parse(savedValue);
-            if (obj.primaryTree && RUNE_TREES_METADATA[obj.primaryTree]) {
-                activeRuneTree = obj.primaryTree;
-            }
-            if (obj.secondaryTreeChoice && RUNE_TREES_METADATA[obj.secondaryTreeChoice]) {
-                activeSecondaryTree = obj.secondaryTreeChoice;
-            }
-            if (obj.selectionList) {
-                runeSelection = { ...runeSelection, ...obj.selectionList };
-            }
-            if (obj.labelName) {
-                runePageName = obj.labelName;
-            }
-        }
-    } catch (e) {
-        console.warn('Erro ao restaurar página de runas:', e);
-    }
-}
-
-function resetRunePage() {
-    runeSelection[activeRuneTree] = {};
-    const runeTree = allRunes.find(t => t.id === activeRuneTree);
-    if (runeTree) {
-        runeSelection[activeRuneTree].keystone = runeTree.slots[0].runes[0].id;
-        runeSelection[activeRuneTree].slot1 = runeTree.slots[1].runes[0].id;
-        runeSelection[activeRuneTree].slot2 = runeTree.slots[2].runes[0].id;
-        runeSelection[activeRuneTree].slot3 = runeTree.slots[3].runes[0].id;
-    }
-    showRuneToast('Seleções redefinidas para o padrão.');
-    renderRunes();
-}
-
-function editRunePageName() {
-    const newValue = prompt('Nome da Página de Runas:', runePageName);
-    if (newValue && newValue.trim()) {
-        runePageName = newValue.trim();
-        saveRunePage();
-        renderRunes();
-    }
-}
-
-function showRuneToast(msg) {
-    let toast = document.getElementById('lol-runes-toast');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'lol-runes-toast';
-        toast.className = 'lol-runes-toast';
-        document.body.appendChild(toast);
-    }
-    toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${msg}</span>`;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2800);
-}
-
-/* ==========================================================================
    LOL CLIENT UI RENDERING
    ========================================================================== */
+/**
+ * Builds a high-resolution vector backdrop (inline SVG data URI) tinted with
+ * the active tree's official colors. Replaces the old low-res blurred
+ * background jpg (300x420) with a crisp, infinitely scalable composition.
+ */
+function buildRuneTreeBackdrop(meta) {
+    const primaryColor = meta.colorHex;
+    const secondaryColor = meta.secondaryColorHex;
+    const svgMarkup = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <radialGradient id="glow" cx="74%" cy="28%" r="72%">
+                    <stop offset="0%" stop-color="${secondaryColor}" stop-opacity="0.34"/>
+                    <stop offset="45%" stop-color="${primaryColor}" stop-opacity="0.12"/>
+                    <stop offset="100%" stop-color="#010a13" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#010a13" stop-opacity="0.98"/>
+                    <stop offset="55%" stop-color="#010a13" stop-opacity="0.72"/>
+                    <stop offset="100%" stop-color="#010a13" stop-opacity="0.18"/>
+                </linearGradient>
+            </defs>
+            <rect width="1400" height="900" fill="#010a13"/>
+            <rect width="1400" height="900" fill="url(#glow)"/>
+            <g fill="none" stroke="${primaryColor}">
+                <circle cx="1030" cy="330" r="270" stroke-width="2" opacity="0.30"/>
+                <circle cx="1030" cy="330" r="340" stroke-width="1" stroke-dasharray="16 22" opacity="0.22"/>
+                <circle cx="1030" cy="330" r="420" stroke-width="1" opacity="0.12"/>
+                <polygon points="1030,-30 1385,330 1030,690 675,330" stroke-width="1.5" opacity="0.20"/>
+                <polygon points="1030,60 1290,330 1030,600 770,330" stroke-width="1" opacity="0.16"/>
+                <g stroke-width="1" opacity="0.14">
+                    <line x1="1030" y1="-60" x2="1030" y2="720"/>
+                    <line x1="640" y1="330" x2="1420" y2="330"/>
+                    <line x1="755" y1="55" x2="1305" y2="605"/>
+                    <line x1="1305" y1="55" x2="755" y2="605"/>
+                </g>
+                <circle cx="1030" cy="330" r="64" stroke-width="2.5" opacity="0.45"/>
+                <circle cx="1030" cy="330" r="30" stroke-width="1.5" opacity="0.55" stroke="${secondaryColor}"/>
+            </g>
+            <rect width="1400" height="900" fill="url(#fade)"/>
+        </svg>
+    `;
+    const svgCompact = svgMarkup.replace(/\s+/g, ' ').trim();
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgCompact)}`;
+}
+
 function renderRunes() {
     const container = document.getElementById('runes-container');
     if (!container || !allRunes || allRunes.length === 0) return;
 
     const activeMeta = RUNE_TREES_METADATA[activeRuneTree] || RUNE_TREES_METADATA[8000];
     const primaryTree = allRunes.find(t => t.id === activeRuneTree) || allRunes[0];
-    const secondaryMeta = RUNE_TREES_METADATA[activeSecondaryTree] || RUNE_TREES_METADATA[8400];
-    const secondaryTreeChoice = allRunes.find(t => t.id === activeSecondaryTree) || allRunes[3];
 
-    // Ensures selected picks for the primary tree
+    // Ensures selected picks for the active tree
     if (!runeSelection[activeRuneTree]) {
         runeSelection[activeRuneTree] = {
             keystone: primaryTree.slots[0].runes[0].id,
@@ -524,15 +425,6 @@ function renderRunes() {
     }
     const primaryChoices = runeSelection[activeRuneTree];
 
-    // Ensures picks for the secondary tree
-    if (!runeSelection.secondaryList[activeSecondaryTree] || runeSelection.secondaryList[activeSecondaryTree].length < 2) {
-        runeSelection.secondaryList[activeSecondaryTree] = [
-            secondaryTreeChoice.slots[1].runes[0].id,
-            secondaryTreeChoice.slots[2].runes[0].id
-        ];
-    }
-    const secondaryChoices = runeSelection.secondaryList[activeSecondaryTree];
-
     // If no rune has been inspected yet, set the active keystone
     if (!currentInspectedRune) {
         const ksId = primaryChoices.keystone || primaryTree.slots[0].runes[0].id;
@@ -542,36 +434,30 @@ function renderRunes() {
             rawData: ksObj,
             runeTree: primaryTree,
             slotIndex: 0,
-            slotName: 'Runa Essencial (Keystone)'
+            slotName: 'Runas Essenciais (Keystone)'
         };
     }
 
-    // HTML of the Primary Tree selectors
     const allTreeIds = [8000, 8100, 8200, 8400, 8300];
-    const primaryMiniIconsHtml = allTreeIds
-        .filter(id => id !== activeRuneTree)
+
+    // Top selector: the 5 official trees
+    const treeTabsHtml = allTreeIds
         .map(id => {
             const m = RUNE_TREES_METADATA[id];
+            const isActive = id === activeRuneTree;
             return `
-                <button type="button" class="lol-path-mini-btn" onclick="selectRuneTree(${id})" title="${m.labelName} — ${m.subtitleText}">
+                <button type="button"
+                        class="lol-tree-tab ${isActive ? 'active' : ''}"
+                        onclick="selectRuneTree(${id})"
+                        title="${m.labelName} — ${m.subtitleText}"
+                        style="${isActive ? `--tab-color:${m.colorHex}; --tab-glow:${m.glowColor}; --tab-secondary:${m.secondaryColorHex};` : ''}">
                     <img src="${m.runeIconUrl}" alt="${m.labelName}">
+                    <span>${m.labelName}</span>
                 </button>
             `;
         }).join('');
 
-    // HTML of the Secondary Tree selectors
-    const secondaryMiniIconsHtml = allTreeIds
-        .filter(id => id !== activeRuneTree && id !== activeSecondaryTree)
-        .map(id => {
-            const m = RUNE_TREES_METADATA[id];
-            return `
-                <button type="button" class="lol-path-mini-btn" onclick="selectSecondaryTree(${id})" title="${m.labelName} — ${m.subtitleText}">
-                    <img src="${m.runeIconUrl}" alt="${m.labelName}">
-                </button>
-            `;
-        }).join('');
-
-    // 1. Primary tree rows (Keystones + 3 Sub-runes)
+    // 1. Keystones (top row of the active tree)
     const slotKeystone = primaryTree.slots[0];
     const keystonesHtml = slotKeystone.runes.map(r => {
         const isSelected = primaryChoices.keystone === r.id;
@@ -588,9 +474,11 @@ function renderRunes() {
         `;
     }).join('');
 
+    // 2. Rows 1, 2 and 3 stacked vertically
     const subSlotsHtml = [1, 2, 3].map(slotIdx => {
         const slot = primaryTree.slots[slotIdx];
         const cacheKey = `slot${slotIdx}`;
+        const rowName = activeMeta.slotNames[slotIdx] || `Linha ${slotIdx}`;
         const runesHtml = slot.runes.map(r => {
             const isSelected = primaryChoices[cacheKey] === r.id;
             const runeIcon = `https://ddragon.leagueoflegends.com/cdn/img/${r.icon}`;
@@ -609,34 +497,10 @@ function renderRunes() {
         return `
             <div class="lol-rune-tier-row" data-tier="${slotIdx}">
                 <div class="lol-tier-divider"></div>
-                <div class="lol-runes-badge-group">
-                    ${runesHtml}
+                <div class="lol-tier-row-header">
+                    <span class="lol-tier-row-num">${slotIdx}</span>
+                    <span class="lol-tier-row-name">${rowName}</span>
                 </div>
-            </div>
-        `;
-    }).join('');
-
-    // 2. Secondary column (3 sub-rune rows, pick up to 2)
-    const subSlotsSecondaryHtml = [1, 2, 3].map(slotIdx => {
-        const slot = secondaryTreeChoice.slots[slotIdx];
-        const runesHtml = slot.runes.map(r => {
-            const isSelected = secondaryChoices.includes(r.id);
-            const runeIcon = `https://ddragon.leagueoflegends.com/cdn/img/${r.icon}`;
-            return `
-                <div class="lol-rune-badge lol-subrune-badge lol-secondary-badge ${isSelected ? 'selected' : ''}"
-                     onclick="selectSecondaryRune(${slotIdx}, ${r.id})"
-                     onmouseenter="inspectRuneHover(${r.id}, ${slotIdx}, ${activeSecondaryTree}, true)"
-                     title="${r.name}">
-                    <div class="lol-rune-ring">
-                        <img src="${runeIcon}" alt="${r.name}" class="lol-rune-icon">
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        return `
-            <div class="lol-rune-tier-row lol-sec-tier-row" data-tier="${slotIdx}">
-                <div class="lol-tier-divider"></div>
                 <div class="lol-runes-badge-group">
                     ${runesHtml}
                 </div>
@@ -661,6 +525,7 @@ function renderRunes() {
 
         return `
             <div class="lol-shard-tier-row">
+                <span class="lol-shard-row-label" title="${tier.labelName}"><i class="${tier.runeIconUrl}"></i></span>
                 <div class="lol-shard-badges-group">
                     ${optionsHtml}
                 </div>
@@ -668,59 +533,38 @@ function renderRunes() {
         `;
     }).join('');
 
-    // Explanatory section ("one for each, meaning precision explains its 3 runes, then the sub runes one by one...")
+    // Explanatory section (each rune explained one by one)
     let rowByRowExplanationHtml = '';
     if (runeViewMode === 'lista') {
         rowByRowExplanationHtml = buildRowByRowExplanation(primaryTree, activeMeta);
     }
 
     container.innerHTML = `
-        <div class="lol-runes-client-wrapper" style="--tree-theme-color:${activeMeta.colorHex}; --tree-theme-glow:${activeMeta.glowColor}; --sec-theme-color:${secondaryMeta.colorHex};">
-            <!-- Official atmospheric background of the tree with monument and pedestal -->
-            <div class="lol-runes-backdrop" style="background-image: url('${activeMeta.bgImage}');">
+        <div class="lol-runes-client-wrapper" style="--tree-theme-color:${activeMeta.colorHex}; --tree-theme-secondary:${activeMeta.secondaryColorHex}; --tree-theme-glow:${activeMeta.glowColor};">
+            <!-- High-resolution vector backdrop tinted with the tree's official colors -->
+            <div class="lol-runes-backdrop" style="background-image: url('${buildRuneTreeBackdrop(activeMeta)}');">
                 <div class="lol-backdrop-vignette"></div>
             </div>
 
             <div class="lol-runes-window">
-                <!-- Client top bar (page name, save button, +, trash) -->
-                <div class="lol-client-header">
-                    <div class="lol-header-title-box">
-                        <button type="button" class="lol-edit-name-btn" onclick="editRunePageName()" title="Renomear página de runas">
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <h2 class="lol-page-name" onclick="editRunePageName()">${runePageName}</h2>
-                        <i class="fa-solid fa-chevron-down lol-dropdown-arrow"></i>
+                <!-- Top selector: the 5 rune trees -->
+                <div class="lol-tree-tabs">
+                    <div class="lol-tree-tabs-list">
+                        ${treeTabsHtml}
                     </div>
-
-                    <div class="lol-header-actions">
-                        <button type="button" class="lol-client-action-btn" onclick="saveRunePage()" title="Salvar escolhas de runas">
-                            <span>SALVAR</span>
-                        </button>
-                        <button type="button" class="lol-client-icon-btn" onclick="editRunePageName()" title="Nova página">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                        <button type="button" class="lol-client-icon-btn" onclick="resetRunePage()" title="Redefinir escolhas">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
+                    <div class="lol-tree-tabs-info">
+                        <span class="lol-tree-tabs-crest"><img src="${activeMeta.runeIconUrl}" alt="${activeMeta.labelName}"></span>
+                        <div>
+                            <h3 class="lol-tree-tabs-name">${activeMeta.labelName}</h3>
+                            <p class="lol-tree-tabs-sub">${activeMeta.subtitleText}</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Main body with 3 columns: primary tree | secondary tree + shards | monument + inspector -->
-                <div class="lol-client-body-layout">
-                    <!-- Column 1: primary tree -->
+                <!-- Main body: active tree (left) | inspector + shards (right) -->
+                <div class="lol-runes-main-layout">
+                    <!-- Column 1: keystones + rows 1/2/3 of the active tree -->
                     <div class="lol-primary-column">
-                        <!-- Primary selector header -->
-                        <div class="lol-path-selector-row">
-                            <div class="lol-active-path-crest" title="${activeMeta.labelName} (Árvore Principal)">
-                                <div class="lol-crest-halo"></div>
-                                <img src="${activeMeta.runeIconUrl}" alt="${activeMeta.labelName}" class="lol-crest-img">
-                            </div>
-                            <div class="lol-alt-paths-group">
-                                ${primaryMiniIconsHtml}
-                            </div>
-                        </div>
-
-                        <!-- Tree content with side timeline -->
                         <div class="lol-tree-slots-content">
                             <!-- Timeline line on the left with connector dots -->
                             <div class="lol-timeline-track">
@@ -730,7 +574,6 @@ function renderRunes() {
                                 <span class="lol-timeline-node ${primaryChoices.slot3 ? 'active' : ''}"></span>
                             </div>
 
-                            <!-- Group of the 4 tree rows -->
                             <div class="lol-slots-rows-group">
                                 <!-- Keystones (core runes) -->
                                 <div class="lol-keystone-section">
@@ -744,7 +587,7 @@ function renderRunes() {
                                     </div>
                                 </div>
 
-                                <!-- 3 sub-runes of the primary tree -->
+                                <!-- 3 sub-rune rows of the active tree -->
                                 <div class="lol-subrunes-section">
                                     ${subSlotsHtml}
                                 </div>
@@ -752,60 +595,24 @@ function renderRunes() {
                         </div>
                     </div>
 
-                    <!-- Column 2: secondary tree + attribute shards -->
-                    <div class="lol-secondary-column">
-                        <!-- Secondary tree selector -->
-                        <div class="lol-path-selector-row lol-sec-selector-row">
-                            <div class="lol-active-path-crest lol-sec-crest" title="${secondaryMeta.labelName} (Árvore Secundária)">
-                                <div class="lol-crest-halo" style="border-color:${secondaryMeta.colorHex};"></div>
-                                <img src="${secondaryMeta.runeIconUrl}" alt="${secondaryMeta.labelName}" class="lol-crest-img">
-                            </div>
-                            <div class="lol-alt-paths-group">
-                                ${secondaryMiniIconsHtml}
-                            </div>
-                        </div>
-
-                        <!-- Secondary slots and shards with timeline -->
-                        <div class="lol-tree-slots-content lol-sec-content">
-                            <div class="lol-timeline-track lol-sec-timeline">
-                                <span class="lol-timeline-node ${secondaryChoices.length >= 1 ? 'active' : ''}"></span>
-                                <span class="lol-timeline-node ${secondaryChoices.length >= 2 ? 'active' : ''}"></span>
-                                <span class="lol-timeline-node"></span>
-                                <span class="lol-timeline-node shard-node active"></span>
-                                <span class="lol-timeline-node shard-node active"></span>
-                                <span class="lol-timeline-node shard-node active"></span>
-                            </div>
-
-                            <div class="lol-slots-rows-group">
-                                <!-- Secondary sub-runes (pick 2) -->
-                                <div class="lol-sec-subrunes-group">
-                                    ${subSlotsSecondaryHtml}
-                                </div>
-
-                                <!-- Attribute shards -->
-                                <div class="lol-shards-section">
-                                    ${statShardsHtml}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Column 3: mystic pedestal + rune detail inspector -->
-                    <div class="lol-inspector-column">
-                        <!-- Rune monument / floating pedestal -->
-                        <div class="lol-monument-pedestal">
-                            <div class="lol-pedestal-light-orb"></div>
-                            <img src="${activeMeta.runeIconUrl}" alt="${activeMeta.labelName}" class="lol-monument-crest-floating">
-                        </div>
-
-                        <!-- Floating rune inspection card -->
+                    <!-- Column 2: live rune inspector + attribute shards -->
+                    <div class="lol-runes-side-column">
+                        <!-- Floating rune inspection card (hover/click explanation) -->
                         <div id="lol-rune-inspector-card" class="lol-rune-inspector-card">
                             <!-- Filled via updateInspectorCard() -->
+                        </div>
+
+                        <!-- Attribute shards -->
+                        <div class="lol-shards-section">
+                            <div class="lol-shards-title">
+                                <i class="fa-solid fa-cubes-stacked"></i> Fragmentos de Atributos
+                            </div>
+                            ${statShardsHtml}
                         </div>
                     </div>
                 </div>
 
-                <!-- Footer / bottom bar (grid mode vs explanatory list mode, detailed checkbox, quick navigation) -->
+                <!-- Footer bar (client view vs explanatory list, detailed/summarized) -->
                 <div class="lol-client-footer">
                     <div class="lol-footer-left">
                         <div class="lol-view-toggles">
@@ -822,25 +629,8 @@ function renderRunes() {
                         <label class="lol-compare-checkbox-label">
                             <input type="checkbox" id="lolRuneDetailedCheckbox" ${!runeSummaryMode ? 'checked' : ''}
                                    onchange="toggleRuneSummary(!this.checked)">
-                            <span>Exibir descrições detalhadas durante a comparação (ou segure Shift)</span>
+                            <span>Exibir descrições detalhadas</span>
                         </label>
-                    </div>
-
-                    <div class="lol-footer-right">
-                        <div class="lol-quick-tree-pills">
-                            ${allTreeIds.map(id => {
-                                const m = RUNE_TREES_METADATA[id];
-                                const isActive = id === activeRuneTree;
-                                return `
-                                    <button type="button" class="lol-tree-pill ${isActive ? 'active' : ''}"
-                                            onclick="selectRuneTree(${id})"
-                                            style="${isActive ? `border-color:${m.colorHex}; color:${m.secondaryColorHex};` : ''}">
-                                        <img src="${m.runeIconUrl}" alt="${m.labelName}">
-                                        <span>${m.labelName}</span>
-                                    </button>
-                                `;
-                            }).join('')}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -915,11 +705,6 @@ function updateInspectorCard() {
         </div>
         <div class="lol-inspector-body">
             ${descHtml}
-        </div>
-        <div class="lol-inspector-footer">
-            <span class="lol-inspector-tip">
-                <i class="fa-solid fa-mouse-pointer"></i> Clique na runa para selecioná-la na sua página de runas.
-            </span>
         </div>
     `;
 }

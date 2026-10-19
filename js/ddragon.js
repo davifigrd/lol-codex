@@ -22,7 +22,7 @@ async function loadDDragonVersion() {
    ========================================================================== */
 // Cache-busting for the local data JSONs (keep in sync with the ?v= refs
 // in index.html, otherwise stale summaries can linger in the browser cache)
-const LOCAL_DATA_CACHE_VERSION = '4';
+const LOCAL_DATA_CACHE_VERSION = '5';
 
 async function loadAuthorSummaries() {
     const loadJSON = async (fetchPath, fallback = {}) => {
@@ -38,7 +38,10 @@ async function loadAuthorSummaries() {
 
     const [skillEntries, itemsData, runeEntries, glossaryData] = await Promise.all([
         loadJSON(`../data/skill-summary.json?v=${LOCAL_DATA_CACHE_VERSION}`),
-        loadJSON(`../data/item-summary.json?v=${LOCAL_DATA_CACHE_VERSION}`),
+        loadJSON(`../data/item-resum.json?v=${LOCAL_DATA_CACHE_VERSION}`).then(async res => {
+            if (res && Object.keys(res).length > 0) return res;
+            return await loadJSON(`../data/item-summary.json?v=${LOCAL_DATA_CACHE_VERSION}`);
+        }),
         loadJSON(`../data/rune-summary.json?v=${LOCAL_DATA_CACHE_VERSION}`),
         loadJSON(`../data/glossary.json?v=${LOCAL_DATA_CACHE_VERSION}`)
     ]);

@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupModalEvents();
     setupAlphabeticalIndex();
     setupModalScrollLock();
+    setupFeedbackWidget();
 
     // 1. Sync the official Data Dragon version
     await loadDDragonVersion();

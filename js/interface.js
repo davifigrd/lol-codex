@@ -8,6 +8,17 @@ function setupNavigation() {
     if (mobileBtn && navMenu) {
         mobileBtn.addEventListener('click', () => navMenu.classList.toggle('mobile-open'));
     }
+
+    // Deep links from the standalone Quiz page (index.html#items, #runes, ...)
+    // must activate the matching tab instead of only jumping to a hidden section.
+    const applyHashTab = () => {
+        const tabId = (window.location.hash || '').replace('#', '');
+        if (!tabId) return;
+        const target = document.getElementById(tabId);
+        if (target && target.classList.contains('page-section')) switchTab(tabId);
+    };
+    window.addEventListener('hashchange', applyHashTab);
+    applyHashTab();
 }
 
 // Closes the global search preview when clicking outside the header field

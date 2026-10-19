@@ -182,24 +182,216 @@ body.scroll-locked {
   border-bottom-color: var(--gold-dark);
 }
 
-/* Support/feedback badge (Gmail) in the footer */
-.footer-support-link {
-  display: inline-flex;
+/* ==========================================================================
+   FEEDBACK WIDGET (js/feedback.js)
+   Discreet floating icon at the bottom right of the footer that opens a
+   small Hextech-style contact window (Nome / E-mail / Mensagem).
+   ========================================================================== */
+.footer-feedback-btn {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 1.1rem;
+  z-index: 1500;
+  width: 44px;
+  height: 44px;
+  display: flex;
   align-items: center;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  justify-content: center;
+  font-size: 1.05rem;
+  color: var(--gold-light);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 12px var(--gold-glow);
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.footer-support-link:hover,
-.footer-support-link:focus-visible {
+.footer-feedback-btn:hover,
+.footer-feedback-btn:focus-visible,
+.footer-feedback-btn.active {
+  color: var(--hextech-cyan-accent);
   transform: translateY(-2px);
-  filter: brightness(1.08);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55), 0 0 16px rgba(0, 209, 255, 0.35);
 }
 
-.footer-support-link img {
-  height: 28px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+.feedback-widget {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 4.4rem;
+  z-index: 1501;
+  width: min(330px, calc(100vw - 2rem));
+  padding: 1rem 1.1rem 1.15rem;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65), 0 0 18px var(--gold-glow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.98);
+  transform-origin: bottom right;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+.feedback-widget.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.feedback-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--gold-light);
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+}
+
+.feedback-widget-header i {
+  margin-right: 0.35rem;
+  color: var(--gold-bright);
+}
+
+.feedback-widget-close {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.feedback-widget-close:hover,
+.feedback-widget-close:focus-visible {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.feedback-field {
+  margin-bottom: 0.7rem;
+}
+
+.feedback-field label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.feedback-field input,
+.feedback-field textarea {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-body);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feedback-field input:focus,
+.feedback-field textarea:focus {
+  outline: none;
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+
+.feedback-field input.invalid,
+.feedback-field textarea.invalid {
+  border-color: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.35);
+}
+
+.feedback-field-error {
+  display: block;
+  min-height: 0.9rem;
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: #f87171;
+}
+
+.feedback-submit-btn {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--bg-dark);
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold-primary));
+  border: 1px solid var(--gold-dark);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.feedback-submit-btn:hover:not(:disabled),
+.feedback-submit-btn:focus-visible:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.feedback-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Success/error toast for the feedback widget */
+.feedback-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.6rem;
+  z-index: 1600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-title);
+  background: var(--bg-dark);
+  border: 1px solid #22c55e;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 14px rgba(34, 197, 94, 0.35);
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+
+.feedback-toast i {
+  color: #22c55e;
+}
+
+.feedback-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.feedback-toast.error {
+  border-color: #ef4444;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 14px rgba(239, 68, 68, 0.35);
+}
+
+.feedback-toast.error i {
+  color: #ef4444;
 }
 
 .footer-disclaimer {

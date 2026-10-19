@@ -107,11 +107,36 @@ img.stat-img-icon {
   mask-image: url('../img/stats/Life_steal_icon.png');
 }
 
+/* Vampirismo (VAMP) — Omnivamp icon */
+.stat-img-vamp {
+  --stat-color: #c026d3;
+  background-color: #c026d3;
+  -webkit-mask-image: url('../img/stats/Omnivamp_icon.png');
+  mask-image: url('../img/stats/Omnivamp_icon.png');
+}
+
+/* Letalidade (LET) — Armor penetration icon, reddish tint to distinguish */
+.stat-img-let {
+  --stat-color: #fb923c;
+  background-color: #fb923c;
+  -webkit-mask-image: url('../img/stats/Armor_penetration_icon.png');
+  mask-image: url('../img/stats/Armor_penetration_icon.png');
+}
+
+/* Penetração de Armadura % (A. PEN) — same icon, slate/silver tint */
 .stat-img-pen {
   --stat-color: #cbd5e1;
   background-color: #cbd5e1;
   -webkit-mask-image: url('../img/stats/Armor_penetration_icon.png');
   mask-image: url('../img/stats/Armor_penetration_icon.png');
+}
+
+/* Penetração Mágica (M. PEN) — uses the magic penetration icon, purple */
+.stat-img-magicpen {
+  --stat-color: #c084fc;
+  background-color: #c084fc;
+  -webkit-mask-image: url('../img/stats/Magic_penetration_icon.png');
+  mask-image: url('../img/stats/Magic_penetration_icon.png');
 }
 
 .stat-img-mana {
@@ -133,6 +158,22 @@ img.stat-img-icon {
   background-color: #f97316;
   -webkit-mask-image: url('../img/stats/Tenacity_icon.png');
   mask-image: url('../img/stats/Tenacity_icon.png');
+}
+
+/* Regeneração de Vida (HP5) — Health regeneration icon, bright green */
+.stat-img-hpregen {
+  --stat-color: #4ade80;
+  background-color: #4ade80;
+  -webkit-mask-image: url('../img/stats/Health_regeneration_icon.png');
+  mask-image: url('../img/stats/Health_regeneration_icon.png');
+}
+
+/* Regeneração de Mana — Mana regen icon, bright blue */
+.stat-img-manaregen {
+  --stat-color: #93c5fd;
+  background-color: #93c5fd;
+  -webkit-mask-image: url('../img/stats/Mana_regeneration_icon.png');
+  mask-image: url('../img/stats/Mana_regeneration_icon.png');
 }
 
 /* ==========================================================================
@@ -206,6 +247,34 @@ img.stat-img-icon {
   background: rgba(244, 63, 94, 0.08) !important;
   box-shadow: none !important;
 }
+/* Vampirismo (VAMP) */
+.stat-badge-vamp {
+  border-color: rgba(192, 38, 211, 0.35) !important;
+  color: #e879f9 !important;
+  background: rgba(192, 38, 211, 0.08) !important;
+  box-shadow: none !important;
+}
+/* Letalidade (LET) */
+.stat-badge-let {
+  border-color: rgba(251, 146, 60, 0.35) !important;
+  color: #fdba74 !important;
+  background: rgba(251, 146, 60, 0.08) !important;
+  box-shadow: none !important;
+}
+/* Pen. Armadura % (A. PEN) */
+.stat-badge-armorpen {
+  border-color: rgba(203, 213, 225, 0.35) !important;
+  color: #e2e8f0 !important;
+  background: rgba(203, 213, 225, 0.08) !important;
+  box-shadow: none !important;
+}
+/* Penetração Mágica (M. PEN) */
+.stat-badge-magicpen {
+  border-color: rgba(192, 132, 252, 0.35) !important;
+  color: #d8b4fe !important;
+  background: rgba(192, 132, 252, 0.08) !important;
+  box-shadow: none !important;
+}
 .stat-badge-pen {
   border-color: rgba(203, 213, 225, 0.35) !important;
   color: #e2e8f0 !important;
@@ -218,10 +287,43 @@ img.stat-img-icon {
   background: rgba(59, 130, 246, 0.08) !important;
   box-shadow: none !important;
 }
+.stat-badge-manaregen {
+  border-color: rgba(147, 197, 253, 0.35) !important;
+  color: #bae6fd !important;
+  background: rgba(147, 197, 253, 0.08) !important;
+  box-shadow: none !important;
+}
 .stat-badge-mov {
   border-color: rgba(96, 165, 250, 0.35) !important;
   color: #93c5fd !important;
   background: rgba(96, 165, 250, 0.08) !important;
   box-shadow: none !important;
 }
-
+/* Regeneração de Vida (HP5) */
+.stat-badge-hpregen {
+  border-color: rgba(74, 222, 128, 0.35) !important;
+  color: #86efac !important;
+  background: rgba(74, 222, 128, 0.08) !important;
+  box-shadow: none !important;
+}
+/* Tenacidade (TEN) */
+.stat-badge-tenacity {
+  border-color: rgba(249, 115, 22, 0.35) !important;
+  color: #fdba74 !important;
+  background: rgba(249, 115, 22, 0.08) !important;
+  box-shadow: none !important;
+}
+/* Resist. Lentidão (SR) */
+.stat-badge-sr {
+  border-color: rgba(52, 211, 153, 0.35) !important;
+  color: #6ee7b7 !important;
+  background: rgba(52, 211, 153, 0.08) !important;
+  box-shadow: none !important;
+}
+/* Cura e Resist. do Escudo (E&S) */
+.stat-badge-healshield {
+  border-color: rgba(52, 211, 153, 0.35) !important;
+  color: #34d399 !important;
+  background: rgba(52, 211, 153, 0.08) !important;
+  box-shadow: none !important;
+}

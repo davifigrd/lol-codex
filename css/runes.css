@@ -44,201 +44,111 @@
   min-height: 590px;
 }
 
-/* CLIENT TOP BAR (Page Name, Save Button, +, Trash) */
-.lol-client-header {
+/* TOP TREE SELECTOR (5 official trees) */
+.lol-tree-tabs {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.15rem 2rem 0.85rem 2rem;
-  border-bottom: 1px solid rgba(200, 155, 60, 0.15);
-  background: rgba(3, 9, 17, 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  gap: 1.25rem;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid rgba(200, 155, 60, 0.18);
+  background: rgba(3, 9, 17, 0.72);
+  flex-wrap: wrap;
 }
 
-.lol-header-title-box {
+.lol-tree-tabs-list {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  user-select: none;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
-.lol-edit-name-btn {
-  background: transparent;
-  border: none;
+.lol-tree-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #3c4048;
+  background: #060e1e;
   color: #a09b8c;
-  font-size: 0.95rem;
-  cursor: pointer;
-  padding: 4px;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.lol-edit-name-btn:hover {
-  color: var(--gold-bright);
-  transform: scale(1.1);
-}
-
-.lol-page-name {
   font-family: var(--font-title);
-  font-size: 1.35rem;
+  font-size: 0.8rem;
   font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lol-tree-tab img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: grayscale(45%);
+  transition: all 0.2s ease;
+}
+
+.lol-tree-tab:hover {
   color: #f0e6d2;
-  letter-spacing: 0.04em;
+  border-color: #5b5a56;
+  transform: translateY(-1px);
+}
+
+.lol-tree-tab:hover img {
+  filter: grayscale(0%);
+}
+
+.lol-tree-tab.active {
+  color: var(--tab-secondary, #f0e6d2);
+  border-color: var(--tab-color, #c89b3c);
+  background: color-mix(in srgb, var(--tab-color, #c89b3c) 14%, #060e1e);
+  box-shadow: 0 0 14px var(--tab-glow, rgba(200, 155, 60, 0.35));
+}
+
+.lol-tree-tab.active img {
+  filter: grayscale(0%) drop-shadow(0 0 5px var(--tab-glow, rgba(200, 155, 60, 0.6)));
+}
+
+.lol-tree-tabs-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.lol-tree-tabs-crest img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px var(--tree-theme-glow));
+}
+
+.lol-tree-tabs-name {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--tree-theme-secondary, #f0e6d2);
   margin: 0;
-  text-shadow: 0 0 10px rgba(240, 178, 50, 0.25);
-  transition: color 0.2s ease;
+  line-height: 1.2;
+  text-shadow: 0 0 12px var(--tree-theme-glow);
 }
 
-.lol-header-title-box:hover .lol-page-name {
-  color: var(--gold-bright);
-}
-
-.lol-dropdown-arrow {
-  font-size: 0.75rem;
+.lol-tree-tabs-sub {
+  font-size: 0.76rem;
   color: #a09b8c;
-  transition: transform 0.2s ease;
+  margin: 0;
 }
 
-.lol-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.lol-client-action-btn {
-  background: #1e2328;
-  border: 1px solid #5b5a56;
-  color: #cdbe91;
-  font-family: var(--font-title);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  padding: 0.45rem 1.4rem;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5);
-}
-
-.lol-client-action-btn:hover {
-  background: #252b31;
-  border-color: #c89b3c;
-  color: #f0e6d2;
-  box-shadow: 0 0 12px rgba(200, 155, 60, 0.35);
-}
-
-.lol-client-icon-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #1e2328;
-  border: 1px solid #5b5a56;
-  color: #cdbe91;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.2s ease;
-}
-
-.lol-client-icon-btn:hover {
-  background: #262c33;
-  border-color: #c89b3c;
-  color: #f0e6d2;
-  box-shadow: 0 0 10px rgba(200, 155, 60, 0.3);
-}
-
-/* CLIENT 3-COLUMN LAYOUT */
-.lol-client-body-layout {
-  display: grid;
-  grid-template-columns: 290px 240px 1fr;
-  gap: 1.5rem;
-  padding: 1.25rem 2rem 1.5rem 2rem;
-  align-items: start;
-}
-
-/* TREE SELECTOR AT THE TOP OF THE COLUMN */
-.lol-path-selector-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-
-.lol-active-path-crest {
+/* MAIN 2-COLUMN LAYOUT (tree | inspector + shards) */
+.lol-runes-main-layout {
   position: relative;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle, rgba(14, 25, 42, 0.95) 0%, rgba(3, 8, 16, 0.98) 100%);
-  border: 2px solid var(--tree-theme-color);
-  box-shadow: 0 0 16px var(--tree-theme-glow), inset 0 0 10px var(--tree-theme-glow);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.lol-crest-halo {
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 1px dashed rgba(200, 155, 60, 0.35);
-  pointer-events: none;
-  animation: crestPulse 4s linear infinite;
-}
-
-@keyframes crestPulse {
-  0% { transform: rotate(0deg); opacity: 0.5; }
-  50% { opacity: 0.85; }
-  100% { transform: rotate(360deg); opacity: 0.5; }
-}
-
-.lol-crest-img {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 6px var(--tree-theme-glow));
-}
-
-.lol-alt-paths-group {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-
-.lol-path-mini-btn {
-  background: transparent;
-  border: none;
-  padding: 0;
-  width: 26px;
-  height: 26px;
-  cursor: pointer;
-  opacity: 0.45;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lol-path-mini-btn img {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
-  filter: grayscale(40%);
-  transition: all 0.2s ease;
-}
-
-.lol-path-mini-btn:hover {
-  opacity: 1;
-  transform: scale(1.2);
-}
-
-.lol-path-mini-btn:hover img {
-  filter: grayscale(0%) drop-shadow(0 0 6px var(--gold-bright));
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  align-items: start;
 }
 
 /* SIDE TIMELINE WITH DOTS AND CONNECTORS */
@@ -284,12 +194,6 @@
   border-color: var(--tree-theme-color);
   background: var(--tree-theme-color);
   box-shadow: 0 0 10px var(--tree-theme-glow);
-}
-
-.lol-sec-timeline .lol-timeline-node.active {
-  border-color: var(--sec-theme-color);
-  background: var(--sec-theme-color);
-  box-shadow: 0 0 10px var(--sec-theme-color);
 }
 
 .lol-timeline-node.shard-node.active {
@@ -396,11 +300,6 @@
   box-shadow: 0 0 12px var(--tree-theme-glow);
 }
 
-.lol-secondary-badge.selected .lol-rune-ring {
-  border-color: var(--sec-theme-color) !important;
-  box-shadow: 0 0 12px var(--sec-theme-color) !important;
-}
-
 .lol-rune-ring {
   width: 100%;
   height: 100%;
@@ -446,30 +345,59 @@
   gap: 1.15rem;
 }
 
-/* SECONDARY COLUMN AND SHARDS */
-.lol-secondary-column {
+/* RIGHT SIDE COLUMN (live inspector + attribute shards) */
+.lol-runes-side-column {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
   border-left: 1px solid rgba(200, 155, 60, 0.15);
   padding-left: 1.5rem;
 }
 
-.lol-sec-subrunes-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.lol-runes-side-column .lol-rune-inspector-card {
+  position: sticky;
+  top: 1rem;
 }
 
 .lol-shards-section {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  margin-top: 0.75rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid rgba(200, 155, 60, 0.2);
+}
+
+.lol-shards-title {
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tree-theme-color, #c89b3c);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(200, 155, 60, 0.2);
+}
+
+.lol-shards-title i {
+  color: var(--gold-bright);
 }
 
 .lol-shard-tier-row {
   display: flex;
   align-items: center;
+  gap: 0.65rem;
+}
+
+.lol-shard-row-label {
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7e879b;
+  font-size: 0.72rem;
+  flex-shrink: 0;
 }
 
 .lol-shard-badges-group {
@@ -515,56 +443,15 @@
   object-fit: contain;
 }
 
-/* COLUMN 3: MYSTIC PEDESTAL + LIVE RUNE INSPECTOR CARD */
+/* INSPECTOR COLUMN (live rune explanation card) */
 .lol-inspector-column {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
-  min-height: 480px;
-  padding-top: 0.5rem;
-}
-
-.lol-monument-pedestal {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-  width: 320px;
-  height: 400px;
-  pointer-events: none;
-  opacity: 0.85;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lol-pedestal-light-orb {
-  position: absolute;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--tree-theme-glow) 0%, transparent 70%);
-  animation: orbPulse 5s ease-in-out infinite alternate;
-}
-
-@keyframes orbPulse {
-  0% { transform: scale(0.9); opacity: 0.4; }
-  100% { transform: scale(1.15); opacity: 0.8; }
-}
-
-.lol-monument-crest-floating {
-  width: 130px;
-  height: 130px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 25px var(--tree-theme-glow)) drop-shadow(0 0 40px var(--tree-theme-color));
-  animation: floatMonument 4s ease-in-out infinite alternate;
-}
-
-@keyframes floatMonument {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(1deg); }
-  100% { transform: translateY(4px) rotate(-1deg); }
+  align-items: stretch;
+  min-height: auto;
+  padding-top: 0;
 }
 
 /* RUNE INSPECTION CARD */
@@ -659,6 +546,36 @@
   border-radius: 2px;
 }
 
+.lol-tier-row-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.lol-tier-row-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--tree-theme-color, #c89b3c);
+  color: #030810;
+  font-weight: 800;
+  font-size: 0.68rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lol-tier-row-name {
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cdbe91;
+}
+
 .lol-rune-p {
   margin: 0 0 0.5rem 0;
 }
@@ -688,20 +605,6 @@
 .lol-rune-keyword {
   color: #f0e6d2;
   font-weight: 700;
-}
-
-.lol-inspector-footer {
-  margin-top: 0.9rem;
-  padding-top: 0.7rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.lol-inspector-tip {
-  font-size: 0.73rem;
-  color: #7e879b;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
 }
 
 .lol-inspector-empty {
@@ -779,45 +682,6 @@
   width: 15px;
   height: 15px;
   cursor: pointer;
-}
-
-.lol-quick-tree-pills {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.lol-tree-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.35rem 0.8rem;
-  border-radius: 14px;
-  border: 1px solid #3c4048;
-  background: #060e1e;
-  color: #a09b8c;
-  font-size: 0.76rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.lol-tree-pill img {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-}
-
-.lol-tree-pill:hover {
-  border-color: #c89b3c;
-  color: #f0e6d2;
-  transform: translateY(-1px);
-}
-
-.lol-tree-pill.active {
-  background: rgba(200, 155, 60, 0.15);
-  box-shadow: 0 0 8px rgba(200, 155, 60, 0.3);
 }
 
 /* FULL EXPLANATORY GUIDE SECTION (Runes explained one by one) */
@@ -1018,56 +882,16 @@
   line-height: 1.35;
 }
 
-/* SAVE FEEDBACK TOAST */
-.lol-runes-toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%) translateY(30px);
-  background: #091428;
-  border: 1.5px solid var(--gold-primary);
-  color: #f0e6d2;
-  padding: 0.75rem 1.75rem;
-  border-radius: 4px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 16px var(--gold-glow);
-  font-family: var(--font-title);
-  font-size: 0.92rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 9999;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.lol-runes-toast i {
-  color: var(--gold-bright);
-  font-size: 1.1rem;
-}
-
-.lol-runes-toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-  pointer-events: auto;
-}
-
 /* RESPONSIVENESS */
 @media (max-width: 1100px) {
-  .lol-client-body-layout {
-    grid-template-columns: 1fr 1fr;
+  .lol-runes-main-layout {
+    grid-template-columns: 1fr;
   }
-  .lol-inspector-column {
-    grid-column: 1 / -1;
-    min-height: auto;
-    margin-top: 1rem;
-    padding-top: 1rem;
+  .lol-runes-side-column {
+    border-left: none;
+    padding-left: 0;
     border-top: 1px solid rgba(200, 155, 60, 0.2);
-  }
-  .lol-monument-pedestal {
-    display: none;
+    padding-top: 1.25rem;
   }
   .lol-rune-inspector-card {
     max-width: 100%;
@@ -1075,21 +899,14 @@
 }
 
 @media (max-width: 768px) {
-  .lol-client-body-layout {
+  .lol-runes-main-layout {
     grid-template-columns: 1fr;
     gap: 1.25rem;
     padding: 1rem;
   }
-  .lol-secondary-column {
-    border-left: none;
-    padding-left: 0;
-    border-top: 1px solid rgba(200, 155, 60, 0.2);
-    padding-top: 1.25rem;
-  }
-  .lol-client-header {
-    padding: 1rem;
+  .lol-tree-tabs {
+    padding: 0.9rem 1rem;
     flex-direction: column;
-    gap: 0.8rem;
     align-items: flex-start;
   }
   .lol-client-footer {

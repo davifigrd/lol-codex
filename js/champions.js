@@ -59,11 +59,90 @@ function renderChampions(itemList) {
     }
 
     if (featuredGrid && allChampions.length > 0) {
-        featuredGrid.innerHTML = allChampions.slice(0, 4).map(c => buildChampionCardHTML(c)).join('');
+        renderFeaturedChampions();
     }
 
     // Updates the balloon after rendering
     try { window.dispatchEvent(new Event('scroll')); } catch (e) {}
+}
+
+/* ==========================================================================
+   RECENT CHAMPIONS (last 4 opened, persisted in localStorage)
+   ========================================================================== */
+const RECENT_CHAMPIONS_STORAGE_KEY = 'lol_codex_recentes';
+const RECENT_CHAMPIONS_LIMIT = 4;
+
+// Returns the stored champion ids, newest first, without duplicates
+function readRecentChampionIds() {
+    try {
+        const raw = localStorage.getItem(RECENT_CHAMPIONS_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(parsed)) return [];
+        const seen = new Set();
+        return parsed
+            .filter(id => typeof id === 'string' && id)
+            .filter(id => {
+                if (seen.has(id)) return false;
+                seen.add(id);
+                return true;
+            })
+            .slice(0, RECENT_CHAMPIONS_LIMIT);
+    } catch (e) {
+        return [];
+    }
+}
+
+// Adds/updates a champion at the top of the history (max 4, newest first)
+function registerRecentChampion(championId) {
+    if (!championId) return;
+    try {
+        const ids = readRecentChampionIds().filter(id => id !== championId);
+        ids.unshift(championId);
+        localStorage.setItem(RECENT_CHAMPIONS_STORAGE_KEY, JSON.stringify(ids.slice(0, RECENT_CHAMPIONS_LIMIT)));
+    } catch (e) {
+        // localStorage unavailable: history is session-only
+    }
+}
+
+/**
+ * Renders the Home featured grid from the recent champions history.
+ * When the history is empty, a Hextech CTA banner invites the user to
+ * open the Champions tab instead.
+ */
+function renderFeaturedChampions() {
+    const featuredGrid = document.getElementById('featuredChampGrid');
+    if (!featuredGrid) return;
+
+    const recentIds = readRecentChampionIds();
+    const recentChampions = recentIds
+        .map(id => allChampions.find(c => c.id === id || c.key === id))
+        .filter(Boolean)
+        .slice(0, RECENT_CHAMPIONS_LIMIT);
+
+    if (recentChampions.length > 0) {
+        featuredGrid.innerHTML = recentChampions.map(c => buildChampionCardHTML(c)).join('');
+        return;
+    }
+
+    // Empty history: Hextech call-to-action banner
+    featuredGrid.innerHTML = `
+        <div class="featured-recent-cta">
+            <div class="featured-recent-cta-icon">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <div class="featured-recent-cta-content">
+                <h3 class="featured-recent-cta-title">Seus últimos campeões aparecem aqui</h3>
+                <p class="featured-recent-cta-text">
+                    Abra a ficha de qualquer campeão e ele ficará salvo neste navegador.
+                    Os <strong>4 últimos acessos</strong> são exibidos nesta vitrine.
+                </p>
+                <button type="button" class="filter-btn featured-recent-cta-btn" onclick="switchTab('champions')">
+                    <i class="fa-solid fa-shield-halved"></i> Explorar campeões
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    `;
 }
 
 function buildChampionCardHTML(champ) {
@@ -135,10 +214,10 @@ function setupAlphabeticalIndex() {
     // Time window in which the balloon stays suppressed (avoids showing on tab changes)
     let suppressUntil = 0;
 
-    // Only active on the champions tab
-    function isChampionsTabActive() {
+    // Checks active tab
+    function getActiveTab() {
         const activeTabName = document.querySelector('.page-section.active');
-        return !!activeTabName && activeTabName.id === 'champions';
+        return activeTabName ? activeTabName.id : '';
     }
 
     // Sticks the balloon to the scrollbar — follows the scroll position
@@ -154,45 +233,80 @@ function setupAlphabeticalIndex() {
         balloonEl.classList.remove('visible');
     }
 
-    // Shows the current section letter and repositions next to the scrollbar
+    // Shows the current section (letter on champions, category name on items)
     function updateAlphabetBalloon() {
-        if (!isChampionsTabActive()) {
+        const activeTab = getActiveTab();
+        if (activeTab !== 'champions' && activeTab !== 'items') {
             hideAlphabetBalloon();
             lastLetter = null;
             return;
         }
 
-        // First visible card from the top of the usable area
-        const cards = grid.querySelectorAll('.champ-card[data-letter]');
-        if (!cards.length) return;
+        let currentSectionText = null;
+        const topLimit = 120;
 
-        const topLimit = 100;
-        let currentLetter = null;
-        for (const card of cards) {
-            if (card.getBoundingClientRect().bottom > topLimit) {
-                currentLetter = card.getAttribute('data-letter');
-                break;
+        if (activeTab === 'champions') {
+            const cards = grid.querySelectorAll('.champ-card[data-letter]');
+            if (!cards.length) return;
+            for (const card of cards) {
+                if (card.getBoundingClientRect().bottom > topLimit) {
+                    currentSectionText = card.getAttribute('data-letter');
+                    break;
+                }
+            }
+        } else if (activeTab === 'items') {
+            // A lista telefônica no scroll só se aplica quando estiver SEM NENHUM FILTRO
+            const searchInput = document.getElementById('itemSearch');
+            const hasQuery = Boolean(searchInput && searchInput.value.trim().length > 0);
+            const hasAttrFilters = typeof activeAttributeFilters !== 'undefined' && activeAttributeFilters.size > 0;
+            if (hasQuery || hasAttrFilters) {
+                hideAlphabetBalloon();
+                return;
+            }
+
+            const sections = document.querySelectorAll('#items-grid .item-rarity-section');
+            if (!sections.length) {
+                hideAlphabetBalloon();
+                return;
+            }
+            for (const sec of sections) {
+                const rect = sec.getBoundingClientRect();
+                if (rect.bottom > topLimit) {
+                    currentSectionText = sec.getAttribute('data-rarity-label') || sec.dataset.rarityLabel;
+                    break;
+                }
             }
         }
-        if (!currentLetter) return;
 
-        if (currentLetter !== lastLetter) {
-            lastLetter = currentLetter;
-            balloonEl.textContent = currentLetter;
+        if (!currentSectionText) return;
+
+        if (currentSectionText !== lastLetter) {
+            lastLetter = currentSectionText;
+            balloonEl.textContent = currentSectionText;
         }
 
         positionOnScrollbar();
         balloonEl.classList.add('visible');
         clearTimeout(hideTimer);
-        hideTimer = setTimeout(hideAlphabetBalloon, 900);
+        hideTimer = setTimeout(hideAlphabetBalloon, 1000);
     }
 
     // Repositions without forcing display (used when the list changes)
     function repositionIfVisible() {
         if (!balloonEl.classList.contains('visible')) return;
-        if (!isChampionsTabActive()) {
+        const activeTab = getActiveTab();
+        if (activeTab !== 'champions' && activeTab !== 'items') {
             hideAlphabetBalloon();
             return;
+        }
+        if (activeTab === 'items') {
+            const searchInput = document.getElementById('itemSearch');
+            const hasQuery = Boolean(searchInput && searchInput.value.trim().length > 0);
+            const hasAttrFilters = typeof activeAttributeFilters !== 'undefined' && activeAttributeFilters.size > 0;
+            if (hasQuery || hasAttrFilters) {
+                hideAlphabetBalloon();
+                return;
+            }
         }
         positionOnScrollbar();
     }

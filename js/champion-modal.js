@@ -9,6 +9,12 @@ async function openChampionModal(championId) {
 
     currentOpenChampionModal = championId;
 
+    // Saves the champion in the "recent champions" history (Home showcase)
+    if (typeof registerRecentChampion === 'function') {
+        registerRecentChampion(championId);
+        if (typeof renderFeaturedChampions === 'function') renderFeaturedChampions();
+    }
+
     modalContent.innerHTML = `
         <div class="loading-box" style="padding:4rem 1rem;">
             <div class="loading-spinner"></div>

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Hextech — LoL Codex</title>
+
+    <!-- Google Fonts Hextech & Gamer -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- FontAwesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- External CSS in the ../css/ folder -->
+    <link rel="stylesheet" href="../css/style.css?v=5" />
+    <link rel="stylesheet" href="../css/layout.css?v=6" />
+    <link rel="stylesheet" href="../css/components.css?v=6" />
+    <link rel="stylesheet" href="../css/modals.css?v=4" />
+    <link rel="stylesheet" href="../css/quiz.css?v=2" />
+    <link rel="stylesheet" href="../css/responsive.css?v=4" />
+
+    <!-- Site favicons / icons with their respective sizes -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/icon/16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/icon/32.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="128x128"
+      href="../img/icon/128.png"
+    />
+    <meta name="theme-color" content="#091428" />
+  </head>
+  <body>
+    <!-- Header Navigation -->
+    <header>
+      <div class="container header-content">
+        <a href="index.html#home" class="logo" title="LoL Codex">
+          <img
+            src="../img/icon/header-logo.png"
+            alt="LoL Codex"
+            class="header-logo-img"
+          />
+        </a>
+
+        <button
+          class="mobile-toggle"
+          id="mobileToggleBtn"
+          aria-label="Abrir menu"
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-menu" id="navMenu">
+          <li>
+            <a href="index.html#home" class="nav-link"
+              ><i class="fa-solid fa-house"></i> Início</a
+            >
+          </li>
+          <li>
+            <a href="index.html#champions" class="nav-link"
+              ><i class="fa-solid fa-shield-halved"></i> Campeões</a
+            >
+          </li>
+          <li>
+            <a href="index.html#items" class="nav-link"
+              ><i class="fa-solid fa-ring"></i> Itens</a
+            >
+          </li>
+          <li>
+            <a href="index.html#runes" class="nav-link"
+              ><i class="fa-solid fa-wand-magic-sparkles"></i> Runas</a
+            >
+          </li>
+          <li>
+            <a href="quiz.html" class="nav-link active"
+              ><i class="fa-solid fa-circle-question"></i> Quiz</a
+            >
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="quiz-page">
+      <section class="quiz-hero">
+        <div class="container">
+          <span class="quiz-kicker">
+            <i class="fa-solid fa-circle-question"></i> Quiz Hextech
+          </span>
+          <h1 class="hero-title">Teste seu conhecimento</h1>
+          <p class="hero-subtitle">
+            Escolha uma categoria e responda perguntas sobre mapa, objetivos,
+            habilidades de campeões e itens. Cada rodada traz uma explicação
+            didática da resposta.
+          </p>
+        </div>
+      </section>
+
+      <section class="quiz-section">
+        <div class="container">
+          <div id="quiz-app">
+            <div class="loading-box">
+              <div class="loading-spinner"></div>
+              <span>Carregando categorias do quiz...</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-brand">
+          <img
+            src="../img/icon/128.png"
+            alt="LoL Codex"
+            class="footer-logo-img"
+          />
+          <span class="footer-rights"
+            >LoL Codex © 2026 · Todos os direitos reservados —
+            <a
+              class="footer-credit"
+              href="https://buymeacoffee.com/davifigrd"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Davi Figueiredo</a
+            ></span
+          >
+        </div>
+        <p class="footer-disclaimer">
+          Não afiliado à Riot Games. League of Legends é marca registrada da
+          Riot Games, Inc.
+        </p>
+      </div>
+
+      <!-- Discreet floating feedback button (bottom-right) -->
+      <button
+        type="button"
+        class="footer-feedback-btn"
+        id="feedbackOpenBtn"
+        onclick="toggleFeedbackWidget()"
+        aria-label="Enviar feedback ou mensagem para o desenvolvedor"
+        title="Feedback / Contato"
+      >
+        <i class="fa-solid fa-circle-question"></i>
+      </button>
+
+      <!-- Feedback widget (small window, Hextech style) -->
+      <div
+        class="feedback-widget"
+        id="feedbackWidget"
+        role="dialog"
+        aria-modal="false"
+        aria-labelledby="feedbackWidgetTitle"
+      >
+        <div class="feedback-widget-header">
+          <span id="feedbackWidgetTitle"
+            ><i class="fa-solid fa-envelope"></i> Fale com o dev</span
+          >
+          <button
+            type="button"
+            class="feedback-widget-close"
+            id="feedbackCloseBtn"
+            onclick="closeFeedbackWidget()"
+            aria-label="Fechar janela de feedback"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <form id="feedbackForm" novalidate>
+          <div class="feedback-field">
+            <label for="feedbackName">Nome</label>
+            <input
+              type="text"
+              id="feedbackName"
+              name="name"
+              placeholder="Seu nome"
+              autocomplete="name"
+            />
+            <span class="feedback-field-error" id="feedbackNameError"></span>
+          </div>
+          <div class="feedback-field">
+            <label for="feedbackEmail">E-mail</label>
+            <input
+              type="email"
+              id="feedbackEmail"
+              name="email"
+              placeholder="seu@email.com"
+              autocomplete="email"
+            />
+            <span class="feedback-field-error" id="feedbackEmailError"></span>
+          </div>
+          <div class="feedback-field">
+            <label for="feedbackMessage">Mensagem</label>
+            <textarea
+              id="feedbackMessage"
+              name="message"
+              rows="4"
+              placeholder="Escreva sua mensagem aqui..."
+            ></textarea>
+            <span class="feedback-field-error" id="feedbackMessageError"></span>
+          </div>
+          <button type="submit" class="feedback-submit-btn" id="feedbackSubmitBtn">
+            <i class="fa-solid fa-paper-plane"></i> Enviar
+          </button>
+        </form>
+      </div>
+    </footer>
+
+    <script src="../js/feedback.js?v=1"></script>
+    <script src="../data/quiz-fallback.js?v=1"></script>
+    <script src="../js/quiz.js?v=3"></script>
+  </body>
+</html>

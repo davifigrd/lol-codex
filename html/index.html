@@ -21,15 +21,15 @@
 
     <!-- External CSS in the ../css/ folder -->
     <!-- Modular CSS (ordered: order = cascade) -->
-    <link rel="stylesheet" href="../css/style.css?v=4" />
-    <link rel="stylesheet" href="../css/layout.css?v=4" />
-    <link rel="stylesheet" href="../css/champions.css?v=4" />
-    <link rel="stylesheet" href="../css/items.css?v=4" />
-    <link rel="stylesheet" href="../css/components.css?v=4" />
+    <link rel="stylesheet" href="../css/style.css?v=5" />
+    <link rel="stylesheet" href="../css/layout.css?v=6" />
+    <link rel="stylesheet" href="../css/champions.css?v=5" />
+    <link rel="stylesheet" href="../css/items.css?v=7" />
+    <link rel="stylesheet" href="../css/components.css?v=6" />
     <link rel="stylesheet" href="../css/modals.css?v=4" />
     <link rel="stylesheet" href="../css/switch.css?v=4" />
-    <link rel="stylesheet" href="../css/runes.css?v=4" />
-    <link rel="stylesheet" href="../css/badges.css?v=4" />
+    <link rel="stylesheet" href="../css/runes.css?v=5" />
+    <link rel="stylesheet" href="../css/badges.css?v=6" />
     <link rel="stylesheet" href="../css/filters.css?v=4" />
     <link rel="stylesheet" href="../css/responsive.css?v=4" />
 
@@ -130,6 +130,11 @@
               ><i class="fa-solid fa-wand-magic-sparkles"></i> Runas</a
             >
           </li>
+          <li>
+            <a href="quiz.html" class="nav-link"
+              ><i class="fa-solid fa-circle-question"></i> Quiz</a
+            >
+          </li>
         </ul>
       </div>
     </header>
@@ -187,12 +192,22 @@
                   atributos.
                 </p>
               </div>
+              <a class="category-card" href="quiz.html">
+                <div class="icon"><i class="fa-solid fa-circle-question"></i></div>
+                <h3>
+                  Quiz <span class="badge-count">3 Categorias</span>
+                </h3>
+                <p>
+                  Teste seus conhecimentos de mapa, objetivos, campeões e itens
+                  com explicações didáticas.
+                </p>
+              </a>
             </div>
 
             <!-- Featured Champions Section -->
             <div class="section-header" style="margin-top: 2rem">
               <div class="section-title">
-                <i class="fa-solid fa-fire"></i> Campeões em Destaque
+                <i class="fa-solid fa-clock-rotate-left"></i> Campeões Recentes
               </div>
               <button class="filter-btn" onclick="switchTab('champions')">
                 Ver Todos <i class="fa-solid fa-arrow-right"></i>
@@ -213,8 +228,8 @@
       <section id="champions" class="page-section">
         <div class="container">
           <div class="section-header">
-            <div class="section-title">
-              <i class="fa-solid fa-shield-halved"></i> Campeões
+            <div class="section-title" aria-label="Campeões">
+              <i class="fa-solid fa-shield-halved"></i>
             </div>
           </div>
 
@@ -316,8 +331,8 @@
       <section id="items" class="page-section">
         <div class="container">
           <div class="section-header">
-            <div class="section-title">
-              <i class="fa-solid fa-ring"></i> Itens
+            <div class="section-title" aria-label="Itens">
+              <i class="fa-solid fa-ring"></i>
             </div>
           </div>
 
@@ -359,13 +374,13 @@
                 <span id="itemSummaryLabel">Resumido</span>
               </div>
 
-              <!-- Info (i) button: toggles the descriptions on cards -->
+              <!-- Info (i) button: replaces card descriptions with the ultra-summary -->
               <button
                 type="button"
                 id="itemInfoToggleBtn"
                 class="item-info-toggle-btn"
                 onclick="toggleItemDescription()"
-                title="Ativar/desativar descrição nos cards de itens"
+                title="Ativar/desativar o resumo em tópicos nos cards de itens"
               >
                 <i class="fa-solid fa-circle-info"></i>
                 <span class="info-btn-text">Info</span>
@@ -398,8 +413,8 @@
             style="display: none"
           ></div>
 
-          <!-- Main Summoner's Rift items grid (descriptions hidden by default) -->
-          <div class="item-grid hide-item-desc" id="items-grid">
+          <!-- Main Summoner's Rift items grid (description shown; Info reveals the summary) -->
+          <div class="item-grid" id="items-grid">
             <div class="loading-box">
               <div class="loading-spinner"></div>
               <span
@@ -413,11 +428,7 @@
       <!-- RUNES SECTION -->
       <section id="runes" class="page-section">
         <div class="container">
-          <div class="section-header">
-            <div class="section-title">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> Runas Reforjadas &
-              Fragmentos de Atributos
-            </div>
+          <div class="section-header" style="justify-content: flex-end">
             <div class="switch-wrapper">
               <span id="runeDetailsLabel">Detalhado</span>
               <label class="hextech-toggle">
@@ -552,87 +563,48 @@
           </div>
         </div>
 
-        <div class="filter-popup-body">
+                <div class="filter-popup-body">
           <!-- Offense group -->
           <div class="filter-section-block">
             <div class="filter-section-title">
               <i class="fa-solid fa-khanda"></i> Ataque &amp; Magia (Ofensivo)
             </div>
             <div class="filter-pills-grid">
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="AD"
-                onclick="toggleItemAttributeFilter('AD')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="AD" onclick="toggleItemAttributeFilter('AD')">
                 <span class="stat-img-icon stat-img-ad"></span>
                 <span>Dano de Ataque (AD)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="AP"
-                onclick="toggleItemAttributeFilter('AP')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="AP" onclick="toggleItemAttributeFilter('AP')">
                 <span class="stat-img-icon stat-img-ap"></span>
                 <span>Poder de Habilidade (AP)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="AS"
-                onclick="toggleItemAttributeFilter('AS')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="AS" onclick="toggleItemAttributeFilter('AS')">
                 <span class="stat-img-icon stat-img-as"></span>
                 <span>Velocidade de Ataque (AS)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="CRIT"
-                onclick="toggleItemAttributeFilter('CRIT')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="CRIT" onclick="toggleItemAttributeFilter('CRIT')">
                 <span class="stat-img-icon stat-img-crit"></span>
-                <span>Acerto Crítico (CRIT)</span>
+                <span>Acerto Cr&#237;tico (CRIT)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="LS"
-                onclick="toggleItemAttributeFilter('LS')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="LS" onclick="toggleItemAttributeFilter('LS')">
                 <span class="stat-img-icon stat-img-ls"></span>
                 <span>Roubo de Vida (LS)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="VAMP"
-                onclick="toggleItemAttributeFilter('VAMP')"
-              >
-                <span
-                  class="stat-img-icon stat-img-ls"
-                  style="filter: hue-rotate(45deg)"
-                ></span>
-                <span>Onivampirismo</span>
+              <button type="button" class="filter-pill-btn" data-attr="VAMP" onclick="toggleItemAttributeFilter('VAMP')">
+                <span class="stat-img-icon stat-img-vamp"></span>
+                <span>Vampirismo (VAMP)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="ARMOR_PEN"
-                onclick="toggleItemAttributeFilter('ARMOR_PEN')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="LET" onclick="toggleItemAttributeFilter('LET')">
+                <span class="stat-img-icon stat-img-let"></span>
+                <span>Letalidade (LET)</span>
+              </button>
+              <button type="button" class="filter-pill-btn" data-attr="ARMOR_PEN" onclick="toggleItemAttributeFilter('ARMOR_PEN')">
                 <span class="stat-img-icon stat-img-pen"></span>
-                <span>Letalidade / Pen. Armadura</span>
+                <span>Penetra&#231;&#227;o de Armadura (A. PEN)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="MAGIC_PEN"
-                onclick="toggleItemAttributeFilter('MAGIC_PEN')"
-              >
-                <span class="stat-img-icon stat-img-mr"></span>
-                <span>Penetração Mágica</span>
+              <button type="button" class="filter-pill-btn" data-attr="MAGIC_PEN" onclick="toggleItemAttributeFilter('MAGIC_PEN')">
+                <span class="stat-img-icon stat-img-magicpen"></span>
+                <span>Penetra&#231;&#227;o M&#225;gica (M. PEN)</span>
               </button>
             </div>
           </div>
@@ -643,53 +615,29 @@
               <i class="fa-solid fa-shield-halved"></i> Atributos Defensivos
             </div>
             <div class="filter-pills-grid">
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="HP"
-                onclick="toggleItemAttributeFilter('HP')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="HP" onclick="toggleItemAttributeFilter('HP')">
                 <span class="stat-img-icon stat-img-health"></span>
-                <span>Vida / Saúde (LP)</span>
+                <span>Vida (HP)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="ARMOR"
-                onclick="toggleItemAttributeFilter('ARMOR')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="ARMOR" onclick="toggleItemAttributeFilter('ARMOR')">
                 <span class="stat-img-icon stat-img-armor"></span>
                 <span>Armadura (ARMOR)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="MR"
-                onclick="toggleItemAttributeFilter('MR')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="MR" onclick="toggleItemAttributeFilter('MR')">
                 <span class="stat-img-icon stat-img-mr"></span>
-                <span>Resistência Mágica (MR)</span>
+                <span>Resist&#234;ncia M&#225;gica (MR)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="HP_REGEN"
-                onclick="toggleItemAttributeFilter('HP_REGEN')"
-              >
-                <span
-                  class="stat-img-icon stat-img-health"
-                  style="filter: brightness(1.2)"
-                ></span>
-                <span>Regeneração de Vida</span>
+              <button type="button" class="filter-pill-btn" data-attr="HP_REGEN" onclick="toggleItemAttributeFilter('HP_REGEN')">
+                <span class="stat-img-icon stat-img-hpregen"></span>
+                <span>Regenera&#231;&#227;o de Vida (HP5)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="TENACITY"
-                onclick="toggleItemAttributeFilter('TENACITY')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="TENACITY" onclick="toggleItemAttributeFilter('TENACITY')">
                 <span class="stat-img-icon stat-img-tenacity"></span>
-                <span>Tenacidade / Resist. Lentidão</span>
+                <span>Tenacidade (TEN)</span>
+              </button>
+              <button type="button" class="filter-pill-btn" data-attr="SR" onclick="toggleItemAttributeFilter('SR')">
+                <span class="stat-img-icon stat-img-tenacity" style="filter:hue-rotate(120deg);"></span>
+                <span>Resist. Lentid&#227;o (SR)</span>
               </button>
             </div>
           </div>
@@ -697,66 +645,33 @@
           <!-- Resources & utility group -->
           <div class="filter-section-block">
             <div class="filter-section-title">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> Recursos &amp;
-              Utilidade
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Recursos &amp; Utilidade
             </div>
             <div class="filter-pills-grid">
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="CDR"
-                onclick="toggleItemAttributeFilter('CDR')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="CDR" onclick="toggleItemAttributeFilter('CDR')">
                 <span class="stat-img-icon stat-img-cdr"></span>
-                <span>Aceleração de Habilidade (CDR)</span>
+                <span>Acelera&#231;&#227;o de Habilidade (CDR)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="MANA"
-                onclick="toggleItemAttributeFilter('MANA')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="MANA" onclick="toggleItemAttributeFilter('MANA')">
                 <span class="stat-img-icon stat-img-mana"></span>
-                <span>Mana</span>
+                <span>Mana (MANA)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="MANA_REGEN"
-                onclick="toggleItemAttributeFilter('MANA_REGEN')"
-              >
-                <span
-                  class="stat-img-icon stat-img-mana"
-                  style="filter: brightness(1.2)"
-                ></span>
-                <span>Regeneração de Mana</span>
+              <button type="button" class="filter-pill-btn" data-attr="MANA_REGEN" onclick="toggleItemAttributeFilter('MANA_REGEN')">
+                <span class="stat-img-icon stat-img-mana" style="filter: brightness(1.4) hue-rotate(15deg)"></span>
+                <span>Regenera&#231;&#227;o de Mana (MANA REG.)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="MOV"
-                onclick="toggleItemAttributeFilter('MOV')"
-              >
+              <button type="button" class="filter-pill-btn" data-attr="MOV" onclick="toggleItemAttributeFilter('MOV')">
                 <span class="stat-img-icon stat-img-mov"></span>
-                <span>Velocidade de Movimento / Botas</span>
+                <span>Velocidade de Movimento (MS)</span>
               </button>
-              <button
-                type="button"
-                class="filter-pill-btn"
-                data-attr="HEAL_SHIELD"
-                onclick="toggleItemAttributeFilter('HEAL_SHIELD')"
-              >
-                <i
-                  class="fa-solid fa-heart-pulse"
-                  style="color: #34d399; font-size: 14px"
-                ></i>
-                <span>Cura e Resistência do Escudo</span>
+              <button type="button" class="filter-pill-btn" data-attr="HEAL_SHIELD" onclick="toggleItemAttributeFilter('HEAL_SHIELD')">
+                <i class="fa-solid fa-heart-pulse" style="color: #34d399; font-size: 14px"></i>
+                <span>Cura e Resist. do Escudo (E&amp;S)</span>
               </button>
             </div>
           </div>
         </div>
-
-        <div class="filter-popup-footer">
+<div class="filter-popup-footer">
           <span id="filteredItemsCountPreview" class="filter-preview-text"
             >Mostrando todos os itens</span
           >
@@ -1147,38 +1062,102 @@
               >Davi Figueiredo</a
             ></span
           >
-          <a
-            class="footer-support-link"
-            href="mailto:contact@davifigrd.com?subject=LoL%20Codex%20-%20Suporte%20%2F%20Feedback&body=Escreva%20sua%20mensagem%20aqui..."
-            title="Entrar em contato com o desenvolvedor (suporte/feedback)"
-          >
-            <img
-              src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&amp;logo=gmail&amp;logoColor=white"
-              alt="Email - Suporte/Feedback"
-            />
-          </a>
         </div>
         <p class="footer-disclaimer">
           Não afiliado à Riot Games. League of Legends é marca registrada da
           Riot Games, Inc.
         </p>
       </div>
+
+      <!-- Discreet floating feedback button (bottom-right) -->
+      <button
+        type="button"
+        class="footer-feedback-btn"
+        id="feedbackOpenBtn"
+        onclick="toggleFeedbackWidget()"
+        aria-label="Enviar feedback ou mensagem para o desenvolvedor"
+        title="Feedback / Contato"
+      >
+        <i class="fa-solid fa-circle-question"></i>
+      </button>
+
+      <!-- Feedback widget (small window, Hextech style) -->
+      <div
+        class="feedback-widget"
+        id="feedbackWidget"
+        role="dialog"
+        aria-modal="false"
+        aria-labelledby="feedbackWidgetTitle"
+      >
+        <div class="feedback-widget-header">
+          <span id="feedbackWidgetTitle"
+            ><i class="fa-solid fa-envelope"></i> Fale com o dev</span
+          >
+          <button
+            type="button"
+            class="feedback-widget-close"
+            id="feedbackCloseBtn"
+            onclick="closeFeedbackWidget()"
+            aria-label="Fechar janela de feedback"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <form id="feedbackForm" novalidate>
+          <div class="feedback-field">
+            <label for="feedbackName">Nome</label>
+            <input
+              type="text"
+              id="feedbackName"
+              name="name"
+              placeholder="Seu nome"
+              autocomplete="name"
+            />
+            <span class="feedback-field-error" id="feedbackNameError"></span>
+          </div>
+          <div class="feedback-field">
+            <label for="feedbackEmail">E-mail</label>
+            <input
+              type="email"
+              id="feedbackEmail"
+              name="email"
+              placeholder="seu@email.com"
+              autocomplete="email"
+            />
+            <span class="feedback-field-error" id="feedbackEmailError"></span>
+          </div>
+          <div class="feedback-field">
+            <label for="feedbackMessage">Mensagem</label>
+            <textarea
+              id="feedbackMessage"
+              name="message"
+              rows="4"
+              placeholder="Escreva sua mensagem aqui..."
+            ></textarea>
+            <span class="feedback-field-error" id="feedbackMessageError"></span>
+          </div>
+          <button type="submit" class="feedback-submit-btn" id="feedbackSubmitBtn">
+            <i class="fa-solid fa-paper-plane"></i> Enviar
+          </button>
+        </form>
+      </div>
     </footer>
 
     <!-- Modular JavaScript (classic files loaded in order) -->
-    <script src="../js/state.js?v=4"></script>
-    <script src="../js/utils.js?v=4"></script>
+    <script src="../js/state.js?v=5"></script>
+    <script src="../js/utils.js?v=6"></script>
     <script src="../js/champion-data.js?v=4"></script>
-    <script src="../js/colors.js?v=4"></script>
-    <script src="../js/ddragon.js?v=4"></script>
-    <script src="../js/champions.js?v=4"></script>
-    <script src="../js/champion-modal.js?v=4"></script>
-    <script src="../js/items.js?v=4"></script>
-    <script src="../js/runes.js?v=4"></script>
-    <script src="../js/filters.js?v=4"></script>
+    <script src="../js/colors.js?v=6"></script>
+    <script src="../js/ddragon.js?v=6"></script>
+    <script src="../js/champions.js?v=7"></script>
+    <script src="../js/champion-modal.js?v=5"></script>
+    <script src="../js/items.js?v=8"></script>
+    <script src="../js/runes.js?v=6"></script>
+    <script src="../js/filters.js?v=7"></script>
     <script src="../js/search.js?v=4"></script>
     <script src="../js/tooltip.js?v=4"></script>
-    <script src="../js/interface.js?v=4"></script>
-    <script src="../js/app.js?v=4"></script>
+    <script src="../js/feedback.js?v=1"></script>
+    <script src="../js/interface.js?v=5"></script>
+    <script src="../js/app.js?v=6"></script>
   </body>
 </html>

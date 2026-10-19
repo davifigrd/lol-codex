@@ -1,19 +1,93 @@
-/* Item Grid & Cards */
-.item-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.25rem;
+/* ==========================================================================
+   LoL Codex — Items CSS: Rarity Sections, Icon Borders, Quick Info & Modal
+   ========================================================================== */
+
+/* Main Items Container */
+#items-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  width: 100%;
 }
 
+#items-grid.is-filtered {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.15rem;
+}
+
+/* --------------------------------------------------------------------------
+   RARITY SECTIONS & HEADERS (Iniciais, Básicos, Épicos, Lendários, Botas)
+   -------------------------------------------------------------------------- */
+.item-rarity-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item-rarity-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background: rgba(6, 14, 30, 0.75);
+  border-left: 4px solid var(--rarity-color, var(--gold-primary));
+  border-radius: var(--radius-sm);
+  border-top: 1px solid rgba(200, 155, 60, 0.12);
+  border-right: 1px solid rgba(200, 155, 60, 0.12);
+  border-bottom: 1px solid rgba(200, 155, 60, 0.12);
+}
+
+.item-rarity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--rarity-color, var(--gold-primary));
+  flex-shrink: 0;
+}
+
+.item-rarity-title {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.04em;
+}
+
+.item-rarity-count {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-left: auto;
+  font-family: var(--font-body);
+}
+
+.item-rarity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.15rem;
+}
+
+/* Fallback grid if rendered flat */
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.15rem;
+}
+
+/* --------------------------------------------------------------------------
+   ITEM CARDS
+   -------------------------------------------------------------------------- */
 .item-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 1.25rem;
+  padding: 1.15rem;
   transition: var(--transition);
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 
 .item-card:hover {
@@ -27,22 +101,71 @@
 .item-header {
   display: flex;
   gap: 0.85rem;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 0.85rem;
 }
 
+/* --------------------------------------------------------------------------
+   DIRECT ICON BORDER BY RARITY
+   * Iniciais: #a0a0a0
+   * Básicos: #22c55e
+   * Épicos: #a855f7
+   * Lendários: #eab308
+   * Botas: #3b82f6
+   -------------------------------------------------------------------------- */
+.item-icon-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+}
+
 .item-icon {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: var(--radius-sm);
-  border: 2px solid var(--gold-primary);
+  border: 2px solid var(--rarity-border-color, var(--gold-primary));
   object-fit: cover;
   background: #000;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+.item-card:hover .item-icon {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px var(--rarity-border-color, var(--gold-primary));
+}
+
+.item-icon.rarity-starter {
+  border-color: #a0a0a0 !important;
+}
+.item-icon.rarity-basic {
+  border-color: #22c55e !important;
+}
+.item-icon.rarity-epic {
+  border-color: #a855f7 !important;
+}
+.item-icon.rarity-legendary {
+  border-color: #eab308 !important;
+}
+.item-icon.rarity-boots {
+  border-color: #3b82f6 !important;
+}
+
+/* Header Text */
+.item-title-wrap {
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .item-title-wrap h4 {
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--gold-light);
+  line-height: 1.25;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item-cost {
@@ -52,7 +175,7 @@
   white-space: nowrap;
 }
 
-/* Attribute badges below the item name (e.g. Trinity Force > AD HP AS) */
+/* Attribute badges below the item name */
 .item-badges {
   display: flex;
   flex-wrap: wrap;
@@ -60,19 +183,143 @@
   margin-top: 0.35rem;
 }
 
+/* Normal Description */
 .item-stats {
   font-size: 0.8rem;
   color: var(--text-body);
-  margin-bottom: 0.75rem;
+  line-height: 1.45;
+  margin-top: 0.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.item-passive {
+/* Card Info Button (Direct toggle on the card) */
+.item-card-info-btn {
+  background: transparent;
+  border: none;
+  color: var(--gold-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 50%;
+  line-height: 1;
+  transition: transform 0.2s ease, color 0.2s ease;
+  opacity: 0.7;
+}
+
+.item-card-info-btn:hover,
+.item-card-info-btn.active {
+  opacity: 1;
+  color: var(--gold-bright);
+  transform: scale(1.15);
+}
+
+/* --------------------------------------------------------------------------
+   HEX-TECH ULTRA-SUMMARIZED BULLETS CARD (Info Mode)
+   Yellow topics with keywords matching Hextech aesthetic
+   -------------------------------------------------------------------------- */
+.item-quick-bullets {
+  margin-top: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(10, 20, 40, 0.85);
+  border: 1px solid rgba(240, 178, 50, 0.25);
+  border-radius: var(--radius-sm);
+  display: none;
+  flex-direction: column;
+  gap: 0.35rem;
   font-size: 0.78rem;
   color: var(--text-body);
-  background: var(--bg-panel);
-  padding: 0.6rem;
-  border-radius: var(--radius-sm);
-  border-left: 3px solid var(--hextech-navy);
-  margin-top: auto;
+  transition: opacity 0.2s ease, max-height 0.3s ease;
 }
 
+.quick-bullet-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  line-height: 1.4;
+}
+
+.hextech-bullet {
+  color: var(--gold-bright);
+  font-size: 0.75rem;
+  text-shadow: 0 0 6px var(--gold-glow);
+  flex-shrink: 0;
+}
+
+.bullet-keyword {
+  color: var(--gold-bright);
+  font-weight: 700;
+  margin-right: 0.2rem;
+}
+
+.bullet-stat-val {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+/* Visibility toggling via global button or card */
+.hide-item-desc .item-stats {
+  display: none;
+}
+
+.hide-item-desc .item-quick-bullets {
+  display: flex;
+}
+
+/* Per-card Info: the summary replaces that card's description */
+.item-card.info-open .item-stats {
+  display: none;
+}
+
+/* When Info toggle is off, bullets can still show if card was specifically toggled */
+.item-quick-bullets.collapsed {
+  display: none !important;
+}
+
+.item-quick-bullets.expanded {
+  display: flex !important;
+}
+
+/* --------------------------------------------------------------------------
+   DETAILED MODAL STAT LINES WITH ICONS
+   -------------------------------------------------------------------------- */
+.modal-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.6rem;
+  margin: 0.85rem 0 1.15rem 0;
+  padding: 0.85rem;
+  background: rgba(6, 14, 30, 0.85);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.modal-stat-line {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.86rem;
+}
+
+.modal-stat-value {
+  color: #4ade80;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.modal-stat-label {
+  color: var(--gold-light);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   PHONE BOOK SCROLL BALLOON ADAPTATION
+   -------------------------------------------------------------------------- */
+.alphabet-balloon {
+  white-space: nowrap;
+  max-width: 140px;
+  text-align: center;
+  padding: 0.35rem 0.75rem;
+}
