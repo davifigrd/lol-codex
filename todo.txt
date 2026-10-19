@@ -1,48 +1,201 @@
-==================================== OUTROS/ PÓS RESUMO.JSON
-ARRUMAR MOBILE
-- Corrigir a responsividade do mobile
+===============================================================================
+                       LOL CODEX — ROADMAP DE PROMPTS
+===============================================================================
 
-QUIZ
-Aba separada só pra quiz do site (NAV)
-- quiz com coisas para aprender ou aprimorar no jogo, como por exemplo: buff dos dragões, tempo de nascimento, tempo que pega nível 6, tempo que o arauto larva e Baron nascem e etc
-- quiz sobre skills de campeões e itens tambem. Aparece o campeão e o usuário tem que acertar como é a skill daquele campeão de cabeça, depois, é revelado o que a skill realmente faz. Faça o mesmo para itens.
+[PARTE 1/5] — REESTRUTURAÇÃO, FOOTER E FORMULÁRIO DE SUPORTE
+-------------------------------------------------------------------------------
+Atue como um desenvolvedor Front-End especialista em Vanilla JavaScript e CSS Hextech.
 
-DESTAQUE/ FAVORITO/ MAIS ACESSO
-1. campeões em destaque aparece os ultimos 4 campeoes acessados pelo usuario, se não tiver clicado em nenhum ainda, faça um link chamando para algum campeão, para que assim ele possa selecionar a um da lista e entrar nos campeões de destaque (guarde no local storage ou coisa do tipo).
-2. esquema de favoritos, onde é possivel favoritar um campeão para ele aparecer 
-3. ou os campeões destaque são os mais acessados do site
+Execute os seguintes ajustes de estrutura e interface no projeto LoL Codex:
 
-ESPECIFICAÇÕES (XP, GHOST)
-- tem que explicar que XP é experiencia ao passar o mouse (como na passiva do bardo tem). Faça o mesmo para GHOST (por exemplo na bell veth). HOOK e silence (blitz)
+1. ORGANIZAÇÃO DE PASTAS:
+   - Mova o arquivo 'scripts/resize-icons.js' para a pasta 'js/resize-icons.js'.
+   - Exclua a pasta 'scripts/' após a movimentação.
 
-CAMPEÃO E ITEM FAVORITO
-- quero que tenha um coração do lado contrário do que aparece a rota do campeão, ou seja, no canto superior esquerdo do card, de modo que o usuario consiga filtrar por favoritos também. Faça isso para itens também.
+2. AJUSTES VISUAIS E DE TEXTO NA INTERFACE:
+   - Remova completamente os títulos e emojis das seções "ITENS" e "CAMPEÕES" na interface.
+   - Nas descrições onde aparecem atributos/efeitos como "dano físico", "dano mágico", "stun" e "shield", aplique cores temáticas correspondentes a esses tipos de efeitos/atributos (utilizando o design system do site e referências visuais oficiais do LoL).
+   - Corrija o Body Scroll Lock ao abrir qualquer modal ('champion-modal', 'item-modal', etc.): trave a rolagem do body ('document.body.style.overflow = "hidden"') enquanto o modal estiver aberto e restaure ('" "') ao fechar.
 
-====================================
-ARRUMAR RUNAS
-- quero melhorar página de runas, gostei desse esquema de interação que parece que está dentro do jogo, pode manter isso, mas quero que seja só pra um tipo de runa, por exemplo, só precisão, depois só determinação e etc, não é pra ficar literalmente igual o do jogo.mantenha esse estilo de interação parecido com o jogo só como base. Mas quero todas as informações na tela, falando a respeito das runas (pta, conquistador e etc), assim como as sub-runas (até a morte e etc). Quando o usuário quiser ver outra categoria de runa, ele tem que clicar pra trocar a categoria, feitiçaria e etc. Tire tambem o botão de salvar, o + de adicionar uma nova runa e o nome da runa e editar o nome da runa (BLITZ YASUO MEIO). essa parte não é necessária. O importante é explicar o que cada runa faz. Tire isso (Clique na runa para selecioná-la na sua página de runas). a imagem de runa do fundo está desfocada/ embaçada/ com resolução baixa, corrija isso tambem. Não quero essa runa secundária aparecendo, só a primaria mesmo para ensinar sobre a runa selecionada pelo usuario, uma por vez. Tire isso -> Runas Reforjadas & Fragmentos de Atributos e esse emoji de mágica ai.
-
-UI DANO FISICO + STUN + SHIELD
-- nessas descrições que tem por exemplo, dano fisico, dano mágico, stun, shield, coloque das cores respectivas desses tipos de atributos, pegue de outras partes do projeto como referencia e até do próprio lol para saber as cores.
-
-PASTA SCRIPT
-- coloque o resize-icons.js na pasta js, não precisa dessa pasta script, apague ela depois de mover o arquivo.
-
-TIRAR TÍTULOS
-- remova completamente esses títulos (emoji) ITENS e (emoji) CAMPEÕES
-
-TIRAR E-MAIL DO FOOTER
-- na verdade é pra usar o email para contato/ suporte/ feedback no footer. não quero esse embemed escrito email e o simbolo do gmail. Só faça alguma forma do usuario entrar em contato mas que seja discreto. Talvez com um símbolo de interregogação ou coisa do tipo no canto inferior direito do footer.
-
-RESUMO ITENS
-- na verdade o resumo do item não é uma parte a mais, quando selecionado o switch do resumido, ele vai trocar o texto descritivo do item para o que está no resumo, assim como faz para as skills do campeão.
-
-ITENS ATT
-quando o usuario clicar em info nos itens, quero que apareça a descrição mais resumida possível no card do item. Mais resumido ainda do que a versão Resumido do json (contrário de detalhado). Pode ser tópicos com palavras chaves que indicam o que o item faz. Talvez bolinhas amarelas combinando com a estética do site ou coisa do tipo, simples.
-
-==================================== NEXT
+3. FOOTER E FORMULÁRIO DISCRETO DE SUPORTE/FEEDBACK:
+   - No footer, crie uma forma discreta de contato usando apenas um ícone (ex: 'fa-circle-question' ou ícone Hextech de dúvida) no canto inferior direito.
+   - Ao clicar no ícone, abra um mini modal/janela discreta no canto da tela (não deve cobrir a tela inteira, estilo widget/toast) contendo um formulário de Feedback/Suporte.
+   - O formulário deve conter:
+     * Campo de Nome, Campo de E-mail do usuário e Área de Texto da Mensagem.
+     * Botão de Enviar e um botão 'X' visível para fechar a janela.
+     * O e-mail de destino final do desenvolvedor é 'davifrdutra@gmail.com', mas este e-mail NÃO deve ficar exposto no HTML/código visível ao usuário (utilize uma integração/endpoint seguro ou simulado de disparo como Formspree/EmailJS).
+   - Validações do Formulário:
+     * Validar campos obrigatórios e formato de e-mail antes de permitir o envio.
+     * Implementar trava de segurança contra SPAM no localStorage: limitar a no máximo 3 envios por dia por usuário (esta limitação de 3 envios diários deve ser interna e não explicitada ao usuário).
+     * Após o envio bem-sucedido, exibir mensagem/toast de confirmação ("Mensagem enviada com sucesso!"), limpar os campos do formulário e fechar a janela.
 
 
+[PARTE 2/5] — REFORMULAÇÃO COMPLETA DO SISTEMA DE ITENS
+-------------------------------------------------------------------------------
+Atue como um desenvolvedor Front-End e refatore a aba e a lógica de Itens no LoL Codex de acordo com as seguintes regras de negócio:
 
-==================================== DOING
+1. FILTRAGEM E REMOÇÃO DE ITENS ANTIGOS:
+   - Remova da listagem todos os itens que já foram removidos do League of Legends 5v5 atual (ex: itens da era antiga/Removidos). Mantenha estritamente itens ativos na versão atual do jogo.
 
+2. PADRONIZAÇÃO DE ATRIBUTOS E SIGLAS NOS FILTROS:
+   - Nos filtros de atributos dos itens, padronize todos os nomes em português acompanhados das siglas oficiais entre parênteses:
+     1. Dano de Ataque (AD)
+     2. Poder de Habilidade (AP)
+     3. Velocidade de Ataque (AS)
+     4. Acerto Crítico (CRIT)
+     5. Roubo de Vida (LS)
+     6. Vampirismo (VAMP) -> Unificar e mapear corretamente itens que possuem sustentação de dano/vampirismo.
+     7. Letalidade (LET)
+     8. Penetração de Armadura (A. PEN) -> Separar de Letalidade e vincular aos seus itens respectivos.
+     9. Penetração Mágica (M. PEN) -> Corrigir ícone e associação (ex: Cajado do Vazio deve ter Penetração Mágica, não de Armadura).
+     10. Vida (HP)
+     11. Armadura (ARMOR)
+     12. Resistência Mágica (MR)
+     13. Regeneração de Vida (HP5) -> Padronizar como HP5 e associar aos itens de regeneração.
+     14. Tenacidade (TEN) -> Separar de Resistência a Lentidão e atribuir aos seus itens respectivos.
+     15. Resist. Lentidão (SR) -> Atribuir aos itens respectivos.
+     16. Aceleração de Habilidade (CDR)
+     17. Mana (MANA)
+     18. Regeneração de Mana (MANA REG.)
+     19. Velocidade de Movimento (MS)
+     20. Cura e Resistência do Escudo (E&S)
+
+3. CORES DE BORDAS POR RARIDADE NOS ÍCONES DOS ITENS:
+   - Aplique cores na BORDA DIRETA DO ÍCONE DA IMAGEM do item (não na janela/card inteiro) baseando-se na sua raridade:
+     * Itens Iniciais: Borda cinza/branca (#a0a0a0)
+     * Itens Básicos: Borda verde (#22c55e)
+     * Itens Épicos: Borda roxa (#a855f7)
+     * Itens Lendários: Borda dourada (#eab308)
+     * Botas: Borda azul (#3b82f6)
+
+4. CATEGORIZAÇÃO E SCROLL INDICATOR (ESTILO LISTA TELEFÔNICA):
+   - Separe a exibição dos itens por categorias/grupos de raridade (Iniciais, Básicos, Épicos, Lendários, Botas) e ordene os itens alfabeticamente dentro de cada categoria.
+   - Adapte o efeito de indicador flutuante de rolagem (Scroll Spy / Lista Telefônica): enquanto o usuário rola a página de itens, o balão flutuante deve exibir o NOME DA CATEGORIA ATUAL (ex: "Iniciais", "Lendários", etc.) em vez de letras do alfabeto A-Z.
+
+5. RESUMO E MODAL DE INFORMAÇÕES DO ITEM:
+   - O switch "Resumido" nos itens deve substituir o texto descritivo oficial da Riot pelo texto autoral presente no 'data/item-resum.json' (mesmo comportamento das skills de campeões).
+   - Ao clicar no botão "Info" do card do item, exibir uma versão ultrarresumida do item no próprio card, usando tópicos/bullets amarelos com palavras-chave diretas combinando com a estética Hextech.
+   - Dentro da janela do modal de detalhe do item, insira os ícones visuais dos atributos ao lado dos valores e nomes (ex: [Ícone AD] +130 Poder de Habilidade).
+
+
+[PARTE 3/5] — REFORMULAÇÃO DA SEÇÃO DE RUNAS
+-------------------------------------------------------------------------------
+Refatore a página e a estrutura visual de Runas no LoL Codex respeitando as seguintes especificações:
+
+1. LIMPEZA E FOCO PEDAGÓGICO:
+   - Remova o cabeçalho "Runas Reforjadas & Fragmentos de Atributos", o emoji de mágica, o botão "Salvar", a opção "+ Adicionar nova runa", o campo de editar nome da página de runas ("BLITZ YASUO MEIO") e a mensagem "Clique na runa para selecioná-la...".
+   - Remova a seleção de Árvore Secundária. A página deve focar exclusivamente em ENSINAR UMA ÁRVORE POR VEZ em detalhes.
+
+2. NAVEGAÇÃO E NÍVEIS DE RUNAS:
+   - Crie uma seleção superior onde o usuário clica para alternar a categoria principal exibida (Precisão, Dominação, Feitiçaria, Determinação, Inspiração).
+   - Ao selecionar uma árvore, exiba todas as informações das Keystones e Sub-runas na tela organizada por linhas/níveis verticais fieis ao LoL (Keystone no topo, seguida pela Linha 1, Linha 2 e Linha 3 de sub-runas).
+   - Exiba a explicação e detalhes do que cada runa faz ao passar o mouse ou clicar.
+
+3. ESTILIZAÇÃO HEXTECH E CORES OFICIAIS:
+   - Aplique as cores oficiais Hextech nas bordas e acentos das runas de acordo com a árvore ativa:
+     * Precisão: Dourado / Amarelo (#c8aa6e / #f0b232)
+     * Dominação: Vermelho (#dc2626 / #ef4444)
+     * Feitiçaria: Azul / Roxo Mágico (#3b82f6 / #8b5cf6)
+     * Determinação: Verde (#22c55e / #10b981)
+     * Inspiração: Azul Claro / Turquesa (#06b6d4 / #0ac8b9)
+   - Substitua a imagem de fundo desfocada/embaçada por uma imagem ou vetor em alta resolução.
+
+
+[PARTE 4/5] — HOME (RECENTES) E GLOSSÁRIO DE TERMOS GAMER
+-------------------------------------------------------------------------------
+Implemente o sistema de Campeões Recentes no localStorage para a Home e expanda o sistema de Tooltips de Glossário no LoL Codex:
+
+1. CAMPEÕES EM DESTAQUE NA HOME (HISTÓRICO RECENTE):
+   - Altere a grade de "Campeões em Destaque" da Home para exibir os ÚLTIMOS 4 CAMPEÕES acessados pelo usuário.
+   - Sempre que o usuário abrir o modal de um campeão ('abrirModalCampeao(champId)'), grave esse ID no 'localStorage' em um array 'lol_codex_recentes' (máximo de 4 itens, sem duplicatas, com o mais recente em primeiro).
+   - CASO O HISTÓRICO ESTEJA VAZIO (primeiro acesso do usuário):
+     Exiba na Home um card/banner convidativo (Call-to-Action) Hextech com um link/botão direcionando para a aba de Campeões para ele explorar e abrir seus primeiros campeões.
+
+2. ESPECIFICAÇÕES E TERMOS DE GLOSSÁRIO (TOOLTIPS):
+   - Certifique-se de que no 'data/glossary.json' e no formatador de tooltips dinâmicos existam explicativos claros para os termos gamer/mecanismos de jogo:
+     * XP (Experiência)
+     * GHOST (Fantasma / Aumento de velocidade de movimento e ignorar colisão)
+     * HOOK (Puxão / Gancho)
+     * SILENCE (Silêncio / Impedir conjuração de habilidades)
+   - Ao passar o mouse sobre estes termos nos textos do site, exibir o tooltip estilizado em tema Hextech (#091428, borda dourada e animação suave).
+
+
+[PARTE 5/5] — SISTEMA E MÓDULO DE QUIZ INTERATIVO
+-------------------------------------------------------------------------------
+Crie uma nova seção/aba no LoL Codex dedicada a um Quiz Interativo para o usuário aprimorar seus conhecimentos do jogo.
+
+1. NAVEGAÇÃO E MÓDULO:
+   - Adicione o item "Quiz" na barra de navegação principal (NAV).
+   - Crie a estrutura em 'html/index.html', estilize em 'css/style.css' e gerencie em 'js/script.js' (ou crie um módulo 'js/modules/quiz.js').
+
+2. BANCO DE DADOS LOCAL DO QUIZ ('data/quiz.json'):
+   - Monte/estruture o arquivo 'data/quiz.json' organizado por CATEGORIAS SEPARADAS:
+     * Categoria "Mapa e Objetivos": Perguntas sobre tempo de nascimento/respawn e buffs de Dragões, Larvas do Vazio, Arauto, Barão, Aronguejo e tempo para nível 6.
+     * Categoria "Habilidades de Campeões": Perguntas focadas em identificar o efeito ou tecla da habilidade de determinado campeão.
+     * Categoria "Itens e Receitas": Perguntas sobre atributos ou passivas de itens.
+
+3. FUNCIONAMENTO E INTERFACE DO QUIZ:
+   - O usuário pode escolher a Categoria desejada antes de começar.
+   - Modos de Pergunta:
+     * Múltipla Escolha: Selecionar a resposta correta entre 4 opções.
+     * Modo Revelação/Memória: Exibir a imagem do Campeão/Item/Objetivo, perguntar qual é a habilidade/atributo e permitir que o usuário pense antes de clicar no botão "Revelar Resposta".
+   - Feedback visual dinâmico com pontuação e explicações didáticas ao final de cada rodada.
+==========================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
+[INSTRUÇÃO ADICIONAL SE FOR ENVIAR FOTOS/PRINTS JUNTO]
+-------------------------------------------------------------------------------
+Use de exemplo as imagens anexadas para saber quais itens ainda estão no jogo e
+são de partidas 5v5 normais. Analise cada ícone enviado nas fotos e pegue o
+nome de cada um traduzido em português, assim como é no jogo. Lembrando: itens
+que estão apagados/desativados na imagem não devem ser considerados (e se
+houver algum deles no site, pode retirar, pois foram removidos do jogo).
+===============================================================================
+
+
+===============================================================================
+[PARTE 2/5] — REFORMULAÇÃO COMPLETA DO SISTEMA DE ITENS
+===============================================================================
+Atue como um desenvolvedor Front-End e refatore a aba e a lógica de Itens no LoL Codex de acordo com as seguintes regras de negócio:
+
+1. FILTRAGEM E REMOÇÃO DE ITENS ANTIGOS:
+   - Remova da listagem todos os itens que já foram removidos do League of Legends 5v5 atual (ex: itens da era antiga/Removidos). Mantenha estritamente itens ativos na versão atual do jogo.
+
+2. PADRONIZAÇÃO DE ATRIBUTOS E SIGLAS NOS FILTROS:
+   - Nos filtros de atributos dos itens, padronize todos os nomes em português acompanhados das siglas oficiais entre parênteses:
+     1. Dano de Ataque (AD)
+     2. Poder de Habilidade (AP)
+     3. Velocidade de Ataque (AS)
+     4. Acerto Crítico (CRIT)
+     5. Roubo de Vida (LS)
+     6. Vampirismo (VAMP) -> Unificar e mapear corretamente itens que possuem sustentação de dano/vampirismo.
+     7. Letalidade (LET)
+     8. Penetração de Armadura (A. PEN) -> Separar de Letalidade e vincular aos seus itens respectivos.
+     9. Penetração Mágica (M. PEN) -> Corrigir ícone e associação (ex: Cajado do Vazio deve ter Penetração Mágica, não de Armadura).
+     10. Vida (HP)
+     11. Armadura (ARMOR)
+     12. Resistência Mágica (MR)
+     13. Regeneração de Vida (HP5) -> Padronizar como HP5 e associar aos itens de regeneração.
+     14. Tenacidade (TEN) -> Separar de Resistência a Lentidão e atribuir aos seus itens respectivos.
+     15. Resist. Lentidão (SR) -> Atribuir aos itens respectivos.
+     16. Aceleração de Habilidade (CDR)
+     17. Mana (MANA)
+     18. Regeneração de Mana (MANA REG.)
+     19. Velocidade de Movimento (MS)
+     20. Cura e Resistência do Escudo (E&S)
+
+3. CORES DE BORDAS POR RARIDADE NOS ÍCONES DOS ITENS:
+   - Aplique cores na BORDA DIRETA DO ÍCONE DA IMAGEM do item (não na janela/card inteiro) baseando-se na sua raridade:
+     * Itens Iniciais: Borda cinza/branca (#a0a0a0)
+     * Itens Básicos: Borda verde (#22c55e)
+     * Itens Épicos: Borda roxa (#a855f7)
+     * Itens Lendários: Borda dourada (#eab308)
+     * Botas: Borda azul (#3b82f6)
+
+4. CATEGORIZAÇÃO E SCROLL INDICATOR (ESTILO LISTA TELEFÔNICA):
+   - Separe a exibição dos itens por categorias/grupos de raridade (Iniciais, Básicos, Épicos, Lendários, Botas) e ordene os itens alfabeticamente dentro de cada categoria.
+   - Adapte o efeito de indicador flutuante de rolagem (Scroll Spy / Lista Telefônica): enquanto o usuário rola a página de itens, o balão flutuante deve exibir o NOME DA CATEGORIA ATUAL (ex: "Iniciais", "Lendários", etc.) em vez de letras do alfabeto A-Z.
+
+5. RESUMO E MODAL DE INFORMAÇÕES DO ITEM:
+   - O switch "Resumido" nos itens deve substituir o texto descritivo oficial da Riot pelo texto autoral presente no 'data/item-resum.json' (mesmo comportamento das skills de campeões).
+   - Ao clicar no botão "Info" do card do item, exibir uma versão ultrarresumida do item no próprio card, usando tópicos/bullets amarelos com palavras-chave diretas combinando com a estética Hextech.
+   - Dentro da janela do modal de detalhe do item, insira os ícones visuais dos atributos ao lado dos valores e nomes (ex: [Ícone AD] +130 Poder de Habilidade).
+===============================================================================
