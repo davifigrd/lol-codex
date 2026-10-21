@@ -22,31 +22,6 @@
   padding-right: 2.9rem;
 }
 
-.clear-search-btn {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  line-height: 1;
-  background: transparent;
-  border: none;
-  border-radius: 50%;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: color 0.2s ease, background 0.2s ease;
-}
-.clear-search-btn:hover {
-  color: var(--gold-bright);
-  background: rgba(200, 155, 60, 0.12);
-}
-
 .item-actions-group {
   display: flex;
   align-items: center;

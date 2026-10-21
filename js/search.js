@@ -1,6 +1,24 @@
 /* LoL Codex — Global search with real-time suggestions (champions, items and runes). */
+
+// Shows/hides the clear "X" on the header search bar according to the typed text.
+function syncHeaderClearBtn(value) {
+    const clearBtn = document.getElementById('clearHeaderSearchBtn');
+    if (clearBtn) clearBtn.style.display = value && value.length > 0 ? 'flex' : 'none';
+}
+
+// Clears the header search bar and closes the suggestion list.
+function clearGlobalSearch() {
+    const input = document.getElementById('headerGlobalSearch');
+    if (!input) return;
+    input.value = '';
+    syncHeaderClearBtn('');
+    hideSuggestions(input.id, getSuggestionBoxFor(input.id));
+    input.focus();
+}
+
 function handleGlobalSearchInput(event) {
     const query = event.target.value;
+    syncHeaderClearBtn(query);
     renderGlobalSuggestions(query, event.target.id);
 }
 
@@ -191,6 +209,7 @@ function renderGlobalSuggestions(query, inputId) {
             if (!targetElement) return;
             const inp = document.getElementById(inputId);
             if (inp) inp.value = targetElement.name;
+            syncHeaderClearBtn(targetElement.name);
             hideSuggestions(inputId, suggBox);
             targetElement.action();
         });

@@ -339,11 +339,24 @@ function renderItems(itemList) {
 }
 
 /**
+ * Resolves the short, objective author summary for an item.
+ * Falls back to the official Riot "plaintext" one-liner when no author
+ * summary has been written yet, so the card is never empty.
+ */
+function getItemAuthorSummary(item) {
+    const entry = itemSummaries[item.id];
+    if (entry && entry.resumo && !entry.resumo.startsWith('TODO:')) {
+        return entry.resumo;
+    }
+    return stripHtmlTags(item.plaintext || '') || '';
+}
+
+/**
  * Builds the card HTML for an item with:
  * - Direct colored border on the image icon based on rarity
- * - Attribute topic lines (each stat the item grants); items without stat
- *   topics (consumables/starters) fall back to the description text.
- * - Resumido mode affecting that fallback description
+ * - Attribute topic lines (each stat the item grants)
+ * - A clamped description line that alternates between the author summary
+ *   and the official Riot description via the global Resumido/Detalhado switch
  */
 function buildItemCardHTML(item, rarityKey) {
     const iconUrl = `https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${item.id}.png`;
@@ -351,24 +364,23 @@ function buildItemCardHTML(item, rarityKey) {
     const rarityInfo = ITEM_RARITY[rarityKey] || ITEM_RARITY.BASIC;
     const rarityColor = rarityInfo.color;
 
-    // Summary vs detailed mode:
-    // Resumido = author text from data/item-resum.json / item-summary.json
-    // Detalhado = clean DDragon text
-    const itemSummaryData = itemSummaries[item.id];
-    let displayText = '';
-    if (itemSummaryMode && itemSummaryData && itemSummaryData.resumo && !itemSummaryData.resumo.startsWith('TODO:')) {
-        displayText = itemSummaryData.resumo;
-    } else {
-        displayText = item.plaintext || stripHtmlTags(item.description || '') || 'Item de Summoner\'s Rift.';
-    }
+    // "Resumido" = short author text; "Detalhado" = official Riot description
+    // with the <stats> block stripped (the stat bullets already cover it).
+    // Only one of them is ever rendered at a time.
+    const displayText = itemSummaryMode
+        ? getItemAuthorSummary(item)
+        : getItemOfficialDescription(item);
 
     // Attribute topics: the cards show ONLY the item's stat topics. Items
     // without stat topics (consumables/starters) fall back to the description.
     const infoTopics = getItemStatTopics(item);
     const hasInfoTopics = infoTopics.length > 0;
+    const descHtml = displayText
+        ? `<p class="item-card-desc ${itemSummaryMode ? 'is-summary' : 'is-official'}">${displayText}</p>`
+        : '';
     const bodyHtml = hasInfoTopics
-        ? buildItemInfoCard(item, infoTopics)
-        : `<p class="item-stats">${displayText}</p>`;
+        ? `${buildItemInfoCard(item, infoTopics)}${descHtml}`
+        : descHtml || `<p class="item-stats">Item de Summoner's Rift.</p>`;
 
     return `
         <div class="item-card" data-item-id="${item.id}" onclick="openItemModal('${item.id}')" onmouseenter="applyCardHoverColor(this, '${iconUrl}')">
@@ -420,6 +432,30 @@ function pickTopicIcon(label) {
         if (rule.test.test(label)) return rule.icon;
     }
     return `<i class="fa-solid fa-gem" style="color:var(--gold-bright);font-size:12px;"></i>`;
+}
+
+/**
+ * Returns the official Riot description without the <stats> block, which is
+ * already reproduced as attribute bullets/badges elsewhere in the UI.
+ * Values stay colored; tags are converted to readable inline markup.
+ */
+function getItemOfficialDescription(item) {
+    const raw = item.description || '';
+    if (!raw) return '';
+
+    const withoutStats = raw.replace(/<stats>[\s\S]*?<\/stats>/i, '');
+    const asInlineText = withoutStats
+        .replace(/<br\s*\/?>/gi, ' ')
+        .replace(/<li>/gi, ' • ')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    // Prefer the properly formatted (colored) version, then fall back to raw
+    if (typeof colorizeEffectDescriptions === 'function' && withoutStats) {
+        return colorizeEffectDescriptions(withoutStats);
+    }
+    return asInlineText || stripHtmlTags(item.plaintext || '');
 }
 
 /**
@@ -666,20 +702,17 @@ function openItemModal(itemId) {
     // Attribute lines with visual icons
     const statLinesHtml = buildModalStatLines(item);
 
-    // Description: in "Resumido" mode, strictly replaces the official Riot description with author text
+    // Description: in "Resumido" mode it strictly replaces the official Riot
+    // description with the author summary — never both at the same time.
     const descriptionHtml = (() => {
-        const itemModalSummary = itemSummaries[itemId];
         if (itemSummaryMode) {
-            const resumoText = (itemModalSummary && itemModalSummary.resumo && !itemModalSummary.resumo.startsWith('TODO:'))
-                ? itemModalSummary.resumo
-                : null;
+            const resumoText = getItemAuthorSummary(item);
             return resumoText
                 ? `<div style="padding:0.25rem 0;"><p style="color:var(--text-body); margin:0; line-height:1.7; font-size:0.95rem;">${resumoText}</p></div>`
                 : `<em style="color:var(--text-muted); font-size:0.9rem;">Resumo autoral ainda não escrito.</em>`;
         }
-        return typeof colorizeEffectDescriptions === 'function'
-            ? colorizeEffectDescriptions(item.description)
-            : (item.description || '<p>Sem descrição adicional.</p>');
+        const official = getItemOfficialDescription(item);
+        return official || '<p>Sem descrição adicional.</p>';
     })();
 
     modalContent.innerHTML = `
@@ -725,7 +758,7 @@ function openItemModal(itemId) {
         </div>
 
         <div class="recipe-section">
-            <div class="recipe-header"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--gold-bright);"></i> Construído a partir de (Componentes):</div>
+            <div class="recipe-header"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--gold-bright);"></i> Componentes:</div>
             <div class="recipe-grid">
                 ${componentsHtml}
             </div>

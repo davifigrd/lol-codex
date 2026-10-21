@@ -392,26 +392,11 @@
   font-size: 0.88rem;
   line-height: 1.55;
   color: var(--text-muted);
-  margin: 0 0 0.7rem;
+  margin: 0;
 }
 
 .featured-recent-cta-text strong {
   color: var(--gold-bright);
-}
-
-.featured-recent-cta-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--gold-bright);
-  transition: gap 0.2s ease;
-}
-
-.featured-recent-cta:hover .featured-recent-cta-hint,
-.featured-recent-cta:focus-visible .featured-recent-cta-hint {
-  gap: 0.7rem;
 }
 
 @media (max-width: 640px) {

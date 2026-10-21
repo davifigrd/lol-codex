@@ -25,7 +25,6 @@ let championDetailsCache = {};
 // Lanes selected in the champion filter (multi-selection: a champion can
 // play more than one lane, e.g. Amumu = Jungle + Support). Empty = all lanes.
 let activeRoleFilters = new Set();
-let activeItemCategory = 'all';
 
 // New attribute filter system (multi-selection via mini window)
 let activeAttributeFilters = new Set();

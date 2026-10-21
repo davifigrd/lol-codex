@@ -231,6 +231,29 @@
 }
 
 /* --------------------------------------------------------------------------
+   CARD DESCRIPTION — clamps the official / author text to 3 lines.
+   Only one of them is rendered at a time (Resumido XOR Detalhado).
+   -------------------------------------------------------------------------- */
+.item-card-desc {
+  margin: 0.6rem 0 0 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.item-card-desc.is-summary {
+  color: var(--gold-light);
+  font-style: italic;
+}
+
+.item-card-desc.is-official {
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
    DETAILED MODAL STAT LINES WITH ICONS
    -------------------------------------------------------------------------- */
 .modal-stat-grid {

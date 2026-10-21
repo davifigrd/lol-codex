@@ -468,41 +468,4 @@ function itemHasAttribute(item, attr) {
     }
 }
 
-function itemMatchesCategory(item, categoryKey) {
-    if (categoryKey === 'all') return true;
-    const tags = item.tags || [];
-    const stats = item.stats || {};
-
-    switch (categoryKey) {
-        case 'AD':
-            return tags.includes('Damage') || Boolean(stats.FlatPhysicalDamageMod);
-        case 'AP':
-            return tags.includes('SpellDamage') || Boolean(stats.FlatMagicDamageMod);
-        case 'ARMOR':
-            // STRICTLY items that grant armor, NEVER just health!
-            return tags.includes('Armor') || Boolean(stats.FlatArmorMod);
-        case 'LP':
-            // Specific filter for Health
-            return tags.includes('Health') || Boolean(stats.FlatHPPoolMod);
-        case 'AS':
-            return tags.includes('AttackSpeed') || Boolean(stats.PercentAttackSpeedMod);
-        case 'CRIT':
-            return tags.includes('CriticalStrike') || Boolean(stats.FlatCritChanceMod);
-        case 'MOV':
-            return tags.includes('Boots') || tags.includes('NonbootsMovement') || Boolean(stats.FlatMovementSpeedMod) || Boolean(stats.PercentMovementSpeedMod);
-        case 'LS':
-            return tags.includes('LifeSteal') || tags.includes('SpellVamp') || tags.includes('Omnivamp') || Boolean(stats.PercentLifeStealMod);
-        case 'CDR':
-            return tags.includes('CooldownReduction') || tags.includes('AbilityHaste');
-        case 'MR':
-            return tags.includes('SpellBlock') || tags.includes('MagicResist') || Boolean(stats.FlatSpellBlockMod);
-        case 'PEN':
-            return tags.includes('ArmorPenetration') || tags.includes('MagicPenetration');
-        case 'MANA':
-            return tags.includes('Mana') || tags.includes('ManaRegen') || Boolean(stats.FlatMPPoolMod);
-        default:
-            return true;
-    }
-}
-
 /* Global search in the hero */

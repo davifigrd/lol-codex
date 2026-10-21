@@ -22,15 +22,15 @@
     <!-- External CSS in the ../css/ folder -->
     <!-- Modular CSS (ordered: order = cascade) -->
     <link rel="stylesheet" href="../css/style.css?v=5" />
-    <link rel="stylesheet" href="../css/layout.css?v=8" />
-    <link rel="stylesheet" href="../css/champions.css?v=6" />
-    <link rel="stylesheet" href="../css/items.css?v=9" />
+    <link rel="stylesheet" href="../css/layout.css?v=9" />
+    <link rel="stylesheet" href="../css/champions.css?v=7" />
+    <link rel="stylesheet" href="../css/items.css?v=10" />
     <link rel="stylesheet" href="../css/components.css?v=6" />
     <link rel="stylesheet" href="../css/modals.css?v=5" />
     <link rel="stylesheet" href="../css/switch.css?v=4" />
-    <link rel="stylesheet" href="../css/runes.css?v=6" />
+    <link rel="stylesheet" href="../css/runes.css?v=7" />
     <link rel="stylesheet" href="../css/badges.css?v=7" />
-    <link rel="stylesheet" href="../css/filters.css?v=6" />
+    <link rel="stylesheet" href="../css/filters.css?v=7" />
     <link rel="stylesheet" href="../css/responsive.css?v=4" />
 
     <!-- Site favicons / icons with their respective sizes -->
@@ -89,6 +89,17 @@
               oninput="handleGlobalSearchInput(event)"
               onkeydown="handleGlobalSearchKeydown(event)"
             />
+            <button
+              id="clearHeaderSearchBtn"
+              class="clear-search-btn"
+              type="button"
+              style="display: none"
+              onclick="clearGlobalSearch()"
+              title="Limpar busca"
+              aria-label="Limpar busca"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
           </div>
           <div
             class="global-suggestions"
@@ -985,11 +996,6 @@
     <footer>
       <div class="container">
         <div class="footer-brand">
-          <img
-            src="../img/icon/128.png"
-            alt="LoL Codex"
-            class="footer-logo-img"
-          />
           <span class="footer-rights"
             >LoL Codex © 2026 · Todos os direitos reservados —
             <a
@@ -1088,20 +1094,21 @@
     </footer>
 
     <!-- Modular JavaScript (classic files loaded in order) -->
-    <script src="../js/state.js?v=7"></script>
+    <script src="../js/state.js?v=8"></script>
     <script src="../js/utils.js?v=6"></script>
     <script src="../js/champion-data.js?v=5"></script>
     <script src="../js/colors.js?v=6"></script>
-    <script src="../js/ddragon.js?v=6"></script>
-    <script src="../js/champions.js?v=8"></script>
+    <script src="../data/item-resum-fallback.js?v=1"></script>
+    <script src="../js/ddragon.js?v=7"></script>
+    <script src="../js/champions.js?v=9"></script>
     <script src="../js/champion-modal.js?v=5"></script>
-    <script src="../js/items.js?v=10"></script>
-    <script src="../js/runes.js?v=7"></script>
-    <script src="../js/filters.js?v=9"></script>
-    <script src="../js/search.js?v=4"></script>
+    <script src="../js/items.js?v=11"></script>
+    <script src="../js/runes.js?v=8"></script>
+    <script src="../js/filters.js?v=10"></script>
+    <script src="../js/search.js?v=5"></script>
     <script src="../js/tooltip.js?v=4"></script>
     <script src="../js/feedback.js?v=2"></script>
-    <script src="../js/interface.js?v=5"></script>
-    <script src="../js/app.js?v=8"></script>
+    <script src="../js/interface.js?v=6"></script>
+    <script src="../js/app.js?v=9"></script>
   </body>
 </html>

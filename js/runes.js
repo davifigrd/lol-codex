@@ -279,9 +279,7 @@ function selectStatShard(rowIndex, shardIndex) {
     if (shard) {
         currentInspectedRune = {
             entryType: 'shard',
-            rawData: shard,
-            rowName: RUNE_STAT_SHARDS[rowIndex].labelName,
-            rowIndex: rowIndex
+            rawData: shard
         };
     }
     renderRunes();
@@ -308,9 +306,7 @@ function inspectShardHover(rowIndex, shardIndex) {
     if (!shard) return;
     currentInspectedRune = {
         entryType: 'shard',
-        rawData: shard,
-        rowName: RUNE_STAT_SHARDS[rowIndex].labelName,
-        rowIndex: rowIndex
+        rawData: shard
     };
     updateInspectorCard();
 }
@@ -462,61 +458,10 @@ function renderRunes() {
             `;
         }).join('');
 
-    // 1. Keystones (top row of the active tree)
-    const slotKeystone = primaryTree.slots[0];
-    const keystonesHtml = slotKeystone.runes.map(r => {
-        const isSelected = primaryChoices.keystone === r.id;
-        const runeIcon = `https://ddragon.leagueoflegends.com/cdn/img/${r.icon}`;
-        return `
-            <div class="lol-rune-badge lol-keystone-badge ${isSelected ? 'selected' : ''}"
-                 onclick="selectPrimaryRune(0, ${r.id})"
-                 onmouseenter="inspectRuneHover(${r.id}, 0, ${activeRuneTree})"
-                 title="${r.name}">
-                <div class="lol-rune-ring">
-                    <img src="${runeIcon}" alt="${r.name}" class="lol-rune-icon">
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    // 2. Rows 1, 2 and 3 stacked vertically
-    const subSlotsHtml = [1, 2, 3].map(slotIdx => {
-        const slot = primaryTree.slots[slotIdx];
-        const cacheKey = `slot${slotIdx}`;
-        const rowName = activeMeta.slotNames[slotIdx] || `Linha ${slotIdx}`;
-        const runesHtml = slot.runes.map(r => {
-            const isSelected = primaryChoices[cacheKey] === r.id;
-            const runeIcon = `https://ddragon.leagueoflegends.com/cdn/img/${r.icon}`;
-            return `
-                <div class="lol-rune-badge lol-subrune-badge ${isSelected ? 'selected' : ''}"
-                     onclick="selectPrimaryRune(${slotIdx}, ${r.id})"
-                     onmouseenter="inspectRuneHover(${r.id}, ${slotIdx}, ${activeRuneTree})"
-                     title="${r.name}">
-                    <div class="lol-rune-ring">
-                        <img src="${runeIcon}" alt="${r.name}" class="lol-rune-icon">
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        return `
-            <div class="lol-rune-tier-row" data-tier="${slotIdx}">
-                <div class="lol-tier-divider"></div>
-                <div class="lol-tier-row-header">
-                    <span class="lol-tier-row-num">${slotIdx}</span>
-                    <span class="lol-tier-row-name">${rowName}</span>
-                </div>
-                <div class="lol-runes-badge-group">
-                    ${runesHtml}
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    // 3. Stat Shards
+    // 3. Stat Shards — a clean 3x3 matrix of circles (no title, no row labels)
     const statShardsHtml = RUNE_STAT_SHARDS.map((tier, lIdx) => {
         const selectedIndex = runeSelection.shards[lIdx] ?? 0;
-        const optionsHtml = tier.optionList.map((op, oIdx) => {
+        return tier.optionList.map((op, oIdx) => {
             const isSelected = selectedIndex === oIdx;
             return `
                 <div class="lol-shard-badge ${isSelected ? 'selected' : ''}"
@@ -527,25 +472,13 @@ function renderRunes() {
                 </div>
             `;
         }).join('');
-
-        return `
-            <div class="lol-shard-tier-row">
-                <span class="lol-shard-row-label" title="Linha ${tier.rowEntry} — ${tier.labelName}">
-                    <i class="${tier.runeIconUrl}"></i>
-                    <em>Linha ${tier.rowEntry} · ${tier.labelName}</em>
-                </span>
-                <div class="lol-shard-badges-group">
-                    ${optionsHtml}
-                </div>
-            </div>
-        `;
     }).join('');
 
-    // Explanatory section (each rune explained one by one)
-    let rowByRowExplanationHtml = '';
-    if (runeViewMode === 'lista') {
-        rowByRowExplanationHtml = buildRowByRowExplanation(primaryTree, activeMeta);
-    }
+    // Grid (desktop default) shows icons with hover explanations; the list
+    // (mobile default) shows each rune's title and description directly.
+    const activeTreeHtml = runeViewMode === 'lista'
+        ? buildRuneListHtml(primaryTree, activeMeta)
+        : buildRuneGridHtml(primaryTree, activeMeta, primaryChoices);
 
     container.innerHTML = `
         <div class="lol-runes-client-wrapper" style="--tree-theme-color:${activeMeta.colorHex}; --tree-theme-secondary:${activeMeta.secondaryColorHex}; --tree-theme-glow:${activeMeta.glowColor};">
@@ -571,36 +504,9 @@ function renderRunes() {
 
                 <!-- Main body: active tree (left) | inspector + shards (right) -->
                 <div class="lol-runes-main-layout">
-                    <!-- Column 1: keystones + rows 1/2/3 of the active tree -->
+                    <!-- Column 1: the active tree (compact grid or inline list) -->
                     <div class="lol-primary-column">
-                        <div class="lol-tree-slots-content">
-                            <!-- Timeline line on the left with connector dots -->
-                            <div class="lol-timeline-track">
-                                <span class="lol-timeline-node ${primaryChoices.keystone ? 'active' : ''}"></span>
-                                <span class="lol-timeline-node ${primaryChoices.slot1 ? 'active' : ''}"></span>
-                                <span class="lol-timeline-node ${primaryChoices.slot2 ? 'active' : ''}"></span>
-                                <span class="lol-timeline-node ${primaryChoices.slot3 ? 'active' : ''}"></span>
-                            </div>
-
-                            <div class="lol-slots-rows-group">
-                                <!-- Keystones (core runes) -->
-                                <div class="lol-keystone-section">
-                                    <div class="lol-keystones-header">
-                                        <span class="lol-keystones-line"></span>
-                                        <span class="lol-keystones-title">RUNAS ESSENCIAIS</span>
-                                        <span class="lol-keystones-line"></span>
-                                    </div>
-                                    <div class="lol-keystones-row">
-                                        ${keystonesHtml}
-                                    </div>
-                                </div>
-
-                                <!-- 3 sub-rune rows of the active tree -->
-                                <div class="lol-subrunes-section">
-                                    ${subSlotsHtml}
-                                </div>
-                            </div>
-                        </div>
+                        ${activeTreeHtml}
                     </div>
 
                     <!-- Column 2: live rune inspector + attribute shards -->
@@ -610,17 +516,16 @@ function renderRunes() {
                             <!-- Filled via updateInspectorCard() -->
                         </div>
 
-                        <!-- Attribute shards -->
+                        <!-- Attribute shards: a 3x3 matrix of circles -->
                         <div class="lol-shards-section">
-                            <div class="lol-shards-title">
-                                <i class="fa-solid fa-cubes-stacked"></i> Fragmentos de Atributos
+                            <div class="lol-shard-matrix">
+                                ${statShardsHtml}
                             </div>
-                            ${statShardsHtml}
                         </div>
                     </div>
                 </div>
 
-                <!-- Footer bar (client view vs explanatory list, detailed/summarized) -->
+                <!-- Footer bar (compact grid vs inline list, detailed/summarized) -->
                 <div class="lol-client-footer">
                     <div class="lol-footer-left">
                         <div class="lol-view-toggles">
@@ -629,7 +534,7 @@ function renderRunes() {
                                 <i class="fa-solid fa-table-cells-large"></i>
                             </button>
                             <button type="button" class="lol-view-btn ${runeViewMode === 'lista' ? 'active' : ''}"
-                                    onclick="toggleRuneViewMode('lista')" title="Lista 3 pontos + 3 linhas (Expandido) — Títulos e descrições visíveis">
+                                    onclick="toggleRuneViewMode('lista')" title="Lista completa — títulos e descrições visíveis sem precisar passar o mouse">
                                 <i class="fa-solid fa-list"></i>
                             </button>
                         </div>
@@ -642,9 +547,6 @@ function renderRunes() {
                     </div>
                 </div>
             </div>
-
-            <!-- Explanatory guide section (shows keystones and each sub-rune one by one) -->
-            ${rowByRowExplanationHtml}
         </div>
     `;
 
@@ -677,7 +579,7 @@ function updateInspectorCard() {
                     <img src="${shard.icon}" alt="${shard.labelName}" class="lol-inspector-icon">
                 </div>
                 <div>
-                    <span class="lol-inspector-badge">Fragmento de Atributo • Linha ${currentInspectedRune.rowIndex + 1} (${currentInspectedRune.rowName})</span>
+                    <span class="lol-inspector-badge" style="color:#ffd23f;">Fragmento de Atributo</span>
                     <h3 class="lol-inspector-title">${shard.labelName}</h3>
                 </div>
             </div>
@@ -715,124 +617,136 @@ function updateInspectorCard() {
 }
 
 /* ==========================================================================
-   ONE-BY-ONE EXPLANATORY GUIDE (List Mode / Full Breakdown)
+   VIEW MODES - COMPACT GRID (desktop default) AND INLINE LIST
    ========================================================================== */
-function buildRowByRowExplanation(runeTree, meta) {
-    // 1. Keystones explained one by one
-    const keystones = runeTree.slots[0].runes;
-    const keystonesCards = keystones.map(r => {
+// Grid view: keystones + 3 sub-rune rows, icons only (hover/click explains).
+function buildRuneGridHtml(primaryTree, activeMeta, primaryChoices) {
+    const keystonesHtml = primaryTree.slots[0].runes.map(r => {
+        const isSelected = primaryChoices.keystone === r.id;
         const runeIcon = `https://ddragon.leagueoflegends.com/cdn/img/${r.icon}`;
-        const descHtml = formatRuneDescription(r, runeSummaryMode);
         return `
-            <div class="lol-guide-rune-card keystone-card">
-                <div class="lol-guide-card-header">
-                    <img src="${runeIcon}" alt="${r.name}" class="lol-guide-rune-img">
-                    <div>
-                        <span class="lol-guide-tier-tag" style="color:${meta.colorHex};">Runa Essencial</span>
-                        <h4 class="lol-guide-rune-name">${r.name}</h4>
-                    </div>
-                </div>
-                <div class="lol-guide-card-desc">
-                    ${descHtml}
+            <div class="lol-rune-badge lol-keystone-badge ${isSelected ? 'selected' : ''}"
+                 onclick="selectPrimaryRune(0, ${r.id})"
+                 onmouseenter="inspectRuneHover(${r.id}, 0, ${primaryTree.id})"
+                 title="${r.name}">
+                <div class="lol-rune-ring">
+                    <img src="${runeIcon}" alt="${r.name}" class="lol-rune-icon">
                 </div>
             </div>
         `;
     }).join('');
 
-    // 2. Sub-runes row by row (Row 1, Row 2, Row 3)
     const subSlotsHtml = [1, 2, 3].map(slotIdx => {
-        const slot = runeTree.slots[slotIdx];
-        const slotName = meta.slotNames[slotIdx] || `Sub-runas • Linha ${slotIdx}`;
-        const runesCards = slot.runes.map(r => {
+        const slot = primaryTree.slots[slotIdx];
+        const cacheKey = `slot${slotIdx}`;
+        const rowName = activeMeta.slotNames[slotIdx] || `Linha ${slotIdx}`;
+        const runesHtml = slot.runes.map(r => {
+            const isSelected = primaryChoices[cacheKey] === r.id;
             const runeIcon = `https://ddragon.leagueoflegends.com/cdn/img/${r.icon}`;
-            const descHtml = formatRuneDescription(r, runeSummaryMode);
             return `
-                <div class="lol-guide-rune-card">
-                    <div class="lol-guide-card-header">
-                        <img src="${runeIcon}" alt="${r.name}" class="lol-guide-rune-img">
-                        <div>
-                            <span class="lol-guide-tier-tag">Linha ${slotIdx}</span>
-                            <h4 class="lol-guide-rune-name">${r.name}</h4>
-                        </div>
-                    </div>
-                    <div class="lol-guide-card-desc">
-                        ${descHtml}
+                <div class="lol-rune-badge lol-subrune-badge ${isSelected ? 'selected' : ''}"
+                     onclick="selectPrimaryRune(${slotIdx}, ${r.id})"
+                     onmouseenter="inspectRuneHover(${r.id}, ${slotIdx}, ${primaryTree.id})"
+                     title="${r.name}">
+                    <div class="lol-rune-ring">
+                        <img src="${runeIcon}" alt="${r.name}" class="lol-rune-icon">
                     </div>
                 </div>
             `;
         }).join('');
 
         return `
-            <div class="lol-guide-tier-section">
-                <div class="lol-guide-tier-title">
-                    <span class="lol-tier-num">${slotIdx}</span>
-                    <h3>Linha ${slotIdx}: ${slotName}</h3>
+            <div class="lol-rune-tier-row" data-tier="${slotIdx}">
+                <div class="lol-tier-divider"></div>
+                <div class="lol-tier-row-header">
+                    <span class="lol-tier-row-num">${slotIdx}</span>
+                    <span class="lol-tier-row-name">${rowName}</span>
                 </div>
-                <div class="lol-guide-tier-grid">
-                    ${runesCards}
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    // 3. Stat Shards explained
-    const shardsCardsHtml = RUNE_STAT_SHARDS.map((tier, lIdx) => {
-        const optionsHtml = tier.optionList.map(op => `
-            <div class="lol-guide-shard-item">
-                <img src="${op.icon}" alt="${op.labelName}" class="lol-guide-shard-img">
-                <div>
-                    <strong>${op.labelName}</strong>
-                    <p>${op.desc}</p>
-                </div>
-            </div>
-        `).join('');
-
-        return `
-            <div class="lol-guide-shard-card">
-                <div class="lol-guide-shard-title"><i class="${tier.runeIconUrl}"></i> Linha ${tier.rowEntry}: ${tier.labelName}</div>
-                <div class="lol-guide-shard-list">
-                    ${optionsHtml}
+                <div class="lol-runes-badge-group">
+                    ${runesHtml}
                 </div>
             </div>
         `;
     }).join('');
 
     return `
-        <div class="lol-runes-explanation-section">
-            <div class="lol-explanation-header">
-                <img src="${meta.runeIconUrl}" alt="${meta.labelName}" class="lol-explanation-crest">
-                <div>
-                    <h3 class="lol-explanation-title">Compêndio Completo: Árvore de ${meta.labelName}</h3>
-                    <p class="lol-explanation-sub">${meta.subtitleText}</p>
-                </div>
+        <div class="lol-tree-slots-content">
+            <!-- Timeline line on the left with connector dots -->
+            <div class="lol-timeline-track">
+                <span class="lol-timeline-node ${primaryChoices.keystone ? 'active' : ''}"></span>
+                <span class="lol-timeline-node ${primaryChoices.slot1 ? 'active' : ''}"></span>
+                <span class="lol-timeline-node ${primaryChoices.slot2 ? 'active' : ''}"></span>
+                <span class="lol-timeline-node ${primaryChoices.slot3 ? 'active' : ''}"></span>
             </div>
 
-            <!-- Keystones section -->
-            <div class="lol-guide-tier-section keystone-section">
-                <div class="lol-guide-tier-title">
-                    <i class="fa-solid fa-crown" style="color:${meta.colorHex};"></i>
-                    <h3>Runas Essenciais de ${meta.labelName} (Keystones)</h3>
+            <div class="lol-slots-rows-group">
+                <!-- Keystones (core runes) -->
+                <div class="lol-keystone-section">
+                    <div class="lol-keystones-header">
+                        <span class="lol-keystones-line"></span>
+                        <span class="lol-keystones-title">RUNAS ESSENCIAIS</span>
+                        <span class="lol-keystones-line"></span>
+                    </div>
+                    <div class="lol-keystones-row">
+                        ${keystonesHtml}
+                    </div>
                 </div>
-                <div class="lol-guide-keystones-grid">
-                    ${keystonesCards}
-                </div>
-            </div>
 
-            <!-- Sub-rune sections row by row -->
-            <div class="lol-guide-subrunes-wrapper">
-                ${subSlotsHtml}
+                <!-- 3 sub-rune rows of the active tree -->
+                <div class="lol-subrunes-section">
+                    ${subSlotsHtml}
+                </div>
             </div>
+        </div>
+    `;
+}
 
-            <!-- Attribute shards section -->
-            <div class="lol-guide-shards-section">
-                <div class="lol-guide-tier-title">
-                    <i class="fa-solid fa-cubes-stacked" style="color:var(--gold-bright);"></i>
-                    <h3>Fragmentos de Atributos (Runas Terciárias)</h3>
+// List view (mobile default): a single column showing .lol-rune-title and
+// .lol-rune-description directly, no hover required.
+function buildRuneListHtml(primaryTree, activeMeta) {
+    const entryHtml = (r, isKeystone) => {
+        const runeIcon = `https://ddragon.leagueoflegends.com/cdn/img/${r.icon}`;
+        const descHtml = formatRuneDescription(r, runeSummaryMode);
+        return `
+            <div class="lol-rune-list-item ${isKeystone ? 'keystone-item' : ''}"
+                 onclick="selectRuneTree(${primaryTree.id}, ${r.id})">
+                <div class="lol-rune-list-icon">
+                    <img src="${runeIcon}" alt="${r.name}" loading="lazy">
                 </div>
-                <div class="lol-guide-shards-grid">
-                    ${shardsCardsHtml}
+                <div class="lol-rune-list-text">
+                    <h4 class="lol-rune-title">${r.name}</h4>
+                    <div class="lol-rune-description">${descHtml}</div>
                 </div>
             </div>
+        `;
+    };
+
+    const keystonesHtml = primaryTree.slots[0].runes.map(r => entryHtml(r, true)).join('');
+
+    const subSlotsHtml = [1, 2, 3].map(slotIdx => {
+        const slot = primaryTree.slots[slotIdx];
+        const rowName = activeMeta.slotNames[slotIdx] || `Linha ${slotIdx}`;
+        return `
+            <div class="lol-rune-list-group">
+                <div class="lol-rune-list-group-title">
+                    <span class="lol-tier-row-num">${slotIdx}</span>
+                    <span>${rowName}</span>
+                </div>
+                ${slot.runes.map(r => entryHtml(r, false)).join('')}
+            </div>
+        `;
+    }).join('');
+
+    return `
+        <div class="lol-rune-list">
+            <div class="lol-rune-list-group">
+                <div class="lol-rune-list-group-title">
+                    <i class="fa-solid fa-crown" style="color:${activeMeta.colorHex};"></i>
+                    <span>Runas Essenciais</span>
+                </div>
+                ${keystonesHtml}
+            </div>
+            ${subSlotsHtml}
         </div>
     `;
 }

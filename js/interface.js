@@ -64,7 +64,6 @@ function setupFilters() {
             if (!targetBtn) return;
             document.querySelectorAll('#itemCatFilterGroup .filter-btn').forEach(b => b.classList.remove('active'));
             targetBtn.classList.add('active');
-            activeItemCategory = targetBtn.dataset.cat;
             filterItems();
         });
     });

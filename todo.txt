@@ -1,118 +1,75 @@
-===============================================================================
-                       LOL CODEX — ROADMAP COMPLETO E UNIFICADO
-===============================================================================
+PROMPT DE AJUSTES E CORREÇÕES DE UI/UX — LoL Codex
 
-[BLOCO 1] — ESTRUTURA GERAL, FOOTER, BUSCA E SUPORTE
--------------------------------------------------------------------------------
-Atue como um desenvolvedor Front-End e aplique as seguintes correções visuais e de estrutura no LoL Codex:
+Por favor, aplique as seguintes correções de layout, CSS e estrutura de dados no projeto:
 
-1. REMOÇÃO GLOBAL DE TÍTULOS E EMOJIS DE SEÇÃO:
-   - Remova completamente os títulos principais e emojis de cabeçalho de TODAS as páginas/seções do site (Campeões, Itens, Runas, Quiz, etc.).
+---
 
-2. FOOTER DISCRETO E SUPORTE/FEEDBACK:
-   - Remova a mini imagem/logo do footer. Mantenha apenas o texto discreto, sem elementos chamativos.
-   - Posicione o botão circular de interrogação (Suporte/Feedback) fixado EXCLUSIVAMENTE dentro do container do footer, no canto inferior direito (`position: relative` ou fluxo normal do footer, não `fixed` na tela).
-   - Ajuste o alinhamento vertical no Flexbox pai do footer: adicione 'align-items: center' para alinhar o texto e o botão no mesmo eixo central vertical, eliminando o espaço vertical exagerado.
-   - Botão 'X' do formulário de Suporte: Mantenha o ícone centralizado e mude a cor do efeito HOVER da borda de vermelho para a cor amarela/dourada padrão Hextech (#f0b232).
+1. CABEÇALHO DAS RUNAS (REMOÇÃO DO SCROLLBAR E ALINHAMENTO HORIZONTAL)
+- Eliminar Barra de Rolagem: Remova a barra de rolagem horizontal (`overflow-x: hidden`) da lista de botões das categorias de runas.
+- Layout em Linha Única: Garanta que os 5 botões (Precisão, Dominação, Feitiçaria, Determinação e Inspiração) e as informações da categoria ativa (ícone, título e descrição) fiquem estritamente lado a lado na mesma linha horizontal.
+- Padronização: Aplique o layout flexbox (`display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap`) para todas as 5 categorias, usando o mesmo padrão funcional exibido na aba Determinação. Reduza levemente os paddings/gaps se necessário para evitar quebras de linha ou scroll.
 
-3. CORREÇÃO DAS BARRAS DE PESQUISA (ITENS E CAMPEÕES):
-   - Centralize perfeitamente o ícone 'X' dentro da área interativa do botão de limpar busca nas páginas de Itens e de Campeões ('display: flex; align-items: center; justify-content: center;').
-   - Elimine qualquer padding, margin ou deslocamento incorreto no elemento do 'X' para que a imagem do ícone fique no centro geométrico exato da área circular escura que surge no hover.
+---
 
-4. NAVEGAÇÃO E CALL TO ACTION DA HOME:
-   - No item "Quiz" do menu de navegação (NAV), troque o ícone de interrogação por um ícone distinto (ex: 'fa-brain', 'fa-gamepad' ou 'fa-trophy').
-   - Card Call To Action ("Seus últimos campeões aparecem aqui"): Remova o botão "Explorar campeões" e qualquer tooltip/aviso flutuante ao passar o mouse (remova o atributo 'title'). Torne toda a área do card clicável para redirecionar o usuário à página de Campeões.
+2. FIXAÇÃO DAS DIMENSÕES DO CARD DE DETALHES DE RUNAS E FRAGMENTOS
+- Trava de Altura e Largura: Defina uma altura e largura fixas (`height` e `width`, ou `min-height`) para o container do card superior de detalhes das runas/fragmentos.
+- Dimensão Base: Dimensiones o card tomando como base o maior texto do sistema (ex: runa com descrição detalhada completa ativa, como "Lenda: Linhagem"). Ao selecionar textos menores (como fragmentos de atributos), o card deve manter exatamente o mesmo tamanho para evitar saltos de layout (layout shift).
+- Remoção de Subtítulos Secundários: Remova textos do tipo "• LINHA 3 (DEFENSIVA)" no topo do card, mantendo apenas a identificação principal (ex: "FRAGMENTO DE ATRIBUTO").
+- Exemplo de CSS para o card:
+  .rune-details-card {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 
-5. LOGS DO CONSOLE:
-   - Remova a mensagem '[LoL Codex] Resumos autorais e glossário carregados: Object' do console. Deixe visível apenas o log de inicialização contendo '[LoL Codex]' e a versão atual do patch (ex: '[LoL Codex] Patch 14.24.1').
+---
 
+3. MODO DE VISUALIZAÇÃO DAS RUNAS (GRADE 2x2 VS. LISTA EXPANDIDA)
+- Modo Compacto (Grade): Exiba apenas a grade com os ícones circulares das runas, mostrando o tooltip/balão explicativo apenas no hover ou clique.
+- Modo Expandido (Lista): Ao ativar o ícone de lista (linhas), cada runa deve ser renderizada em estrutura vertical contendo [Ícone] + [Título] + [Descrição detalhada/efeito] diretamente na tela.
+- Correção de CSS/Estado: Garanta que os elementos de texto (`.rune-title`, `.rune-description`) mudem para `display: block` no modo lista, e corrija o container pai para `display: flex; flex-direction: column; gap: 12px;` evitando que os ícones fiquem espalhados desordenadamente pela tela.
 
-[BLOCO 2] — REFORMULAÇÃO DA PÁGINA DE RUNAS E FRAGMENTOS
--------------------------------------------------------------------------------
-Refatore a interface da página de Runas e ajuste o comportamento dos fragmentos de atributos com base no design do jogo:
+---
 
-1. NAVEGAÇÃO DE CATEGORIAS DE RUNAS:
-   - Mantenha os 5 botões de categorias (Precisão, Dominação, Feitiçaria, Determinação e Inspiração) e o container da categoria ativa (ícone, título e descrição) perfeitamente alinhados na mesma linha horizontal (flex-wrap: nowrap, justify-content: space-between). Impaça a quebra de linha em todas as abas.
+4. SIMPLIFICAÇÃO DOS FRAGMENTOS DE ATRIBUTOS
+- Remoção de Rótulos e Ícones Decorativos: Ocultar/remover o título superior "FRAGMENTOS DE ATRIBUTOS" e os rótulos laterais de cada linha ("LINHA 1 · OFENSIVA", "LINHA 2 · FLEXÍVEL", "LINHA 3 · DEFENSIVA") com seus respectivos ícones (espada, setas, escudo).
+- Matriz Limpa: Mantenha exclusivamente a matriz 3x3 dos botões circulares dos fragmentos, perfeitamente alinhados na horizontal e vertical.
 
-2. ALTERNÂNCIA DE VISUALIZAÇÃO (GRADE 2x2 VS LISTA DETALHADA):
-   - Corrija o modo Lista (3 pontos com 3 traços): garanta que ao ativar este modo, cada runa exiba seu ícone, título (.rune-title) e descrição (.rune-description) visíveis diretamente na tela sem necessidade de passar o mouse.
-   - Ajuste o container das runas no modo Lista para usar 'display: flex; flex-direction: column; gap: 12px;'.
-   - Densidade Padrão por Dispositivo:
-     * PC / Desktop: Padrão no modo Grade 2x2 (compacto).
-     * Dispositivos Móveis / Mobile: Padrão no modo Lista Expandida.
+---
 
-3. CHECKBOX DE DESCRIÇÕES DETALHADAS:
-   - Estilize a checkbox "Exibir descrições detalhadas" com o tema customizado do cliente do LoL (fundo escuro Hextech, borda dourada e marcador interno em vez do checkbox nativo do navegador).
+5. CORREÇÃO NO CAMPO DE BUSCA (ÍCONE DE LIMPAR "X")
+- Centralização e Alinhamento: O ícone "X" de limpar busca está deslocado para a direita da sua área de hover.
+- Ajuste CSS: Centralize o ícone exatamente no centro geométrico do botão/círculo de hover (`display: flex; align-items: center; justify-content: center;`). Verifique e remova margins, paddings ou `position: absolute` incorretos que estejam empurrando a imagem do X para a borda.
 
-4. SIMPLIFICAÇÃO DO PAINEL DE FRAGMENTOS DE ATRIBUTOS (STAT SHARDS):
-   - Remova o título "FRAGMENTOS DE ATRIBUTOS", a frase "Fragmentos personalizam atributos defensivos e ofensivos da sua rota" e os ícones/textos laterais ("LINHA 1 · OFENSIVA", "LINHA 2 · FLEXÍVEL", "LINHA 3 · DEFENSIVA").
-   - Exiba apenas a matriz 3x3 de botões circulares dos fragmentos.
-   - Comportamento de Hover nos Fragmentos: Ao passar o mouse nos ícones da grade inferior, exiba apenas o NOME do fragmento no tooltip (ex: "Força Adaptativa", "Velocidade de Ataque", "+8 de Aceleração de Habilidade").
+---
 
-5. CARD SUPERIOR DE DESTAQUE DOS FRAGMENTOS/RUNAS:
-   - Defina largura e altura fixas ('width' / 'min-height') para o container do card superior de detalhes para que ele NÃO mude de tamanho ao alternar entre runas/fragmentos.
-   - Remova o texto secundário de linha (ex: "• LINHA 3 (DEFENSIVA)") do topo do card, mantendo apenas a identificação principal.
+6. LISTAGEM GERAL DE ITENS (VITRINE DE CARDS)
+- Remoção do Toggle e Descrições na Vitrine:
+  1. Remova o switch/botão "Detalhado / Resumido" do cabeçalho da página principal de itens (ao lado do botão "Filtros").
+  2. Remova as descrições em texto que aparecem abaixo dos atributos nos cards da vitrine geral.
+- Exibição Limpa nos Cards: Exiba apenas o ícone, nome, preço e os atributos simples (ex: `+25 Velocidade de Movimento`). Descrições e habilidades passivas devem ser carregadas e exibidas EXCLUSIVAMENTE ao clicar no card para abrir o modal do item.
 
+---
 
-[BLOCO 3] — SISTEMA DE ITENS: LIMPEZA E AJUSTES DE UI
--------------------------------------------------------------------------------
-Refatore a listagem e os cards de itens no projeto:
+7. MODAL DE DETALHES DOS ITENS
+- Ajuste de Espaçamento: Corrija o espaçamento vertical/margin excessivo entre o topo do modal detalhado e os textos das habilidades passivas.
+- Cobertura do Modo Resumido/Detalhado: Garanta que a base de dados/API contenha os textos dos modos Resumido e Detalhado preenchidos para TODOS os itens do jogo, garantindo que a alternância dentro do modal funcione sem deixar campos em branco.
 
-1. REMOÇÃO DO BOTÃO "INFO" E DO SWITCH DETALHADO/RESUMIDO:
-   - Remova completamente o botão 'i' (Info) de dentro dos cards de itens.
-   - Remova do topo da listagem de itens o container do botão/switch "Detalhado / Resumido".
-   - Limpe do código e do 'localStorage' todas as chaves e variáveis associadas ao estado do botão Info.
-   - Mantenha as janelas modais detalhadas de cada item totalmente funcionais ao clicar no item individual.
+---
 
-2. DEBUGS DE LISTAGEM E NOMBRES COMPLETOS:
-   - Exiba o nome completo de cada item na grade, sem reticências ou cortes.
-   - Garanta que itens duplicados (ex: variações de Manamune, Bastão das Eras, A Coletora, Locket dos Solari, etc.) sejam unificados na renderização.
-   - Mova o item "Grevas Bélicas" da categoria Lendários para a categoria Botas.
+8. REMOÇÃO DE TOOLTIPS INDESEJADOS
+- Card de Últimos Campeões: Remova o tooltip/balão "Ir para Campeões" que surge ao passar o mouse sobre o card ou no botão "Explorar campeões". Remova o atributo `title` do HTML ou desative o evento de hover do tooltip nessa seção.
 
+---
 
-[BLOCO 4] — CAMPEÕES: FILTROS MULTIPLOS E POPULAÇÃO DE ATRIBUTOS
--------------------------------------------------------------------------------
-Refatore a filtragem e a base de atributos dos campeões:
+9. CORREÇÃO E ALINHAMENTO DO FOOTER
+- Estrutura e Alinhamento Vertical: Configure o container do footer com `display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;`.
+- Posicionamento: O bloco de texto de direitos autorais deve ficar centralizado, e o botão de interrogação (`?`) deve ficar perfeitamente alinhado no eixo vertical central, posicionado de forma discreta no canto direito, sem margens superiores excessivas que o empurrem para baixo.
 
-1. FILTRAGEM MULTIPLA COM LÓGICA "E" (AND):
-   - Ao selecionar múltiplos filtros (ex: Top + ADC + Tanque ou AD + AP), exiba APENAS os campeões que possuam TODAS as classificações marcadas simultaneamente.
+---
 
-2. MAPEAMENTO E ATRIBUIÇÃO COMPLETA DOS ATRIBUTOS ('PERFIS_CAMPEAO'):
-   - Cadastre e popule no arquivo JSON/constante de campeões do projeto as seguintes 19 tags/siglas oficiais:
-     1. Dano Físico (AD)
-     2. Poder de Habilidade (AP)
-     3. Tanque (TANK)
-     4. Cura (HEAL)
-     5. Escudo (SHIELD)
-     6. Controle de Grupo (CC)
-     7. Mobilidade (DASH)
-     8. Furtividade (STEALTH)
-     9. Invocações (PETS)
-     10. Dano Verdadeiro (TD)
-     11. Global (GLOBAL)
-     12. Explosão de dano (BURST)
-     13. Controle de Zona (ZONE)
-     14. Iniciação (ENGAGE)
-     15. Proteção (PEEL)
-     16. Alcance (POKE)
-     17. Pressão Lateral (SPLIT)
-     18. Dano Contínuo (DPS)
-     19. Luta em Equipe (TF)
-   - Atualize a função de busca e os badges dos modais para refletirem exatamente este mapeamento.
-
-
-[BLOCO 5] — MÓDULO E INTERFACE DO QUIZ
--------------------------------------------------------------------------------
-Crie e estruture a aba de Quiz Interativo com suporte a dificuldades e barra de pesquisa:
-
-1. MANUTENÇÃO DA NAV BAR NO QUIZ:
-   - Mantenha a barra de pesquisa geral da nav bar visível e operacional também na página do Quiz.
-   - Remova qualquer subtítulo/cabeçalho como "Quiz Hextech".
-
-2. DIFICULDADE E ESTRUTURA DO BANCO DE DADOS ('data/quiz.json'):
-   - Estruture o arquivo 'data/quiz.json' contendo perguntas divididas por Categorias (Mapa/Objetivos, Habilidades de Campeões, Itens) e sub-divididas por Níveis de Dificuldade:
-     * Fácil
-     * Média
-     * Difícil
-   - Fluxo do Usuário: O usuário escolhe primeiro a Categoria desejada e, em seguida, seleciona o Nível de Dificuldade (Fácil, Média ou Difícil) antes de iniciar as perguntas.
-===============================================================================
+10. MAPEAMENTO DE ATRIBUTOS E FILTROS DOS CAMPEÕES
+- Atribuição de Tags/Siglas: Atualize a base de dados dos campeões (JSON/constante) associando a cada um o seu conjunto de tags de estilo de jogo baseadas na wiki/Data Dragon do LoL (ex: `peel`, `dash`, `td`, `global`, `heal`, etc.).
+- Comportamento Esperado: Ao selecionar o filtro "PEEL", o sistema deve filtrar e exibir campeões de proteção/utilidade (Lulu, Janna, Milio, Karma, etc.).

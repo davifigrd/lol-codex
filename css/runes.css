@@ -44,7 +44,7 @@
   min-height: 590px;
 }
 
-/* TOP TREE SELECTOR (5 official trees) */
+/* TOP TREE SELECTOR (5 official trees) — always a single line */
 .lol-tree-tabs {
   position: relative;
   z-index: 2;
@@ -55,7 +55,7 @@
   padding: 1rem 2rem;
   border-bottom: 1px solid rgba(200, 155, 60, 0.18);
   background: rgba(3, 9, 17, 0.72);
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .lol-tree-tabs-list {
@@ -122,6 +122,7 @@
   display: flex;
   align-items: center;
   gap: 0.85rem;
+  flex-shrink: 0;
 }
 
 .lol-tree-tabs-crest img {
@@ -367,62 +368,19 @@
   top: 1rem;
 }
 
+/* ATTRIBUTE SHARDS — a clean 3x3 matrix of circles (no titles, no row labels) */
 .lol-shards-section {
   display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
+  justify-content: center;
+  padding-top: 0.25rem;
 }
 
-.lol-shards-title {
-  font-family: var(--font-title);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--tree-theme-color, #c89b3c);
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(200, 155, 60, 0.2);
-}
-
-.lol-shards-title i {
-  color: var(--gold-bright);
-}
-
-.lol-shard-tier-row {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.lol-shard-row-label {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: #c8aa6e;
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  flex-shrink: 0;
-  min-width: 104px;
-}
-
-.lol-shard-row-label em {
-  font-style: normal;
-}
-
-.lol-shard-row-label i {
-  color: #7e879b;
-  font-size: 0.72rem;
-}
-
-.lol-shard-badges-group {
-  display: flex;
-  align-items: center;
+.lol-shard-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 30px);
+  grid-auto-rows: 30px;
   gap: 0.85rem;
+  justify-content: center;
 }
 
 .lol-shard-badge {
@@ -473,12 +431,16 @@
   padding-top: 0;
 }
 
-/* RUNE INSPECTION CARD */
+/* RUNE INSPECTION CARD — fixed width + min-height so it never resizes when
+   switching between a Rune and an Attribute Shard. */
 .lol-rune-inspector-card {
   position: relative;
   z-index: 3;
-  width: 100%;
-  max-width: 390px;
+  width: 336px;
+  max-width: 100%;
+  min-height: 236px;
+  display: flex;
+  flex-direction: column;
   background: rgba(6, 14, 25, 0.93);
   border: 1.5px solid var(--tree-theme-color, #c89b3c);
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.85), 0 0 20px var(--tree-theme-glow, rgba(200, 170, 110, 0.35));
@@ -704,20 +666,20 @@
   flex-shrink: 0;
   cursor: pointer;
   background: #060e1e;
-  border: 1.5px solid #5b5a56;
+  border: 1.5px solid #c8aa6e;
   border-radius: 3px;
   position: relative;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .lol-compare-checkbox-label input[type="checkbox"]:hover {
-  border-color: #c89b3c;
+  border-color: var(--gold-bright, #ffd23f);
   box-shadow: 0 0 8px rgba(200, 155, 60, 0.35);
 }
 
 .lol-compare-checkbox-label input[type="checkbox"]:checked {
   background: linear-gradient(135deg, rgba(200, 155, 60, 0.35), rgba(240, 178, 50, 0.15));
-  border-color: #c8aa6e;
+  border-color: var(--gold-bright, #ffd23f);
   box-shadow: 0 0 10px rgba(240, 178, 50, 0.45);
 }
 
@@ -738,202 +700,102 @@
   transform: rotate(45deg) scale(1);
 }
 
-/* FULL EXPLANATORY GUIDE SECTION (Runes explained one by one) */
-.lol-runes-explanation-section {
-  padding: 2.25rem 2rem 2.5rem 2rem;
-  background: rgba(3, 8, 16, 0.98);
-  border-top: 2px solid var(--tree-theme-color);
+/* INLINE LIST VIEW (mobile default) - one column, title + description visible */
+.lol-rune-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.lol-explanation-header {
+.lol-rune-list-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lol-rune-list-group-title {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1.25rem;
+  gap: 0.55rem;
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cdbe91;
+  padding-bottom: 0.35rem;
   border-bottom: 1px solid rgba(200, 155, 60, 0.2);
 }
 
-.lol-explanation-crest {
-  width: 52px;
-  height: 52px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 10px var(--tree-theme-glow));
-}
-
-.lol-explanation-title {
-  font-family: var(--font-title);
-  font-size: 1.6rem;
-  color: var(--gold-bright);
-  margin: 0 0 0.25rem 0;
-}
-
-.lol-explanation-sub {
-  font-size: 0.92rem;
-  color: var(--text-muted);
-  margin: 0;
-}
-
-.lol-guide-tier-section {
-  margin-bottom: 2rem;
-}
-
-.lol-guide-tier-title {
+.lol-rune-list-item {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.15rem;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 0.85rem 1rem;
+  background: rgba(6, 14, 25, 0.82);
+  border: 1px solid rgba(200, 155, 60, 0.22);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.lol-tier-num {
-  width: 24px;
-  height: 24px;
+.lol-rune-list-item:hover {
+  border-color: var(--tree-theme-color, #c89b3c);
+  background: rgba(10, 20, 34, 0.92);
+  box-shadow: 0 0 14px var(--tree-theme-glow, rgba(200, 170, 110, 0.3));
+  transform: translateX(2px);
+}
+
+.lol-rune-list-item.keystone-item {
+  border-color: rgba(240, 178, 50, 0.4);
+  background: rgba(240, 178, 50, 0.04);
+}
+
+.lol-rune-list-icon {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: var(--tree-theme-color);
-  color: #030810;
-  font-weight: 800;
-  font-size: 0.78rem;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(200, 155, 60, 0.35);
+  background: radial-gradient(circle, rgba(14, 25, 42, 0.9) 0%, rgba(3, 8, 16, 0.95) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.lol-guide-tier-title h3 {
-  font-family: var(--font-title);
-  font-size: 1.25rem;
-  color: #f0e6d2;
-  margin: 0;
-}
-
-.lol-guide-keystones-grid,
-.lol-guide-tier-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-}
-
-.lol-guide-rune-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 1.15rem;
-  transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-}
-
-.lol-guide-rune-card:hover {
-  border-color: var(--tree-theme-color);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 12px var(--tree-theme-glow);
-}
-
-.lol-guide-rune-card.keystone-card {
-  border-color: rgba(240, 178, 50, 0.4);
-  background: rgba(240, 178, 50, 0.03);
-}
-
-.lol-guide-card-header {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  margin-bottom: 0.85rem;
-  padding-bottom: 0.65rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.lol-guide-rune-img {
-  width: 44px;
-  height: 44px;
+.lol-rune-list-icon img {
+  width: 82%;
+  height: 82%;
   border-radius: 50%;
   object-fit: contain;
-  flex-shrink: 0;
-  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8));
 }
 
-.lol-guide-tier-tag {
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--hextech-cyan-accent);
-  display: block;
+.lol-rune-list-text {
+  flex: 1;
+  min-width: 0;
 }
 
-.lol-guide-rune-name {
+.lol-rune-title {
   font-family: var(--font-title);
-  font-size: 1.05rem;
+  font-size: 0.98rem;
+  font-weight: 700;
   color: #f0e6d2;
-  margin: 0.15rem 0 0 0;
+  margin: 0 0 0.25rem 0;
 }
 
-.lol-guide-card-desc {
+.lol-rune-description {
   font-size: 0.82rem;
   line-height: 1.5;
-  color: var(--text-body);
+  color: #c4c0b6;
 }
 
-/* EXPLAINED SHARDS */
-.lol-guide-shards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
+.lol-rune-description .lol-rune-rich-desc,
+.lol-rune-description .lol-rune-p {
+  margin: 0 0 0.35rem 0;
 }
 
-.lol-guide-shard-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 1.15rem;
-}
-
-.lol-guide-shard-title {
-  font-size: 0.88rem;
-  color: var(--gold-bright);
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 0.95rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.lol-guide-shard-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.lol-guide-shard-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.65rem;
-  background: var(--bg-panel);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-}
-
-.lol-guide-shard-img {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.lol-guide-shard-item strong {
-  color: #f0e6d2;
-  display: block;
-  margin-bottom: 0.2rem;
-}
-
-.lol-guide-shard-item p {
-  color: var(--text-muted);
-  margin: 0;
-  font-size: 0.75rem;
-  line-height: 1.35;
+.lol-rune-description .lol-rune-p:last-child {
+  margin-bottom: 0;
 }
 
 /* RESPONSIVENESS */
@@ -948,7 +810,7 @@
     padding-top: 1.25rem;
   }
   .lol-rune-inspector-card {
-    max-width: 100%;
+    width: 100%;
   }
 }
 
@@ -960,8 +822,10 @@
   }
   .lol-tree-tabs {
     padding: 0.9rem 1rem;
-    flex-direction: column;
-    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .lol-tree-tabs-info .lol-tree-tabs-sub {
+    display: none;
   }
   .lol-client-footer {
     padding: 0.8rem 1rem;
@@ -969,5 +833,4 @@
     align-items: flex-start;
   }
 }
-
 

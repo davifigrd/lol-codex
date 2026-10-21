@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz Hextech — LoL Codex</title>
+    <title>Quiz — LoL Codex</title>
 
     <!-- Google Fonts Hextech & Gamer -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,10 +21,10 @@
 
     <!-- External CSS in the ../css/ folder -->
     <link rel="stylesheet" href="../css/style.css?v=5" />
-    <link rel="stylesheet" href="../css/layout.css?v=8" />
+    <link rel="stylesheet" href="../css/layout.css?v=9" />
     <link rel="stylesheet" href="../css/components.css?v=6" />
     <link rel="stylesheet" href="../css/modals.css?v=5" />
-    <link rel="stylesheet" href="../css/quiz.css?v=3" />
+    <link rel="stylesheet" href="../css/quiz.css?v=4" />
     <link rel="stylesheet" href="../css/responsive.css?v=4" />
 
     <!-- Site favicons / icons with their respective sizes -->
@@ -49,6 +49,38 @@
             class="header-logo-img"
           />
         </a>
+
+        <div class="header-search" role="search">
+          <div class="header-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              type="text"
+              id="headerGlobalSearch"
+              class="header-search-input"
+              placeholder="Buscar campeões, itens, runas..."
+              autocomplete="off"
+              oninput="handleQuizSearchInput(event)"
+              onkeydown="handleQuizSearchKeydown(event)"
+            />
+            <button
+              id="clearHeaderSearchBtn"
+              class="clear-search-btn"
+              type="button"
+              style="display: none"
+              onclick="clearGlobalSearch()"
+              title="Limpar busca"
+              aria-label="Limpar busca"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div
+            class="global-suggestions"
+            id="globalSuggestions"
+            role="listbox"
+            aria-label="Sugestões de busca"
+          ></div>
+        </div>
 
         <button
           class="mobile-toggle"
@@ -116,11 +148,6 @@
     <footer>
       <div class="container">
         <div class="footer-brand">
-          <img
-            src="../img/icon/128.png"
-            alt="LoL Codex"
-            class="footer-logo-img"
-          />
           <span class="footer-rights"
             >LoL Codex © 2026 · Todos os direitos reservados —
             <a
@@ -215,7 +242,7 @@
     </footer>
 
     <script src="../js/feedback.js?v=2"></script>
-    <script src="../data/quiz-fallback.js?v=1"></script>
-    <script src="../js/quiz.js?v=3"></script>
+    <script src="../data/quiz-fallback.js?v=2"></script>
+    <script src="../js/quiz.js?v=4"></script>
   </body>
 </html>

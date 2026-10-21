@@ -219,6 +219,128 @@
 }
 
 /* --------------------------------------------------------------------------
+   DIFFICULTY SELECTION (Fácil / Média / Difícil)
+   -------------------------------------------------------------------------- */
+.quiz-levels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.quiz-level-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 1.7rem 1.25rem 1.35rem;
+  text-align: center;
+  color: var(--text-body);
+  background:
+    linear-gradient(160deg, rgba(19, 36, 56, 0.85), rgba(6, 14, 30, 0.95)),
+    var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease,
+    box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.quiz-level-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--level-accent, var(--gold-primary)), transparent 75%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.quiz-level-card:hover:not(:disabled),
+.quiz-level-card:focus-visible:not(:disabled) {
+  transform: translateY(-4px);
+  border-color: var(--level-accent, var(--gold-primary));
+  background:
+    linear-gradient(160deg, rgba(27, 47, 70, 0.95), rgba(8, 18, 36, 1)),
+    var(--bg-card);
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.55),
+    0 0 18px var(--gold-glow);
+  outline: none;
+}
+
+.quiz-level-card:hover:not(:disabled)::before,
+.quiz-level-card:focus-visible:not(:disabled)::before {
+  opacity: 1;
+}
+
+.quiz-level-card:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.6);
+}
+
+/* Per-difficulty accent colors */
+.quiz-level-card.level-facil {
+  --level-accent: #22c55e;
+}
+.quiz-level-card.level-media {
+  --level-accent: #f0b232;
+}
+.quiz-level-card.level-dificil {
+  --level-accent: #ef4444;
+}
+
+.quiz-level-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 0.3rem;
+  font-size: 1.4rem;
+  color: var(--level-accent, var(--hextech-blue-bright));
+  background: rgba(10, 50, 84, 0.45);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  box-shadow: inset 0 0 14px rgba(10, 200, 185, 0.1);
+  transition: color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.quiz-level-card:hover:not(:disabled) .quiz-level-icon,
+.quiz-level-card:focus-visible:not(:disabled) .quiz-level-icon {
+  box-shadow: 0 0 16px var(--level-accent, rgba(240, 178, 50, 0.25));
+}
+
+.quiz-level-name {
+  display: block;
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--gold-light);
+}
+
+.quiz-level-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.quiz-level-meta i {
+  color: var(--gold-primary);
+}
+
+/* --------------------------------------------------------------------------
    QUIZ SHELL / TOP BAR
    -------------------------------------------------------------------------- */
 .quiz-shell {

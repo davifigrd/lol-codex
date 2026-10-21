@@ -1,0 +1,65 @@
+/* Fallback dos resumos de itens para abertura direta via file:// (o fetch de JSON local e bloqueado pelo navegador).
+   Fonte oficial: data/item-resum.json. Mantenha os dois em sincronia ao editar os resumos. */
+window.ITEM_RESUM_FALLBACK_DATA = {
+  "_comentario": "LoL Codex — Resumos AUTORAIS dos itens. Chave = ID numérico do item como STRING (ex: '3078' para Força da Trindade). Encontre o ID na URL da imagem do item no Data Dragon. Campo 'resumo': sua descrição autoral curta e direta. Quando este arquivo não tiver o item, o site mostrará automaticamente a descrição oficial da Riot.",
+  "3078": {
+    "resumo": "Item completo de bruiser: entrega dano de ataque, vida, aceleração de habilidade e velocidade de movimento ao acertar. O gatilho de Rancor Dobrado faz cada ataque básico aplicar dano adicional, o que torna a Força da Trindade ideal para campeões que ficam trocando ataques básicos e habilidades (Jax, Irelia, Darius)."
+  },
+  "3031": {
+    "resumo": "O item que transforma dano crítico em dano de verdade: além de muito dano de ataque e chance de crítico, converte parte do crítico em dano extra. É o núcleo de praticamente todo atirador de hiper-carry, mas só rende depois que você já tem outros itens de crítico e velocidade de ataque."
+  },
+  "3157": {
+    "resumo": "Sua apólice de seguro contra burst: ao ativar, o campeão entra em estase por alguns instantes, ficando intargetável e imune a dano. Serve tanto para sobreviver a uma combinação inimiga quanto para esperar os tempos de recarga das habilidades — desde que você não seja pego enquanto ela ainda está em recarga."
+  },
+  "3089": {
+    "resumo": "O item mais caro e mais poderoso para magos: dá uma quantidade enorme de Poder de Habilidade e ainda aumenta todo o restante de AP por porcentagem. Como o bônus escala com o que você já tem, vale a pena comprá-lo depois de outros itens de AP — nunca como primeiro item."
+  },
+  "3068": {
+    "resumo": "Montanha de vida para tanques: vida máxima altíssima e regeneração constante de vida. Ele não oferece resistências, então o ideal é combiná-lo com armadura e resistência mágica para que a vida extra dure mais tempo em combate."
+  },
+  "3083": {
+    "resumo": "O item de vida definitivo: concede uma reserva enorme de vida e, quando o campeão fica muito tempo fora de combate, regenera vida com rapidez absurda. É a escolha clássica de tanques e lutadores que querem dominar trocas prolongadas e empurrar rotas sem voltar para a base."
+  },
+  "6655": {
+    "resumo": "Item de dano mágico com foco em poke: concede AP, mana, aceleração de habilidade e explosões adicionais em alvos atingidos por habilidades. Excelente para magos de longo alcance que vivem acertando habilidades à distância."
+  },
+  "3142": {
+    "resumo": "Item de letalidade para assassinos: entrega dano de ataque, letalidade e aceleração de habilidade, além de um ativo de velocidade de movimento e camuflagem. Ideal para entrar, eliminar um alvo e sair de combate — especialmente contra composições com pouca armadura."
+  },
+  "3072": {
+    "resumo": "Dano de ataque, roubo de vida e escudo automático quando a vida fica baixa: a Espada Ensanguentada permite sobreviver a explosões de dano enquanto mantém o atirador atacando. Contra alvos com Feridas Leves e curas fortes, o roubo de vida dela é essencial."
+  },
+  "3046": {
+    "resumo": "Item de velocidade e crítico para atiradores: aumenta a velocidade de ataque, a velocidade de movimento ao atacar e concede um escudo periódico para atravessar o dano de retorno. Muito usada para dar mobilidade extra a campeões frágeis."
+  },
+  "3100": {
+    "resumo": "A ponte entre dano físico e mágico: o Cetro de Lichbane faz o próximo ataque básico, após usar uma habilidade, causar dano mágico adicional. Perfeito para campeões híbridos ou magos que combinam habilidades com ataques básicos (Ekko, Fizz, Twisted Fate)."
+  },
+  "3504": {
+    "resumo": "Item de suporte que fortalece as curas e escudos do usuário e os aplica a um aliado próximo com bônus de velocidade de ataque e dano. É a base dos suportes que querem amplificar o poder do atirador durante as trocas e objetivas."
+  },
+  "3143": {
+    "resumo": "Item defensivo para tanques contra dano físico: concede vida, armadura e aceleração de habilidade, além de reduzir a velocidade de ataque de quem atacar o usuário por tempo prolongado. Ótimo contra atiradores e campeões baseados em velocidade de ataque."
+  },
+  "3110": {
+    "resumo": "Item que pune quem fica perto: além de vida, mana, armadura e AP, o Congelador de Rito cria uma explosão de dano mágico em área periodicamente ao redor do campeão. Detém campeões que entram em contato direto, como tanques e lutadores."
+  },
+  "3102": {
+    "resumo": "Barreira anti-magia: concede AP, resistência mágica e aceleração de habilidade, além de um escudo que bloqueia a próxima habilidade inimiga direcionada. É a resposta padrão contra magos de poke e contra ataques básicos mágicos."
+  },
+  "3033": {
+    "resumo": "Dano de ataque, chance de crítico e Feridas Leves: a Mortal Reminder aplica 40% de redução de cura nos alvos atingidos. É a resposta obrigatória contra times com muita cura, roubo de vida ou regeneração, sem abrir mão do dano de um atirador."
+  },
+  "6617": {
+    "resumo": "Item de suporte focado em cura sustentada: ao curar ou escudar um aliado, o Moonstone Renewer passa a espalhar cura para o aliado mais ferido do time. Excelente para composições que disputam lutas longas e precisam manter todo o grupo vivo."
+  },
+  "4005": {
+    "resumo": "O Imperial Mandate marca o alvo controlado por você e aumenta o dano que ele recebe, além de conceder velocidade de movimento ao aliado que o acertar. É uma escolha de suporte para transformar controle de grupo em dano extra para o time."
+  },
+  "3026": {
+    "resumo": "Segunda chance: o Anjo Guardião ressuscita o campeão após a morte com parte da vida e da mana. É a compra padrão para atiradores e lutadores que precisam entrar na luta sem que um único erro signifique a derrota — desde que respeitado o tempo de recarga."
+  },
+  "3040": {
+    "resumo": "Item de mana escalável: acumula mana conforme o campeão usa habilidades e, ao atingir o limite, transforma-se em um item poderoso (Lágrima de Deusa / Abraço de Seraph). Ideal para magos que sofrem com mana escassa no início da partida."
+  }
+}

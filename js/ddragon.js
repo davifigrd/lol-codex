@@ -9,12 +9,13 @@ async function loadDDragonVersion() {
             const versions = await response.json();
             if (Array.isArray(versions) && versions.length > 0) {
                 currentVersion = versions[0];
-                console.log(`[LoL Codex] Sincronizado: Versão ${currentVersion} | Idioma ${currentLanguage}`);
             }
         }
     } catch (errObj) {
         console.warn(`[LoL Codex] Falha ao obter versões, mantendo: ${currentVersion}`, errObj);
     }
+    // Single init log for the whole application
+    console.log(`[LoL Codex] Patch ${currentVersion}`);
 }
 
 /* ==========================================================================
@@ -22,7 +23,7 @@ async function loadDDragonVersion() {
    ========================================================================== */
 // Cache-busting for the local data JSONs (keep in sync with the ?v= refs
 // in index.html, otherwise stale summaries can linger in the browser cache)
-const LOCAL_DATA_CACHE_VERSION = '5';
+const LOCAL_DATA_CACHE_VERSION = '6';
 
 async function loadAuthorSummaries() {
     const loadJSON = async (fetchPath, fallback = {}) => {
@@ -31,7 +32,11 @@ async function loadAuthorSummaries() {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             return await res.json();
         } catch (errObj) {
-            console.warn(`[LoL Codex] Resumo não encontrado (${fetchPath}):`, errObj.message);
+            // Opening the site via file:// blocks local JSON fetches by design,
+            // so the silent fallback is expected and not worth a console warning.
+            if (location.protocol !== 'file:') {
+                console.warn(`[LoL Codex] Resumo não encontrado (${fetchPath}):`, errObj.message);
+            }
             return fallback;
         }
     };
@@ -39,8 +44,12 @@ async function loadAuthorSummaries() {
     const [skillEntries, itemsData, runeEntries, glossaryData] = await Promise.all([
         loadJSON(`../data/skill-summary.json?v=${LOCAL_DATA_CACHE_VERSION}`),
         loadJSON(`../data/item-resum.json?v=${LOCAL_DATA_CACHE_VERSION}`).then(async res => {
-            if (res && Object.keys(res).length > 0) return res;
-            return await loadJSON(`../data/item-summary.json?v=${LOCAL_DATA_CACHE_VERSION}`);
+            const hasEntries = res && Object.keys(res).some(k => !k.startsWith('_'));
+            if (hasEntries) return res;
+            const legacy = await loadJSON(`../data/item-summary.json?v=${LOCAL_DATA_CACHE_VERSION}`);
+            // file:// mirror of data/item-resum.json (same pattern as data/quiz-fallback.js)
+            if (legacy && Object.keys(legacy).some(k => !k.startsWith('_'))) return legacy;
+            return window.ITEM_RESUM_FALLBACK_DATA || legacy;
         }),
         loadJSON(`../data/rune-summary.json?v=${LOCAL_DATA_CACHE_VERSION}`),
         loadJSON(`../data/glossary.json?v=${LOCAL_DATA_CACHE_VERSION}`)
@@ -50,10 +59,4 @@ async function loadAuthorSummaries() {
     itemSummaries = itemsData;
     runeSummaries = runeEntries;
     lolGlossary = glossaryData;
-    console.log('[LoL Codex] Resumos autorais e glossário carregados:', {
-        championList: Object.keys(skillSummaries).filter(k => !k.startsWith('_')).length,
-        itemsData: Object.keys(itemSummaries).filter(k => !k.startsWith('_')).length,
-        runeEntries: Object.keys(runeSummaries).filter(k => !k.startsWith('_')).length,
-        glossaryTerms: Object.keys(lolGlossary).filter(k => !k.startsWith('_')).length
-    });
 }
