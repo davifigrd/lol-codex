@@ -9,7 +9,7 @@
    URL when deploying. While it is empty, the submission is simulated
    (resolved as a success) so the flow can be tested locally.
    ========================================================================== */
-const FEEDBACK_ENDPOINT = ''; // e.g. 'https://formspree.io/f/xxxxxxxx'
+const FEEDBACK_ENDPOINT = 'https://formsubmit.co/ajax/davifrdutra@gmail.com';
 
 const FEEDBACK_STORAGE_KEY = 'lol_codex_feedback_envios';
 const FEEDBACK_MAX_SENDS_PER_DAY = 3;
@@ -243,10 +243,13 @@ function setupFeedbackWidget() {
         }
 
         dispatchFeedbackMessage({
-            nome: values.name,
+            name: values.name,
             email: values.email,
-            mensagem: values.message,
-            origem: 'LoL Codex — Widget de Feedback'
+            message: values.message,
+            origem: 'LoL Codex — Widget de Feedback',
+            _subject: `LoL Codex: Feedback de ${values.name}`,
+            _template: 'table',
+            _captcha: 'false'
         })
             .then(() => {
                 registerFeedbackSend();

@@ -222,21 +222,24 @@ body.scroll-locked {
   align-items: center;
   justify-content: center;
   font-size: 1.05rem;
-  color: var(--gold-light);
-  background: var(--bg-panel);
-  border: 1px solid var(--border-gold);
+  color: var(--text-muted, #7c8b9e);
+  background: rgba(10, 20, 30, 0.45);
+  border: 1px solid rgba(200, 170, 110, 0.25);
   border-radius: 50%;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 12px var(--gold-glow);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  opacity: 0.45;
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  transition: opacity 0.3s ease, color 0.3s ease, border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
-
 .footer-feedback-btn:hover,
 .footer-feedback-btn:focus-visible,
 .footer-feedback-btn.active {
-  color: var(--hextech-cyan-accent);
+  opacity: 1;
+  color: var(--gold-bright);
+  background: var(--bg-panel);
+  border-color: var(--gold-bright);
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55), 0 0 16px rgba(0, 209, 255, 0.35);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55), 0 0 16px var(--gold-glow), 0 0 8px rgba(255, 210, 63, 0.45);
 }
 
 .feedback-widget {
