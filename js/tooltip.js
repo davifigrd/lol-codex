@@ -40,6 +40,9 @@
 
     const findTarget = (node) => {
         if (!node || node.nodeType !== 1 || typeof node.closest !== 'function') return null;
+        // Sections explicitly marked as tooltip-free (e.g. the "last champions"
+        // showcase on the home page) never show a balloon.
+        if (node.closest('[data-no-tooltip]')) return null;
         return node.closest('[title], [data-tooltip-text]');
     };
 

@@ -1,75 +1,47 @@
-PROMPT DE AJUSTES E CORREÇÕES DE UI/UX — LoL Codex
+CHECK
 
-Por favor, aplique as seguintes correções de layout, CSS e estrutura de dados no projeto:
+1. Remover rolagem horizontal das categorias de runas (overflow-x: hidden).
 
----
+2. Alinhar em linha única os 5 botões de runas e as informações da categoria ativa.
 
-1. CABEÇALHO DAS RUNAS (REMOÇÃO DO SCROLLBAR E ALINHAMENTO HORIZONTAL)
-- Eliminar Barra de Rolagem: Remova a barra de rolagem horizontal (`overflow-x: hidden`) da lista de botões das categorias de runas.
-- Layout em Linha Única: Garanta que os 5 botões (Precisão, Dominação, Feitiçaria, Determinação e Inspiração) e as informações da categoria ativa (ícone, título e descrição) fiquem estritamente lado a lado na mesma linha horizontal.
-- Padronização: Aplique o layout flexbox (`display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap`) para todas as 5 categorias, usando o mesmo padrão funcional exibido na aba Determinação. Reduza levemente os paddings/gaps se necessário para evitar quebras de linha ou scroll.
+3. Padronizar layout flexbox das 5 categorias de runas usando o padrão da aba Determinação.
 
----
+4. Fixar altura e largura do card de detalhes de runas/fragmentos para evitar saltos de layout.
 
-2. FIXAÇÃO DAS DIMENSÕES DO CARD DE DETALHES DE RUNAS E FRAGMENTOS
-- Trava de Altura e Largura: Defina uma altura e largura fixas (`height` e `width`, ou `min-height`) para o container do card superior de detalhes das runas/fragmentos.
-- Dimensão Base: Dimensiones o card tomando como base o maior texto do sistema (ex: runa com descrição detalhada completa ativa, como "Lenda: Linhagem"). Ao selecionar textos menores (como fragmentos de atributos), o card deve manter exatamente o mesmo tamanho para evitar saltos de layout (layout shift).
-- Remoção de Subtítulos Secundários: Remova textos do tipo "• LINHA 3 (DEFENSIVA)" no topo do card, mantendo apenas a identificação principal (ex: "FRAGMENTO DE ATRIBUTO").
-- Exemplo de CSS para o card:
-  .rune-details-card {
-    width: 100%;
-    height: 280px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
+5. Dimensionar card base tomando como referência o maior texto de runa do sistema.
 
----
+6. Remover subtítulos secundários (ex: "• LINHA 3 (DEFENSIVA)") do topo do card de runas.
 
-3. MODO DE VISUALIZAÇÃO DAS RUNAS (GRADE 2x2 VS. LISTA EXPANDIDA)
-- Modo Compacto (Grade): Exiba apenas a grade com os ícones circulares das runas, mostrando o tooltip/balão explicativo apenas no hover ou clique.
-- Modo Expandido (Lista): Ao ativar o ícone de lista (linhas), cada runa deve ser renderizada em estrutura vertical contendo [Ícone] + [Título] + [Descrição detalhada/efeito] diretamente na tela.
-- Correção de CSS/Estado: Garanta que os elementos de texto (`.rune-title`, `.rune-description`) mudem para `display: block` no modo lista, e corrija o container pai para `display: flex; flex-direction: column; gap: 12px;` evitando que os ícones fiquem espalhados desordenadamente pela tela.
+7. Exibir apenas grade com ícones no modo compacto das runas.
 
----
+8. Renderizar lista vertical [Ícone + Título + Descrição] no modo expandido das runas.
 
-4. SIMPLIFICAÇÃO DOS FRAGMENTOS DE ATRIBUTOS
-- Remoção de Rótulos e Ícones Decorativos: Ocultar/remover o título superior "FRAGMENTOS DE ATRIBUTOS" e os rótulos laterais de cada linha ("LINHA 1 · OFENSIVA", "LINHA 2 · FLEXÍVEL", "LINHA 3 · DEFENSIVA") com seus respectivos ícones (espada, setas, escudo).
-- Matriz Limpa: Mantenha exclusivamente a matriz 3x3 dos botões circulares dos fragmentos, perfeitamente alinhados na horizontal e vertical.
+9. Corrigir CSS do modo lista de runas com display: flex; flex-direction: column e display: block nos textos.
 
----
+10. Ocultar título "FRAGMENTOS DE ATRIBUTOS" na seção de fragmentos.
 
-5. CORREÇÃO NO CAMPO DE BUSCA (ÍCONE DE LIMPAR "X")
-- Centralização e Alinhamento: O ícone "X" de limpar busca está deslocado para a direita da sua área de hover.
-- Ajuste CSS: Centralize o ícone exatamente no centro geométrico do botão/círculo de hover (`display: flex; align-items: center; justify-content: center;`). Verifique e remova margins, paddings ou `position: absolute` incorretos que estejam empurrando a imagem do X para a borda.
+11. Remover rótulos e ícones laterais das linhas de fragmentos (Linhas 1, 2 e 3).
 
----
+12. Manter apenas matriz 3x3 de botões de fragmentos alinhados.
 
-6. LISTAGEM GERAL DE ITENS (VITRINE DE CARDS)
-- Remoção do Toggle e Descrições na Vitrine:
-  1. Remova o switch/botão "Detalhado / Resumido" do cabeçalho da página principal de itens (ao lado do botão "Filtros").
-  2. Remova as descrições em texto que aparecem abaixo dos atributos nos cards da vitrine geral.
-- Exibição Limpa nos Cards: Exiba apenas o ícone, nome, preço e os atributos simples (ex: `+25 Velocidade de Movimento`). Descrições e habilidades passivas devem ser carregadas e exibidas EXCLUSIVAMENTE ao clicar no card para abrir o modal do item.
+13. Centralizar ícone "X" de limpar busca no centro geométrico do botão de hover.
 
----
+14. Remover toggle "Detalhado / Resumido" do cabeçalho da listagem geral de itens.
 
-7. MODAL DE DETALHES DOS ITENS
-- Ajuste de Espaçamento: Corrija o espaçamento vertical/margin excessivo entre o topo do modal detalhado e os textos das habilidades passivas.
-- Cobertura do Modo Resumido/Detalhado: Garanta que a base de dados/API contenha os textos dos modos Resumido e Detalhado preenchidos para TODOS os itens do jogo, garantindo que a alternância dentro do modal funcione sem deixar campos em branco.
+15. Remover textos descritivos dos cards da vitrine geral de itens.
 
----
+16. Exibir apenas ícone, nome, preço e atributos simples nos cards da vitrine de itens.
 
-8. REMOÇÃO DE TOOLTIPS INDESEJADOS
-- Card de Últimos Campeões: Remova o tooltip/balão "Ir para Campeões" que surge ao passar o mouse sobre o card ou no botão "Explorar campeões". Remova o atributo `title` do HTML ou desative o evento de hover do tooltip nessa seção.
+17. Reduzir espaçamento vertical topo/passivas no modal de detalhes do item.
 
----
+18. Garantir dados de modo Resumido e Detalhado preenchidos para todos os itens no modal.
 
-9. CORREÇÃO E ALINHAMENTO DO FOOTER
-- Estrutura e Alinhamento Vertical: Configure o container do footer com `display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;`.
-- Posicionamento: O bloco de texto de direitos autorais deve ficar centralizado, e o botão de interrogação (`?`) deve ficar perfeitamente alinhado no eixo vertical central, posicionado de forma discreta no canto direito, sem margens superiores excessivas que o empurrem para baixo.
+19. Remover tooltip "Ir para Campeões" do card e botão na seção de Últimos Campeões.
 
----
+20. Configurar container do footer com display: flex; justify-content: space-between; align-items: center.
 
-10. MAPEAMENTO DE ATRIBUTOS E FILTROS DOS CAMPEÕES
-- Atribuição de Tags/Siglas: Atualize a base de dados dos campeões (JSON/constante) associando a cada um o seu conjunto de tags de estilo de jogo baseadas na wiki/Data Dragon do LoL (ex: `peel`, `dash`, `td`, `global`, `heal`, etc.).
-- Comportamento Esperado: Ao selecionar o filtro "PEEL", o sistema deve filtrar e exibir campeões de proteção/utilidade (Lulu, Janna, Milio, Karma, etc.).
+21. Centralizar direitos autorais e alinhar botão "?" na direita e centro vertical do footer.
+
+22. Mapear tags de estilo de jogo (peel, dash, td, global, etc.) na base de dados dos campeões.
+
+23. Conectar filtro "PEEL" para exibir campeões de suporte/proteção (Lulu, Janna, Milio, Karma, etc.).

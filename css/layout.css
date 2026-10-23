@@ -147,12 +147,32 @@ body.scroll-locked {
 }
 
 /* Footer brand with logo */
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  text-align: center;
+}
+
+.footer-side {
+  flex: 1 1 0;
+}
+
+.footer-center {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
 .footer-brand {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.2rem;
   font-size: 0.88rem;
   color: var(--text-muted);
 }
@@ -183,12 +203,13 @@ body.scroll-locked {
    ========================================================================== */
 .footer-feedback-area {
   position: relative;
-  width: 100%;
-  max-width: 1280px;
-  margin: 1.25rem auto 0;
-  padding: 0 1.5rem;
+  flex: 1 1 0;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+  min-width: 44px;
 }
 
 .footer-feedback-btn {
@@ -421,7 +442,22 @@ body.scroll-locked {
 
 .footer-disclaimer {
   font-size: 0.75rem;
-  margin-top: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+@media (max-width: 640px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 16px;
+  }
+  .footer-side {
+    display: none;
+  }
+  .footer-feedback-area {
+    flex: 0 0 auto;
+    justify-content: center;
+  }
 }
 
 .logo span {
@@ -517,7 +553,7 @@ body.scroll-locked {
 
 .search-input-box input {
   width: 100%;
-  padding: 1.1rem 1.2rem 1.1rem 3.2rem;
+  padding: 1.1rem 2.6rem 1.1rem 3.2rem;
   background: var(--bg-input);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -651,7 +687,7 @@ body.scroll-locked {
   transform: translateY(-50%);
   width: 26px;
   height: 26px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
@@ -667,21 +703,29 @@ body.scroll-locked {
 }
 
 /* Neutralizes the generic search-icon rules and centers the glyph exactly
-   inside the dark hover circle. */
+   inside the dark hover circle. The glyph keeps its own intrinsic size
+   (auto width/height) and is centered by the flex container. */
 .clear-search-btn > i {
   position: static;
   left: auto;
   top: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+  display: block;
+  width: auto;
+  height: auto;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   line-height: 1;
   color: inherit;
-  font-size: inherit;
+  font-size: 0.85rem;
+  transform: none;
+  text-align: center;
+}
+
+.clear-search-btn > i::before {
+  display: block;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
 }
 
 .clear-search-btn:hover {

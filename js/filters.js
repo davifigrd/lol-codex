@@ -53,10 +53,13 @@ function championHasClass(champ, classKey) {
     return getChampionClasses(champ.id, champ.tags).includes(classKey);
 }
 
-// Checks whether the champion has an attribute/playstyle (AD, AP, Tank, CC...)
+// Checks whether the champion has an attribute/playstyle (AD, AP, Tank, CC...).
+// Keys are stored uppercase in CHAMPION_PROFILES; lowercase aliases from the
+// LoL wiki vocabulary (peel, dash, td, global, heal...) are accepted too.
 function championHasAttribute(champ, attr) {
     const profileData = CHAMPION_PROFILES[champ.id] || [];
-    return profileData.includes(attr);
+    const normalized = String(attr || '').toUpperCase();
+    return profileData.includes(normalized);
 }
 
 function toggleChampionClassFilter(classKey) {

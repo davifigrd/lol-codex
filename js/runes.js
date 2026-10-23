@@ -579,7 +579,7 @@ function updateInspectorCard() {
                     <img src="${shard.icon}" alt="${shard.labelName}" class="lol-inspector-icon">
                 </div>
                 <div>
-                    <span class="lol-inspector-badge" style="color:#ffd23f;">Fragmento de Atributo</span>
+                    <span class="lol-inspector-badge" style="color:#ffd23f;">FRAGMENTO DE ATRIBUTO</span>
                     <h3 class="lol-inspector-title">${shard.labelName}</h3>
                 </div>
             </div>
@@ -605,7 +605,7 @@ function updateInspectorCard() {
             </div>
             <div>
                 <span class="lol-inspector-badge" style="color:${treeMeta.colorHex};">
-                    ${isKeystone ? 'Runa Essencial (Keystone)' : currentInspectedRune.slotName} • ${treeMeta.labelName}
+                    ${isKeystone ? 'RUNA ESSENCIAL' : currentInspectedRune.slotName.replace(/\s*•.*$/i, '').toUpperCase()} • ${treeMeta.labelName.toUpperCase()}
                 </span>
                 <h3 class="lol-inspector-title">${runeEntry.name}</h3>
             </div>

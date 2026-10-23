@@ -22,13 +22,13 @@
     <!-- External CSS in the ../css/ folder -->
     <!-- Modular CSS (ordered: order = cascade) -->
     <link rel="stylesheet" href="../css/style.css?v=5" />
-    <link rel="stylesheet" href="../css/layout.css?v=9" />
+    <link rel="stylesheet" href="../css/layout.css?v=10" />
     <link rel="stylesheet" href="../css/champions.css?v=7" />
-    <link rel="stylesheet" href="../css/items.css?v=10" />
+    <link rel="stylesheet" href="../css/items.css?v=11" />
     <link rel="stylesheet" href="../css/components.css?v=6" />
-    <link rel="stylesheet" href="../css/modals.css?v=5" />
+    <link rel="stylesheet" href="../css/modals.css?v=6" />
     <link rel="stylesheet" href="../css/switch.css?v=4" />
-    <link rel="stylesheet" href="../css/runes.css?v=7" />
+    <link rel="stylesheet" href="../css/runes.css?v=8" />
     <link rel="stylesheet" href="../css/badges.css?v=7" />
     <link rel="stylesheet" href="../css/filters.css?v=7" />
     <link rel="stylesheet" href="../css/responsive.css?v=4" />
@@ -215,17 +215,22 @@
               </a>
             </div>
 
-            <!-- Featured Champions Section -->
+            <!-- Featured Champions Section (tooltips disabled in this showcase) -->
             <div
               class="section-header"
               style="margin-top: 2rem; justify-content: flex-end"
+              data-no-tooltip
             >
-              <button class="filter-btn" onclick="switchTab('champions')">
+              <button
+                class="filter-btn"
+                onclick="switchTab('champions')"
+                data-no-tooltip
+              >
                 Ver Todos <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
 
-            <div class="champ-grid" id="featuredChampGrid">
+            <div class="champ-grid" id="featuredChampGrid" data-no-tooltip>
               <div class="loading-box">
                 <div class="loading-spinner"></div>
                 <span>Carregando campeões do Data Dragon...</span>
@@ -367,21 +372,6 @@
             </div>
 
             <div class="item-actions-group">
-              <!-- Detailed/summarized switch (synced with champions and runes,
-                   saved in localStorage) -->
-              <div class="switch-wrapper" style="font-size: 0.8rem">
-                <span id="itemDetailsLabel" class="switch-label-active">Detalhado</span>
-                <label class="hextech-toggle">
-                  <input
-                    type="checkbox"
-                    id="itemSummaryToggle"
-                    onchange="toggleItemSummary(this.checked)"
-                  />
-                  <span class="hextech-slider"></span>
-                </label>
-                <span id="itemSummaryLabel">Resumido</span>
-              </div>
-
               <!-- Dashes button that opens the mini filtering window -->
               <button
                 type="button"
@@ -994,101 +984,106 @@
 
     <!-- Footer -->
     <footer>
-      <div class="container">
-        <div class="footer-brand">
-          <span class="footer-rights"
-            >LoL Codex © 2026 · Todos os direitos reservados —
-            <a
-              class="footer-credit"
-              href="https://buymeacoffee.com/davifigrd"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Davi Figueiredo</a
-            ></span
-          >
-        </div>
-        <p class="footer-disclaimer">
-          Não afiliado à Riot Games. League of Legends é marca registrada da
-          Riot Games, Inc.
-        </p>
-      </div>
+      <div class="footer-content">
+        <!-- Empty side keeps the copyright block geometrically centered -->
+        <span class="footer-side" aria-hidden="true"></span>
 
-      <!-- Support / feedback area: the button lives exclusively inside the footer -->
-      <div class="footer-feedback-area">
-        <button
-          type="button"
-          class="footer-feedback-btn"
-          id="feedbackOpenBtn"
-          onclick="toggleFeedbackWidget()"
-          aria-label="Enviar feedback ou mensagem para o desenvolvedor"
-          title="Feedback / Contato"
-        >
-          <i class="fa-solid fa-circle-question"></i>
-        </button>
-
-        <!-- Feedback widget (small window, Hextech style) -->
-        <div
-          class="feedback-widget"
-          id="feedbackWidget"
-          role="dialog"
-          aria-modal="false"
-          aria-labelledby="feedbackWidgetTitle"
-        >
-          <div class="feedback-widget-header">
-            <span id="feedbackWidgetTitle"
-              ><i class="fa-solid fa-envelope"></i> Suporte / Feedback</span
+        <div class="footer-center">
+          <div class="footer-brand">
+            <span class="footer-rights"
+              >LoL Codex © 2026 · Todos os direitos reservados —
+              <a
+                class="footer-credit"
+                href="https://buymeacoffee.com/davifigrd"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Davi Figueiredo</a
+              ></span
             >
-            <button
-              type="button"
-              class="feedback-widget-close"
-              id="feedbackCloseBtn"
-              onclick="closeFeedbackWidget()"
-              aria-label="Fechar janela de feedback"
-            >
-              <i class="fa-solid fa-xmark"></i>
-            </button>
           </div>
-          <form id="feedbackForm" novalidate>
-            <div class="feedback-field">
-              <label for="feedbackName">Nome</label>
-              <input
-                type="text"
-                id="feedbackName"
-                name="name"
-                placeholder="Seu nome"
-                autocomplete="name"
-              />
-              <span class="feedback-field-error" id="feedbackNameError"></span>
+          <p class="footer-disclaimer">
+            Não afiliado à Riot Games. League of Legends é marca registrada da
+            Riot Games, Inc.
+          </p>
+        </div>
+
+        <!-- Support / feedback area: the button lives exclusively inside the footer -->
+        <div class="footer-feedback-area">
+          <button
+            type="button"
+            class="footer-feedback-btn"
+            id="feedbackOpenBtn"
+            onclick="toggleFeedbackWidget()"
+            aria-label="Enviar feedback ou mensagem para o desenvolvedor"
+            title="Feedback / Contato"
+          >
+            <i class="fa-solid fa-circle-question"></i>
+          </button>
+
+          <!-- Feedback widget (small window, Hextech style) -->
+          <div
+            class="feedback-widget"
+            id="feedbackWidget"
+            role="dialog"
+            aria-modal="false"
+            aria-labelledby="feedbackWidgetTitle"
+          >
+            <div class="feedback-widget-header">
+              <span id="feedbackWidgetTitle"
+                ><i class="fa-solid fa-envelope"></i> Suporte / Feedback</span
+              >
+              <button
+                type="button"
+                class="feedback-widget-close"
+                id="feedbackCloseBtn"
+                onclick="closeFeedbackWidget()"
+                aria-label="Fechar janela de feedback"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
             </div>
-            <div class="feedback-field">
-              <label for="feedbackEmail">E-mail</label>
-              <input
-                type="email"
-                id="feedbackEmail"
-                name="email"
-                placeholder="seu@email.com"
-                autocomplete="email"
-              />
-              <span class="feedback-field-error" id="feedbackEmailError"></span>
-            </div>
-            <div class="feedback-field">
-              <label for="feedbackMessage">Mensagem</label>
-              <textarea
-                id="feedbackMessage"
-                name="message"
-                rows="4"
-                placeholder="Escreva sua mensagem aqui..."
-              ></textarea>
-              <span class="feedback-field-error" id="feedbackMessageError"></span>
-            </div>
-            <button
-              type="submit"
-              class="feedback-submit-btn"
-              id="feedbackSubmitBtn"
-            >
-              <i class="fa-solid fa-paper-plane"></i> Enviar
-            </button>
-          </form>
+            <form id="feedbackForm" novalidate>
+              <div class="feedback-field">
+                <label for="feedbackName">Nome</label>
+                <input
+                  type="text"
+                  id="feedbackName"
+                  name="name"
+                  placeholder="Seu nome"
+                  autocomplete="name"
+                />
+                <span class="feedback-field-error" id="feedbackNameError"></span>
+              </div>
+              <div class="feedback-field">
+                <label for="feedbackEmail">E-mail</label>
+                <input
+                  type="email"
+                  id="feedbackEmail"
+                  name="email"
+                  placeholder="seu@email.com"
+                  autocomplete="email"
+                />
+                <span class="feedback-field-error" id="feedbackEmailError"></span>
+              </div>
+              <div class="feedback-field">
+                <label for="feedbackMessage">Mensagem</label>
+                <textarea
+                  id="feedbackMessage"
+                  name="message"
+                  rows="4"
+                  placeholder="Escreva sua mensagem aqui..."
+                ></textarea>
+                <span class="feedback-field-error" id="feedbackMessageError"></span>
+              </div>
+              <button
+                type="submit"
+                class="feedback-submit-btn"
+                id="feedbackSubmitBtn"
+              >
+                <i class="fa-solid fa-paper-plane"></i> Enviar
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </footer>
@@ -1102,11 +1097,11 @@
     <script src="../js/ddragon.js?v=7"></script>
     <script src="../js/champions.js?v=9"></script>
     <script src="../js/champion-modal.js?v=5"></script>
-    <script src="../js/items.js?v=11"></script>
-    <script src="../js/runes.js?v=8"></script>
-    <script src="../js/filters.js?v=10"></script>
+    <script src="../js/items.js?v=12"></script>
+    <script src="../js/runes.js?v=9"></script>
+    <script src="../js/filters.js?v=11"></script>
     <script src="../js/search.js?v=5"></script>
-    <script src="../js/tooltip.js?v=4"></script>
+    <script src="../js/tooltip.js?v=5"></script>
     <script src="../js/feedback.js?v=2"></script>
     <script src="../js/interface.js?v=6"></script>
     <script src="../js/app.js?v=9"></script>

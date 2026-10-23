@@ -187,6 +187,9 @@ async function loadItemsFromDataDragon() {
         const counter = document.getElementById('countItems');
         if (counter) counter.textContent = `${validSRItems.length} Itens`;
 
+        // Guarantees Resumido/Detalhado content for every item in the modal
+        ensureItemSummaries(validSRItems);
+
         renderItems(validSRItems);
     } catch (errObj) {
         console.error('[LoL Codex] Erro ao carregar itens:', errObj);
@@ -340,15 +343,52 @@ function renderItems(itemList) {
 
 /**
  * Resolves the short, objective author summary for an item.
- * Falls back to the official Riot "plaintext" one-liner when no author
- * summary has been written yet, so the card is never empty.
+ * Falls back to the official Riot "plaintext" one-liner, then to a summary
+ * generated from the item's own stats, so the field is never empty.
  */
 function getItemAuthorSummary(item) {
     const entry = itemSummaries[item.id];
     if (entry && entry.resumo && !entry.resumo.startsWith('TODO:')) {
         return entry.resumo;
     }
-    return stripHtmlTags(item.plaintext || '') || '';
+    return buildItemFallbackSummary(item);
+}
+
+/**
+ * Builds a readable summary for items that have no author-written text.
+ * Guarantees the "Resumido" view of the modal is filled for EVERY item:
+ * plaintext first, then the stat topics, then the first official sentence.
+ */
+function buildItemFallbackSummary(item) {
+    const plaintext = stripHtmlTags(item.plaintext || '');
+    if (plaintext) return plaintext;
+
+    const topics = getItemStatTopics(item);
+    if (topics.length > 0) {
+        const stats = topics.map(t => t.text).join(' · ');
+        return `${item.name}: ${stats}.`;
+    }
+
+    const official = stripHtmlTags(getItemOfficialDescription(item) || '');
+    if (official) {
+        const firstSentence = official.split(/(?<=[.!?])\s+/)[0].trim();
+        if (firstSentence) return firstSentence;
+    }
+
+    return `${item.name} — item de Summoner's Rift.`;
+}
+
+/**
+ * Fills the summary store for every loaded item so both the "Resumido" and
+ * the "Detalhado" views always have content, even for items that were never
+ * manually documented in data/item-resum.json.
+ */
+function ensureItemSummaries(itemList) {
+    (itemList || []).forEach(item => {
+        const entry = itemSummaries[item.id];
+        if (entry && entry.resumo && !entry.resumo.startsWith('TODO:')) return;
+        itemSummaries[item.id] = { resumo: buildItemFallbackSummary(item) };
+    });
 }
 
 /**
@@ -366,21 +406,12 @@ function buildItemCardHTML(item, rarityKey) {
 
     // "Resumido" = short author text; "Detalhado" = official Riot description
     // with the <stats> block stripped (the stat bullets already cover it).
-    // Only one of them is ever rendered at a time.
-    const displayText = itemSummaryMode
-        ? getItemAuthorSummary(item)
-        : getItemOfficialDescription(item);
-
-    // Attribute topics: the cards show ONLY the item's stat topics. Items
-    // without stat topics (consumables/starters) fall back to the description.
+    // The gallery cards intentionally show only the attribute topics: names,
+    // descriptions and passive effects belong to the detail modal exclusively.
     const infoTopics = getItemStatTopics(item);
-    const hasInfoTopics = infoTopics.length > 0;
-    const descHtml = displayText
-        ? `<p class="item-card-desc ${itemSummaryMode ? 'is-summary' : 'is-official'}">${displayText}</p>`
+    const bodyHtml = infoTopics.length > 0
+        ? buildItemInfoCard(item, infoTopics)
         : '';
-    const bodyHtml = hasInfoTopics
-        ? `${buildItemInfoCard(item, infoTopics)}${descHtml}`
-        : descHtml || `<p class="item-stats">Item de Summoner's Rift.</p>`;
 
     return `
         <div class="item-card" data-item-id="${item.id}" onclick="openItemModal('${item.id}')" onmouseenter="applyCardHoverColor(this, '${iconUrl}')">
@@ -708,15 +739,15 @@ function openItemModal(itemId) {
         if (itemSummaryMode) {
             const resumoText = getItemAuthorSummary(item);
             return resumoText
-                ? `<div style="padding:0.25rem 0;"><p style="color:var(--text-body); margin:0; line-height:1.7; font-size:0.95rem;">${resumoText}</p></div>`
-                : `<em style="color:var(--text-muted); font-size:0.9rem;">Resumo autoral ainda não escrito.</em>`;
+                ? `<div class="item-modal-passive-text"><p>${resumoText}</p></div>`
+                : `<div class="item-modal-passive-text"><p>${item.name} — item de Summoner's Rift.</p></div>`;
         }
-        const official = getItemOfficialDescription(item);
+        const official = getItemOfficialDescription(item) || stripHtmlTags(item.plaintext || '');
         return official || '<p>Sem descrição adicional.</p>';
     })();
 
     modalContent.innerHTML = `
-        <div style="display:flex; gap:1.25rem; align-items:center; margin-bottom:1.5rem; border-bottom:1px solid var(--border-color); padding-bottom:1.25rem;">
+        <div class="item-modal-header">
             <img id="item-modal-avatar" src="${iconUrl}" style="width:75px; height:75px; border-radius:var(--radius-md); border:2px solid ${rarityColor}; box-shadow:0 0 15px ${rarityColor}88; object-fit:cover; background:#000; transition:border-color 0.3s ease, box-shadow 0.3s ease;">
             <div style="flex-grow:1;">
                 <div style="display:flex; align-items:center; flex-wrap:wrap; gap:0.35rem;">
@@ -734,8 +765,8 @@ function openItemModal(itemId) {
             </div>
         </div>
 
-        <div style="margin-bottom:1.5rem;">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; gap:0.75rem; flex-wrap:wrap;">
+        <div class="item-modal-details">
+            <div class="item-modal-details-header">
                 <h4 style="color:var(--gold-light); font-size:0.92rem; margin:0; display:flex; align-items:center; gap:0.4rem;">
                     <i class="fa-solid fa-shield-halved" style="color:var(--gold-bright);"></i> Atributos &amp; Efeitos:
                 </h4>
@@ -752,7 +783,7 @@ function openItemModal(itemId) {
             <!-- Visual Attribute lines with icons -->
             ${statLinesHtml}
 
-            <div class="item-ddragon-desc" style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:1rem; margin-top:0.75rem;">
+            <div class="item-ddragon-desc">
                 ${descriptionHtml}
             </div>
         </div>
