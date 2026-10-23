@@ -1,47 +1,7 @@
-CHECK
+- itens resumidos
 
-1. Remover rolagem horizontal das categorias de runas (overflow-x: hidden).
+- responsividade mobile
 
-2. Alinhar em linha única os 5 botões de runas e as informações da categoria ativa.
+- clicar fora da janela de suporte também fecha a janela mas não apaga a mensagem (se tiver algo escrito)
 
-3. Padronizar layout flexbox das 5 categorias de runas usando o padrão da aba Determinação.
-
-4. Fixar altura e largura do card de detalhes de runas/fragmentos para evitar saltos de layout.
-
-5. Dimensionar card base tomando como referência o maior texto de runa do sistema.
-
-6. Remover subtítulos secundários (ex: "• LINHA 3 (DEFENSIVA)") do topo do card de runas.
-
-7. Exibir apenas grade com ícones no modo compacto das runas.
-
-8. Renderizar lista vertical [Ícone + Título + Descrição] no modo expandido das runas.
-
-9. Corrigir CSS do modo lista de runas com display: flex; flex-direction: column e display: block nos textos.
-
-10. Ocultar título "FRAGMENTOS DE ATRIBUTOS" na seção de fragmentos.
-
-11. Remover rótulos e ícones laterais das linhas de fragmentos (Linhas 1, 2 e 3).
-
-12. Manter apenas matriz 3x3 de botões de fragmentos alinhados.
-
-13. Centralizar ícone "X" de limpar busca no centro geométrico do botão de hover.
-
-14. Remover toggle "Detalhado / Resumido" do cabeçalho da listagem geral de itens.
-
-15. Remover textos descritivos dos cards da vitrine geral de itens.
-
-16. Exibir apenas ícone, nome, preço e atributos simples nos cards da vitrine de itens.
-
-17. Reduzir espaçamento vertical topo/passivas no modal de detalhes do item.
-
-18. Garantir dados de modo Resumido e Detalhado preenchidos para todos os itens no modal.
-
-19. Remover tooltip "Ir para Campeões" do card e botão na seção de Últimos Campeões.
-
-20. Configurar container do footer com display: flex; justify-content: space-between; align-items: center.
-
-21. Centralizar direitos autorais e alinhar botão "?" na direita e centro vertical do footer.
-
-22. Mapear tags de estilo de jogo (peel, dash, td, global, etc.) na base de dados dos campeões.
-
-23. Conectar filtro "PEEL" para exibir campeões de suporte/proteção (Lulu, Janna, Milio, Karma, etc.).
+- separar alguns campeões/ itens pra aprender aos poucos (jogo da memória)
